@@ -73,5 +73,7 @@ namespace DoAnCK.UI_GV
         {
             InitializeComponent();
         }
+
+      
     }
 }
