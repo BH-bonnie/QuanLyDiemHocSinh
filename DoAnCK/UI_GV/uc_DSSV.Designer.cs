@@ -44,7 +44,6 @@
             this.HoTen = new DevExpress.XtraGrid.Columns.GridColumn();
             this.NgaySinh = new DevExpress.XtraGrid.Columns.GridColumn();
             this.GioiTinh = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.hihi = new DevExpress.XtraGrid.Columns.GridColumn();
             this.btn = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
             this.bar4 = new DevExpress.XtraBars.Bar();
@@ -92,7 +91,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(61, 40);
+            this.label1.Location = new System.Drawing.Point(53, 34);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(106, 16);
             this.label1.TabIndex = 4;
@@ -101,7 +100,7 @@
             // cbbMa
             // 
             this.cbbMa.FormattingEnabled = true;
-            this.cbbMa.Location = new System.Drawing.Point(212, 31);
+            this.cbbMa.Location = new System.Drawing.Point(178, 31);
             this.cbbMa.Name = "cbbMa";
             this.cbbMa.Size = new System.Drawing.Size(203, 24);
             this.cbbMa.TabIndex = 5;
@@ -126,8 +125,7 @@
             this.MaSV,
             this.HoTen,
             this.NgaySinh,
-            this.GioiTinh,
-            this.hihi});
+            this.GioiTinh});
             this.gvDanhSach.GridControl = this.gcDanhSach;
             this.gvDanhSach.Name = "gvDanhSach";
             // 
@@ -139,7 +137,7 @@
             this.MaSV.Name = "MaSV";
             this.MaSV.Visible = true;
             this.MaSV.VisibleIndex = 0;
-            this.MaSV.Width = 94;
+            this.MaSV.Width = 80;
             // 
             // HoTen
             // 
@@ -149,7 +147,7 @@
             this.HoTen.Name = "HoTen";
             this.HoTen.Visible = true;
             this.HoTen.VisibleIndex = 1;
-            this.HoTen.Width = 94;
+            this.HoTen.Width = 240;
             // 
             // NgaySinh
             // 
@@ -159,7 +157,7 @@
             this.NgaySinh.Name = "NgaySinh";
             this.NgaySinh.Visible = true;
             this.NgaySinh.VisibleIndex = 2;
-            this.NgaySinh.Width = 94;
+            this.NgaySinh.Width = 240;
             // 
             // GioiTinh
             // 
@@ -169,18 +167,7 @@
             this.GioiTinh.Name = "GioiTinh";
             this.GioiTinh.Visible = true;
             this.GioiTinh.VisibleIndex = 3;
-            this.GioiTinh.Width = 94;
-            // 
-            // hihi
-            // 
-            this.hihi.Caption = "hihi";
-            this.hihi.ColumnEdit = this.btn;
-            this.hihi.MinWidth = 25;
-            this.hihi.Name = "hihi";
-            this.hihi.ShowButtonMode = DevExpress.XtraGrid.Views.Base.ShowButtonModeEnum.ShowForFocusedCell;
-            this.hihi.Visible = true;
-            this.hihi.VisibleIndex = 4;
-            this.hihi.Width = 94;
+            this.GioiTinh.Width = 50;
             // 
             // btn
             // 
@@ -371,7 +358,6 @@
         private DevExpress.XtraBars.BarDockControl barDockControlLeft;
         private DevExpress.XtraBars.BarDockControl barDockControlRight;
         private DevExpress.XtraBars.BarButtonItem btnSua;
-        private DevExpress.XtraGrid.Columns.GridColumn hihi;
         private DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit btn;
         private DevExpress.XtraBars.BarListItem barListItem;
     }

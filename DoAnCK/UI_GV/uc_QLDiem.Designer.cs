@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions2 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject5 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject6 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject7 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject8 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions1 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject3 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject4 = new DevExpress.Utils.SerializableAppearanceObject();
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar2 = new DevExpress.XtraBars.Bar();
             this.btnLuu = new DevExpress.XtraBars.BarButtonItem();
@@ -52,12 +52,13 @@
             this.DiemGK = new DevExpress.XtraGrid.Columns.GridColumn();
             this.DiemCK = new DevExpress.XtraGrid.Columns.GridColumn();
             this.DiemTB = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.KetQua = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.TrangThai = new DevExpress.XtraGrid.Columns.GridColumn();
             this.btn = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
             this.barDockControl1 = new DevExpress.XtraBars.BarDockControl();
             this.barDockControl2 = new DevExpress.XtraBars.BarDockControl();
             this.barDockControl3 = new DevExpress.XtraBars.BarDockControl();
             this.barDockControl4 = new DevExpress.XtraBars.BarDockControl();
+            this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1.Panel1)).BeginInit();
@@ -81,9 +82,10 @@
             this.barManager1.Form = this;
             this.barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
             this.btnLuu,
-            this.barButtonItem2});
+            this.barButtonItem2,
+            this.barButtonItem1});
             this.barManager1.MainMenu = this.bar2;
-            this.barManager1.MaxItemId = 2;
+            this.barManager1.MaxItemId = 3;
             // 
             // bar2
             // 
@@ -167,7 +169,7 @@
             // cbbMa
             // 
             this.cbbMa.FormattingEnabled = true;
-            this.cbbMa.Location = new System.Drawing.Point(212, 31);
+            this.cbbMa.Location = new System.Drawing.Point(173, 37);
             this.cbbMa.Name = "cbbMa";
             this.cbbMa.Size = new System.Drawing.Size(203, 24);
             this.cbbMa.TabIndex = 5;
@@ -203,7 +205,7 @@
             this.DiemGK,
             this.DiemCK,
             this.DiemTB,
-            this.KetQua});
+            this.TrangThai});
             this.gvDanhSach.GridControl = this.gcDanhSach;
             this.gvDanhSach.Name = "gvDanhSach";
             // 
@@ -216,7 +218,7 @@
             this.MaSV.OptionsColumn.AllowEdit = false;
             this.MaSV.Visible = true;
             this.MaSV.VisibleIndex = 0;
-            this.MaSV.Width = 94;
+            this.MaSV.Width = 100;
             // 
             // HoTen
             // 
@@ -227,7 +229,7 @@
             this.HoTen.OptionsColumn.AllowEdit = false;
             this.HoTen.Visible = true;
             this.HoTen.VisibleIndex = 1;
-            this.HoTen.Width = 94;
+            this.HoTen.Width = 246;
             // 
             // DiemGK
             // 
@@ -237,7 +239,7 @@
             this.DiemGK.Name = "DiemGK";
             this.DiemGK.Visible = true;
             this.DiemGK.VisibleIndex = 2;
-            this.DiemGK.Width = 94;
+            this.DiemGK.Width = 90;
             // 
             // DiemCK
             // 
@@ -247,7 +249,7 @@
             this.DiemCK.Name = "DiemCK";
             this.DiemCK.Visible = true;
             this.DiemCK.VisibleIndex = 3;
-            this.DiemCK.Width = 94;
+            this.DiemCK.Width = 87;
             // 
             // DiemTB
             // 
@@ -258,24 +260,24 @@
             this.DiemTB.OptionsColumn.AllowEdit = false;
             this.DiemTB.Visible = true;
             this.DiemTB.VisibleIndex = 4;
-            this.DiemTB.Width = 94;
+            this.DiemTB.Width = 97;
             // 
-            // KetQua
+            // TrangThai
             // 
-            this.KetQua.Caption = "Trạng Thái";
-            this.KetQua.FieldName = "KetQua";
-            this.KetQua.MinWidth = 25;
-            this.KetQua.Name = "KetQua";
-            this.KetQua.OptionsColumn.AllowEdit = false;
-            this.KetQua.Visible = true;
-            this.KetQua.VisibleIndex = 5;
-            this.KetQua.Width = 94;
+            this.TrangThai.Caption = "Trạng Thái";
+            this.TrangThai.FieldName = "TrangThai";
+            this.TrangThai.MinWidth = 25;
+            this.TrangThai.Name = "TrangThai";
+            this.TrangThai.OptionsColumn.AllowEdit = false;
+            this.TrangThai.Visible = true;
+            this.TrangThai.VisibleIndex = 5;
+            this.TrangThai.Width = 252;
             // 
             // btn
             // 
             this.btn.AutoHeight = false;
             this.btn.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "hanh", -1, true, true, false, editorButtonImageOptions2, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject5, serializableAppearanceObject6, serializableAppearanceObject7, serializableAppearanceObject8, "", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "hanh", -1, true, true, false, editorButtonImageOptions1, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, serializableAppearanceObject2, serializableAppearanceObject3, serializableAppearanceObject4, "", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
             this.btn.Name = "btn";
             this.btn.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.HideTextEditor;
             // 
@@ -310,6 +312,12 @@
             this.barDockControl4.Location = new System.Drawing.Point(0, 25);
             this.barDockControl4.Manager = this.barManager1;
             this.barDockControl4.Size = new System.Drawing.Size(902, 0);
+            // 
+            // barButtonItem1
+            // 
+            this.barButtonItem1.Caption = "Thống kê";
+            this.barButtonItem1.Id = 2;
+            this.barButtonItem1.Name = "barButtonItem1";
             // 
             // uc_QLDiem
             // 
@@ -368,6 +376,7 @@
         private DevExpress.XtraBars.BarDockControl barDockControl3;
         private DevExpress.XtraBars.BarDockControl barDockControl4;
         private DevExpress.XtraGrid.Columns.GridColumn DiemTB;
-        private DevExpress.XtraGrid.Columns.GridColumn KetQua;
+        private DevExpress.XtraGrid.Columns.GridColumn TrangThai;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem1;
     }
 }

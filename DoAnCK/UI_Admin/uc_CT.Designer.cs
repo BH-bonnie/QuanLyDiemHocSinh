@@ -28,27 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button2 = new System.Windows.Forms.Button();
             this.btnLuu = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtTiLeCK = new System.Windows.Forms.TextBox();
+            this.txtTiLeGK = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(149, 158);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 11;
-            this.button2.Text = "Reset";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
             // btnLuu
             // 
-            this.btnLuu.Location = new System.Drawing.Point(230, 158);
+            this.btnLuu.Location = new System.Drawing.Point(230, 136);
             this.btnLuu.Name = "btnLuu";
             this.btnLuu.Size = new System.Drawing.Size(75, 23);
             this.btnLuu.TabIndex = 10;
@@ -56,24 +46,26 @@
             this.btnLuu.UseVisualStyleBackColor = true;
             this.btnLuu.Click += new System.EventHandler(this.btnLuu_Click);
             // 
-            // textBox2
+            // txtTiLeCK
             // 
-            this.textBox2.Location = new System.Drawing.Point(205, 94);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 22);
-            this.textBox2.TabIndex = 9;
+            this.txtTiLeCK.Location = new System.Drawing.Point(205, 91);
+            this.txtTiLeCK.Name = "txtTiLeCK";
+            this.txtTiLeCK.ReadOnly = true;
+            this.txtTiLeCK.Size = new System.Drawing.Size(100, 22);
+            this.txtTiLeCK.TabIndex = 9;
             // 
-            // textBox1
+            // txtTiLeGK
             // 
-            this.textBox1.Location = new System.Drawing.Point(205, 53);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 22);
-            this.textBox1.TabIndex = 8;
+            this.txtTiLeGK.Location = new System.Drawing.Point(205, 53);
+            this.txtTiLeGK.Name = "txtTiLeGK";
+            this.txtTiLeGK.Size = new System.Drawing.Size(100, 22);
+            this.txtTiLeGK.TabIndex = 8;
+            this.txtTiLeGK.TextChanged += new System.EventHandler(this.txtTiLeGK_TextChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(44, 97);
+            this.label2.Location = new System.Drawing.Point(44, 94);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(102, 16);
             this.label2.TabIndex = 7;
@@ -102,10 +94,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.btnLuu);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtTiLeCK);
+            this.Controls.Add(this.txtTiLeGK);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "uc_CT";
@@ -117,11 +108,9 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button btnLuu;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtTiLeCK;
+        private System.Windows.Forms.TextBox txtTiLeGK;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;

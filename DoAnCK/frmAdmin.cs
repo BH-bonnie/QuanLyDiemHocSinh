@@ -27,6 +27,7 @@ namespace DoAnCK {
         uc_DSGD ucDSGD;
         uc_DSDK ucDSDK;
         uc_KQHT ucKQHT;
+        uc_CT ucCT;
         private void frmAdmin_Load(object sender, EventArgs e)
         {
 
@@ -127,6 +128,23 @@ namespace DoAnCK {
                 ucKQHT.BringToFront();
             }
 
+        }
+
+        private void btnCT_Click(object sender, EventArgs e)
+        {
+
+            if (ucCT == null)
+            {
+                ucCT = new uc_CT();
+                ucCT.Dock = DockStyle.Fill;
+                ucCT.AutoSize = true; // tự động mở rộng theo nội dung
+                mainContainer.Controls.Add(ucCT);
+                ucCT.BringToFront();
+            }
+            else
+            {
+                ucCT.BringToFront();
+            }
         }
     }
 }

@@ -24,6 +24,7 @@ namespace DoAnCK {
         uc_DSGD ucDSGD;
         uc_DSSV ucDSSV;
         uc_QLDiem ucQLD;
+        uc_ThongTinGV ucTTGV;
 
         private void frmGiangVien_Load(object sender, EventArgs e)
         {
@@ -99,6 +100,22 @@ namespace DoAnCK {
             else
             {
                 ucQLD.BringToFront();
+            }
+        }
+
+        private void btnThongTin_Click(object sender, EventArgs e)
+        {
+            if (ucTTGV == null)
+            {
+                ucTTGV = new uc_ThongTinGV();
+                ucTTGV.Dock = DockStyle.Fill;
+                ucTTGV.AutoSize = true;
+                mainContainer.Controls.Add(ucTTGV);
+                ucTTGV.BringToFront();
+            }
+            else
+            {
+                ucTTGV.BringToFront();
             }
         }
     }

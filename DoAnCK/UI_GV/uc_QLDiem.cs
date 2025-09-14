@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using DevExpress.XtraEditors.TextEditController.Utils;
 
 namespace DoAnCK.UI_GV
 {
@@ -25,7 +26,8 @@ namespace DoAnCK.UI_GV
         private bool isLoading = false;
         private void cbbMa_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            if (isLoading) return;
+            LoadBangDiemTheoLop();
         }
 
         private void uc_QLDiem_Load(object sender, EventArgs e)
@@ -74,30 +76,20 @@ namespace DoAnCK.UI_GV
             if (isLoading || cbbMa.SelectedValue == null) return;
 
             string maLHP = cbbMa.SelectedValue.ToString();
+            string query = $"SELECT * FROM fn_SinhVienVaDiemTheoLopHocPhan('{maLHP}', {maHocKyNamHoc})";
 
-            try
+            dt = frmGiangVien.getData(query);
+
+            if (dt != null && dt.Rows.Count > 0)
+                gcDanhSach.DataSource = dt;
+            else
             {
-                using (SqlConnection conn = new SqlConnection(frmGiangVien.ConnString))
-                using (SqlCommand cmd = new SqlCommand("sp_ChiTietHocPhanTheoLop", conn))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@MaLHP", maLHP);
-
-                    SqlDataAdapter da = new SqlDataAdapter(cmd);
-                    DataTable dtBangDiem = new DataTable();
-                    da.Fill(dtBangDiem);
-
-                    gcDanhSach.DataSource = dtBangDiem.Rows.Count > 0 ? dtBangDiem : null;
-
-                    if (dtBangDiem.Rows.Count == 0)
-                        MessageBox.Show("Không có dữ liệu bảng điểm cho lớp học phần này.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi khi load bảng điểm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                gcDanhSach.DataSource = null;
+                MessageBox.Show("Không có dữ liệu sinh viên cho lớp học phần này.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
+
 
         private void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {

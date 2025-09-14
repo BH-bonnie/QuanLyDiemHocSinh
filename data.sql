@@ -1,6 +1,6 @@
-﻿-- ==========================
--- DỮ LIỆU SINH VIÊN (40 SV)
--- ==========================
+﻿USE QL_SinhVien;
+GO
+
 INSERT INTO SinhVien (MaSV, HoTen, NgaySinh, NoiSinh, GioiTinh, CMND_CCCD, LopSV)
 VALUES
 ('SV001', N'Nguyễn Văn An', '2003-05-14', N'Hà Nội', N'Nam', '012345678901', 'CNTT01'),

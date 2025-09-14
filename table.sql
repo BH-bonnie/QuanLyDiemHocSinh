@@ -1,6 +1,5 @@
 ﻿	USE QL_SinhVien;
 	GO
-	DROP TABLE IF EXISTS GiangVien;
 
 	-- ==========================
 	-- XÓA BẢNG CŨ (theo thứ tự con -> cha)
@@ -71,8 +70,9 @@ CREATE TABLE LopHocPhan (
     MaMH     VARCHAR(10) NOT NULL,
     MaGV     VARCHAR(10) NOT NULL,
     MaHocKyNamHoc INT NOT NULL,
-    PRIMARY KEY (MaLHP),
+    PRIMARY KEY (MaLHP)
 );
+
 
 -- ==========================
 -- Bảng DangKyMonHoc
@@ -81,10 +81,10 @@ CREATE TABLE DangKyMonHoc (
     MaSV     VARCHAR(10) NOT NULL,
     MaLHP    VARCHAR(10) NOT NULL,
 	MaHocKyNamHoc INT NOT NULL,
-
     PRIMARY KEY (MaSV, MaLHP),
     FOREIGN KEY (MaLHP) REFERENCES LopHocPhan(MaLHP)
 );
+
 
 -- ==========================
 -- Bảng ChiTietHocPhan
@@ -97,7 +97,7 @@ CREATE TABLE ChiTietHocPhan (
     DiemCK    DECIMAL(4,2) CHECK (DiemCK BETWEEN 0 AND 10),
     PRIMARY KEY (MaSV, MaMH, MaHocKyNamHoc),
     FOREIGN KEY (MaSV) REFERENCES SinhVien(MaSV),
-    FOREIGN KEY (MaMH) REFERENCES MonHoc(MaMH),
+    FOREIGN KEY (MaMH) REFERENCES MonHoc(MaMH)
 );
 
 
