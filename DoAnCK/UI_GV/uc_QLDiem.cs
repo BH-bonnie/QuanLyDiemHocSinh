@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using DevExpress.XtraEditors.TextEditController.Utils;
+using DevExpress.XtraCharts;
 
 namespace DoAnCK.UI_GV
 {
@@ -157,6 +158,27 @@ namespace DoAnCK.UI_GV
                     MessageBox.Show("Lỗi khi lưu điểm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+        
+       
+
+
+   
+
+        private void btnThongKe_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            if (cbbMa.SelectedValue == null)
+            {
+                MessageBox.Show("Vui lòng chọn lớp học phần.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string maLHP = cbbMa.SelectedValue.ToString();
+
+            // Mở form thống kê
+            frmThongKe frm = new frmThongKe();
+            frm.HienThiBieuDoThongKe(maLHP, maHocKyNamHoc);
+            frm.ShowDialog();
         }
     }
 }

@@ -31,6 +31,8 @@ namespace DoAnCK {
 
             
         }
+ 
+
         public static DataTable getData(string query)
         {
             using (var conn = new SqlConnection(ConnString))

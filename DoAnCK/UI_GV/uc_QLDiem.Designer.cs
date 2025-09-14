@@ -38,10 +38,12 @@
             this.bar2 = new DevExpress.XtraBars.Bar();
             this.btnLuu = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
+            this.btnThongKe = new DevExpress.XtraBars.BarButtonItem();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
+            this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
             this.cbbMa = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -58,7 +60,6 @@
             this.barDockControl2 = new DevExpress.XtraBars.BarDockControl();
             this.barDockControl3 = new DevExpress.XtraBars.BarDockControl();
             this.barDockControl4 = new DevExpress.XtraBars.BarDockControl();
-            this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1.Panel1)).BeginInit();
@@ -83,9 +84,10 @@
             this.barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
             this.btnLuu,
             this.barButtonItem2,
-            this.barButtonItem1});
+            this.barButtonItem1,
+            this.btnThongKe});
             this.barManager1.MainMenu = this.bar2;
-            this.barManager1.MaxItemId = 3;
+            this.barManager1.MaxItemId = 4;
             // 
             // bar2
             // 
@@ -95,7 +97,8 @@
             this.bar2.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
             this.bar2.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.btnLuu),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem2)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem2),
+            new DevExpress.XtraBars.LinkPersistInfo(this.btnThongKe)});
             this.bar2.OptionsBar.MultiLine = true;
             this.bar2.OptionsBar.UseWholeRow = true;
             this.bar2.Text = "Main menu";
@@ -112,6 +115,13 @@
             this.barButtonItem2.Caption = "Xuất";
             this.barButtonItem2.Id = 1;
             this.barButtonItem2.Name = "barButtonItem2";
+            // 
+            // btnThongKe
+            // 
+            this.btnThongKe.Caption = "Thống kê";
+            this.btnThongKe.Id = 3;
+            this.btnThongKe.Name = "btnThongKe";
+            this.btnThongKe.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnThongKe_ItemClick);
             // 
             // barDockControlTop
             // 
@@ -144,6 +154,12 @@
             this.barDockControlRight.Location = new System.Drawing.Point(902, 25);
             this.barDockControlRight.Manager = this.barManager1;
             this.barDockControlRight.Size = new System.Drawing.Size(0, 478);
+            // 
+            // barButtonItem1
+            // 
+            this.barButtonItem1.Caption = "Thống kê";
+            this.barButtonItem1.Id = 2;
+            this.barButtonItem1.Name = "barButtonItem1";
             // 
             // splitContainerControl1
             // 
@@ -313,12 +329,6 @@
             this.barDockControl4.Manager = this.barManager1;
             this.barDockControl4.Size = new System.Drawing.Size(902, 0);
             // 
-            // barButtonItem1
-            // 
-            this.barButtonItem1.Caption = "Thống kê";
-            this.barButtonItem1.Id = 2;
-            this.barButtonItem1.Name = "barButtonItem1";
-            // 
             // uc_QLDiem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -378,5 +388,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn DiemTB;
         private DevExpress.XtraGrid.Columns.GridColumn TrangThai;
         private DevExpress.XtraBars.BarButtonItem barButtonItem1;
+        private DevExpress.XtraBars.BarButtonItem btnThongKe;
     }
 }
