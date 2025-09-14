@@ -163,6 +163,12 @@
     <Compile Include="UI_GV\uc_DSSV.Designer.cs">
       <DependentUpon>uc_DSSV.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI_GV\uc_QLDiem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI_GV\uc_QLDiem.Designer.cs">
+      <DependentUpon>uc_QLDiem.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -223,6 +229,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI_GV\uc_DSSV.resx">
       <DependentUpon>uc_DSSV.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI_GV\uc_QLDiem.resx">
+      <DependentUpon>uc_QLDiem.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

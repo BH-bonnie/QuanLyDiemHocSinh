@@ -22,8 +22,6 @@ namespace DoAnCK.UI_GV
         public uc_DSSV()
         {
             InitializeComponent();
-            this.barListItem.ListItemClick += barListItem_ListItemClick;
-
         }
         private int maHocKyNamHoc;
         private DataTable dt;
@@ -48,11 +46,11 @@ namespace DoAnCK.UI_GV
         private void LoadMaLop()
         {
             string queryMa = $@"
-        SELECT DISTINCT MaLHP 
-        FROM LopHocPhan 
-        WHERE MaHocKyNamHoc = {maHocKyNamHoc} 
-          AND MaGV = '{"GV001"}'
-        ORDER BY MaLHP";
+            SELECT DISTINCT MaLHP 
+            FROM LopHocPhan 
+            WHERE MaHocKyNamHoc = {maHocKyNamHoc} 
+              AND MaGV = '{"GV001"}'
+            ORDER BY MaLHP";
 
             DataTable dtMa = frmGiangVien.getData(queryMa);
 
@@ -106,8 +104,8 @@ namespace DoAnCK.UI_GV
 
 
 
-        
-      
+
+
         private void btnXoa_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             int rowHandle = gvDanhSach.FocusedRowHandle;
@@ -150,27 +148,38 @@ namespace DoAnCK.UI_GV
             MessageBox.Show("test");
         }
 
+        // Event handler to load classes before the dropdown is shown
+        private void barListItem_GetItemData(object sender, EventArgs e)
+        {
+            // Check if a student is selected and current class is available
+            if (gvDanhSach.FocusedRowHandle >= 0 && cbbMa.SelectedValue != null)
+            {
+                string maLHPHienTai = cbbMa.SelectedValue.ToString();
+                string maGV = "GV001"; // or get from login context
+                LoadLopChuyen(maLHPHienTai, maGV);
+            }
+        }
 
         private void LoadLopChuyen(string maLHPHienTai, string maGV)
         {
             string query = $@"
-            SELECT MaLHP
-            FROM LopHocPhan
-            WHERE MaHocKyNamHoc = {maHocKyNamHoc}
-              AND MaGV = '{""}'
-              AND MaMH = (SELECT MaMH FROM LopHocPhan WHERE MaLHP = '{maLHPHienTai}')
-              AND MaLHP <> '{maLHPHienTai}'
-            ORDER BY MaLHP";
+                SELECT MaLHP
+                FROM LopHocPhan
+                WHERE MaHocKyNamHoc = {maHocKyNamHoc}
+                  AND MaGV = '{maGV}'
+                  AND MaMH = (SELECT MaMH FROM LopHocPhan WHERE MaLHP = '{maLHPHienTai}')
+                  AND MaLHP <> '{maLHPHienTai}'
+                ORDER BY MaLHP";
 
             DataTable dtLop = frmGiangVien.getData(query);
 
-            barListItem.Strings.Clear(); // Corrected: Clear the list of items using the Strings property
+            barListItem.Strings.Clear(); // Clear the list of items using the Strings property
 
             if (dtLop != null && dtLop.Rows.Count > 0)
             {
                 foreach (DataRow row in dtLop.Rows)
                 {
-                    barListItem.Strings.Add(row["MaLHP"].ToString());
+                    barListItem.Strings.Add(row["MaLHP"].ToString()); 
                 }
             }
             else
@@ -188,34 +197,54 @@ namespace DoAnCK.UI_GV
             if (row == null) return;
 
             string maSV = row["MaSV"].ToString();
-            string maLHPHienTai = cbbMa.SelectedValue.ToString();
-            string maLHPMoi = e.Item.Caption; // Fixed: Use 'Caption' instead of 'Value'
-            string maGV = "GV001"; // or retrieve from the login context
+            string maLHPNguon = cbbMa.SelectedValue.ToString();  // Lớp nguồn (hiện tại)
+            string maLHPDich = barListItem.Strings[e.Index];
 
-            try
+            string maGV = "GV001";
+
+            DialogResult result = MessageBox.Show(
+                $"Bạn có chắc chắn muốn chuyển sinh viên {maSV} từ lớp {maLHPNguon} sang lớp {maLHPDich} không?",
+                "Xác nhận chuyển lớp",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (result == DialogResult.Yes)
             {
-                using (SqlConnection conn = new SqlConnection(connStr))
-                using (SqlCommand cmd = new SqlCommand("sp_ChuyenLopTheoGV", conn))
+                try
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@MaSV", maSV);
-                    cmd.Parameters.AddWithValue("@MaLHPHienTai", maLHPHienTai);
-                    cmd.Parameters.AddWithValue("@MaLHPMoi", maLHPMoi);
-                    cmd.Parameters.AddWithValue("@MaGV", maGV);
+                    // Sử dụng UPDATE đơn giản
+                    string updateQuery = "UPDATE DangKyMonHoc SET MaLHP = @MaLHPDich WHERE MaSV = @MaSV AND MaLHP = @MaLHPNguon";
 
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
+                    using (SqlConnection conn = new SqlConnection(connStr))
+                    using (SqlCommand cmd = new SqlCommand(updateQuery, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@MaSV", maSV);
+                        cmd.Parameters.AddWithValue("@MaLHPNguon", maLHPNguon);
+                        cmd.Parameters.AddWithValue("@MaLHPDich", maLHPDich);
+
+                        conn.Open();
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show($"Đã chuyển sinh viên {maSV} từ lớp {maLHPNguon} sang lớp {maLHPDich}.", "Thành công");
+                            LoadSinhVien();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không tìm thấy đăng ký để chuyển!", "Lỗi");
+                        }
+                    }
                 }
-
-                MessageBox.Show($"Đã chuyển sinh viên {maSV} sang lớp {maLHPMoi}.", "Thành công");
-                LoadSinhVien(); // Refresh the student list
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi khi chuyển lớp: " + ex.Message, "Lỗi");
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi chuyển lớp: " + ex.Message, "Lỗi");
+                }
             }
         }
-       
+
+  
     }
 
 }

@@ -47,11 +47,9 @@
             this.hihi = new DevExpress.XtraGrid.Columns.GridColumn();
             this.btn = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.bar4 = new DevExpress.XtraBars.Bar();
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar3 = new DevExpress.XtraBars.Bar();
-            this.btnThem = new DevExpress.XtraBars.BarButtonItem();
             this.btnXoa = new DevExpress.XtraBars.BarButtonItem();
             this.btnXuat = new DevExpress.XtraBars.BarButtonItem();
             this.barListItem = new DevExpress.XtraBars.BarListItem();
@@ -202,7 +200,6 @@
             // 
             // splitContainerControl1.Panel1
             // 
-            this.splitContainerControl1.Panel1.Controls.Add(this.comboBox1);
             this.splitContainerControl1.Panel1.Controls.Add(this.cbbMa);
             this.splitContainerControl1.Panel1.Controls.Add(this.label1);
             this.splitContainerControl1.Panel1.Text = "Panel1";
@@ -214,14 +211,6 @@
             this.splitContainerControl1.Size = new System.Drawing.Size(834, 456);
             this.splitContainerControl1.SplitterPosition = 62;
             this.splitContainerControl1.TabIndex = 11;
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(3, 0);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(64, 24);
-            this.comboBox1.TabIndex = 6;
             // 
             // bar4
             // 
@@ -243,7 +232,6 @@
             this.barManager1.DockControls.Add(this.barDockControlRight);
             this.barManager1.Form = this;
             this.barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
-            this.btnThem,
             this.btnSua,
             this.btnXoa,
             this.btnQuayLai,
@@ -259,19 +247,12 @@
             this.bar3.DockRow = 0;
             this.bar3.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
             this.bar3.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
-            new DevExpress.XtraBars.LinkPersistInfo(this.btnThem, true),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnXoa, true),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnXuat, true),
             new DevExpress.XtraBars.LinkPersistInfo(this.barListItem, true)});
             this.bar3.OptionsBar.MultiLine = true;
             this.bar3.OptionsBar.UseWholeRow = true;
             this.bar3.Text = "Main menu";
-            // 
-            // btnThem
-            // 
-            this.btnThem.Caption = "Thêm";
-            this.btnThem.Id = 0;
-            this.btnThem.Name = "btnThem";
             // 
             // btnXoa
             // 
@@ -292,6 +273,7 @@
             this.barListItem.Id = 10;
             this.barListItem.Name = "barListItem";
             this.barListItem.ListItemClick += new DevExpress.XtraBars.ListItemClickEventHandler(this.barListItem_ListItemClick);
+            this.barListItem.GetItemData += new System.EventHandler(this.barListItem_GetItemData);
             // 
             // barDockControlTop
             // 
@@ -378,11 +360,9 @@
         private DevExpress.XtraGrid.Columns.GridColumn HoTen;
         private DevExpress.XtraGrid.Columns.GridColumn GioiTinh;
         private DevExpress.XtraGrid.Columns.GridColumn NgaySinh;
-        private System.Windows.Forms.ComboBox comboBox1;
         private DevExpress.XtraBars.Bar bar4;
         private DevExpress.XtraBars.BarManager barManager1;
         private DevExpress.XtraBars.Bar bar3;
-        private DevExpress.XtraBars.BarButtonItem btnThem;
         private DevExpress.XtraBars.BarButtonItem btnXoa;
         private DevExpress.XtraBars.BarButtonItem btnXuat;
         private DevExpress.XtraBars.BarButtonItem btnQuayLai;

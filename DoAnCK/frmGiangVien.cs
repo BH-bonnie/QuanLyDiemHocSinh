@@ -23,6 +23,7 @@ namespace DoAnCK {
         }
         uc_DSGD ucDSGD;
         uc_DSSV ucDSSV;
+        uc_QLDiem ucQLD;
 
         private void frmGiangVien_Load(object sender, EventArgs e)
         {
@@ -82,6 +83,22 @@ namespace DoAnCK {
             else
             {
                 ucDSSV.BringToFront();
+            }
+        }
+
+        private void btnQLD_Click(object sender, EventArgs e)
+        {
+            if(ucQLD == null)
+            {
+                ucQLD = new uc_QLDiem();
+                ucQLD.Dock = DockStyle.Fill;
+                ucQLD.AutoSize = true;
+                mainContainer.Controls.Add(ucQLD);
+                ucQLD.BringToFront();
+            }
+            else
+            {
+                ucQLD.BringToFront();
             }
         }
     }

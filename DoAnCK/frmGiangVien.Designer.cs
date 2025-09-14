@@ -36,7 +36,7 @@
             this.accordionControlElement1 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.btnDSGD = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.btnDSSV = new DevExpress.XtraBars.Navigation.AccordionControlElement();
-            this.accordionControlElement5 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
+            this.btnQLD = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.accordionControlElement9 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.accordionControlElement4 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.accordionControlElement6 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
@@ -88,7 +88,7 @@
             this.accordionControlElement1.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] {
             this.btnDSGD,
             this.btnDSSV,
-            this.accordionControlElement5,
+            this.btnQLD,
             this.accordionControlElement9});
             this.accordionControlElement1.Expanded = true;
             this.accordionControlElement1.Name = "accordionControlElement1";
@@ -108,11 +108,12 @@
             this.btnDSSV.Text = "Danh sách sinh viên";
             this.btnDSSV.Click += new System.EventHandler(this.btnDSSV_Click);
             // 
-            // accordionControlElement5
+            // btnQLD
             // 
-            this.accordionControlElement5.Name = "accordionControlElement5";
-            this.accordionControlElement5.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
-            this.accordionControlElement5.Text = "Quản lý điểm";
+            this.btnQLD.Name = "btnQLD";
+            this.btnQLD.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
+            this.btnQLD.Text = "Quản lý điểm";
+            this.btnQLD.Click += new System.EventHandler(this.btnQLD_Click);
             // 
             // accordionControlElement9
             // 
@@ -178,7 +179,7 @@
         private DevExpress.XtraBars.Navigation.AccordionControlElement btnDSGD;
         private DevExpress.XtraBars.Navigation.AccordionControlElement btnDSSV;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement4;
-        private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement5;
+        private DevExpress.XtraBars.Navigation.AccordionControlElement btnQLD;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement6;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement7;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement8;
