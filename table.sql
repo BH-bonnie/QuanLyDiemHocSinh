@@ -14,14 +14,19 @@
 		IF OBJECT_ID('dbo.CongThucTinhDiem', 'U') IS NOT NULL DROP TABLE dbo.CongThucTinhDiem;
 		IF OBJECT_ID('dbo.HocKyNamHoc', 'U') IS NOT NULL DROP TABLE dbo.HocKyNamHoc;
 				IF OBJECT_ID('dbo.DiemRenLuyen', 'U') IS NOT NULL DROP TABLE dbo.DiemRenLuyen;
+	IF OBJECT_ID('dbo.Lop', 'U') IS NOT NULL DROP TABLE dbo.Lop;
+
 
 
 
 	GO
 
-	-- ==========================
-	-- Bảng SinhVien
-	-- ==========================
+	CREATE TABLE Lop (
+		LopSV      VARCHAR(20) PRIMARY KEY,
+		TenLop     NVARCHAR(100) NOT NULL
+
+	);
+
 	CREATE TABLE SinhVien (
 		MaSV       VARCHAR(10) PRIMARY KEY,
 		HoTen      NVARCHAR(100) NOT NULL,
@@ -33,9 +38,11 @@
 	);
 
 	CREATE TABLE DiemRenLuyen (
-		MaSV       VARCHAR(10) PRIMARY KEY,
-		MaHocKyNamHoc INT NOT NULL
-	);
+    MaSV VARCHAR(10) PRIMARY KEY,
+    MaHocKyNamHoc INT NOT NULL,
+    Diem DECIMAL(5,2) CHECK (Diem >= 0 AND Diem <= 100)
+);
+
 
 	-- ==========================
 	-- Bảng MonHoc
@@ -115,3 +122,14 @@ CREATE TABLE CongThucTinhDiem
 
 
 	
+	CREATE TABLE KetQuaThi
+(
+    MaSV VARCHAR(10) NOT NULL,
+    MaMH VARCHAR(10) NOT NULL,
+    MaHocKyNamHoc INT NOT NULL,
+    DiemGK    DECIMAL(4,2) CHECK (DiemGK BETWEEN 0 AND 10),
+    DiemCK    DECIMAL(4,2) CHECK (DiemCK BETWEEN 0 AND 10),
+    PRIMARY KEY (MaSV, MaMH, MaHocKyNamHoc),
+    FOREIGN KEY (MaSV) REFERENCES SinhVien(MaSV),
+    FOREIGN KEY (MaMH) REFERENCES MonHoc(MaMH),
+);

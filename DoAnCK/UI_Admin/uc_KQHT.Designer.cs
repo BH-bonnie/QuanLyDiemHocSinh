@@ -43,6 +43,14 @@
             this.btnXoa = new DevExpress.XtraBars.BarButtonItem();
             this.gcDanhSachSV = new DevExpress.XtraGrid.GridControl();
             this.gvDanhSachSV = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.MaSV = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.HoTen = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.MaMH = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.TenMH = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.DiemGK = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.DiemCK = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.DiemTB = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.KetQua = new DevExpress.XtraGrid.Columns.GridColumn();
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
             this.cbbNamHoc = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -102,7 +110,6 @@
             this.btnQuayLai.Caption = "Hoàn tác";
             this.btnQuayLai.Id = 3;
             this.btnQuayLai.Name = "btnQuayLai";
-            this.btnQuayLai.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnQuayLai_ItemClick);
             // 
             // barButtonItem1
             // 
@@ -172,9 +179,104 @@
             // 
             // gvDanhSachSV
             // 
+            this.gvDanhSachSV.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.MaSV,
+            this.HoTen,
+            this.MaMH,
+            this.TenMH,
+            this.DiemGK,
+            this.DiemCK,
+            this.DiemTB,
+            this.KetQua});
             this.gvDanhSachSV.GridControl = this.gcDanhSachSV;
             this.gvDanhSachSV.Name = "gvDanhSachSV";
             this.gvDanhSachSV.OptionsView.ShowGroupPanel = false;
+            // 
+            // MaSV
+            // 
+            this.MaSV.Caption = "MSSV";
+            this.MaSV.FieldName = "MaSV";
+            this.MaSV.MinWidth = 25;
+            this.MaSV.Name = "MaSV";
+            this.MaSV.OptionsColumn.AllowEdit = false;
+            this.MaSV.Visible = true;
+            this.MaSV.VisibleIndex = 0;
+            this.MaSV.Width = 109;
+            // 
+            // HoTen
+            // 
+            this.HoTen.Caption = "Họ tên";
+            this.HoTen.FieldName = "HoTen";
+            this.HoTen.MinWidth = 25;
+            this.HoTen.Name = "HoTen";
+            this.HoTen.OptionsColumn.AllowEdit = false;
+            this.HoTen.Visible = true;
+            this.HoTen.VisibleIndex = 1;
+            this.HoTen.Width = 207;
+            // 
+            // MaMH
+            // 
+            this.MaMH.Caption = "MaMH";
+            this.MaMH.FieldName = "MaMH";
+            this.MaMH.MinWidth = 25;
+            this.MaMH.Name = "MaMH";
+            this.MaMH.OptionsColumn.AllowEdit = false;
+            this.MaMH.Visible = true;
+            this.MaMH.VisibleIndex = 2;
+            this.MaMH.Width = 109;
+            // 
+            // TenMH
+            // 
+            this.TenMH.Caption = "Tên môn học ";
+            this.TenMH.FieldName = "TenMH";
+            this.TenMH.MinWidth = 25;
+            this.TenMH.Name = "TenMH";
+            this.TenMH.OptionsColumn.AllowEdit = false;
+            this.TenMH.Visible = true;
+            this.TenMH.VisibleIndex = 3;
+            this.TenMH.Width = 144;
+            // 
+            // DiemGK
+            // 
+            this.DiemGK.Caption = "Điểm giữa kỳ";
+            this.DiemGK.FieldName = "DiemGK";
+            this.DiemGK.MinWidth = 25;
+            this.DiemGK.Name = "DiemGK";
+            this.DiemGK.Visible = true;
+            this.DiemGK.VisibleIndex = 4;
+            this.DiemGK.Width = 60;
+            // 
+            // DiemCK
+            // 
+            this.DiemCK.Caption = "Điểm cuối kỳ";
+            this.DiemCK.FieldName = "DiemCK";
+            this.DiemCK.MinWidth = 25;
+            this.DiemCK.Name = "DiemCK";
+            this.DiemCK.Visible = true;
+            this.DiemCK.VisibleIndex = 5;
+            this.DiemCK.Width = 62;
+            // 
+            // DiemTB
+            // 
+            this.DiemTB.Caption = "Điểm tổng";
+            this.DiemTB.FieldName = "DiemTB";
+            this.DiemTB.MinWidth = 25;
+            this.DiemTB.Name = "DiemTB";
+            this.DiemTB.OptionsColumn.AllowEdit = false;
+            this.DiemTB.Visible = true;
+            this.DiemTB.VisibleIndex = 6;
+            this.DiemTB.Width = 65;
+            // 
+            // KetQua
+            // 
+            this.KetQua.Caption = "Kết quả";
+            this.KetQua.FieldName = "KetQua";
+            this.KetQua.MinWidth = 25;
+            this.KetQua.Name = "KetQua";
+            this.KetQua.OptionsColumn.AllowEdit = false;
+            this.KetQua.Visible = true;
+            this.KetQua.VisibleIndex = 7;
+            this.KetQua.Width = 89;
             // 
             // splitContainerControl1
             // 
@@ -204,7 +306,6 @@
             this.cbbNamHoc.Name = "cbbNamHoc";
             this.cbbNamHoc.Size = new System.Drawing.Size(193, 24);
             this.cbbNamHoc.TabIndex = 3;
-            this.cbbNamHoc.SelectedIndexChanged += new System.EventHandler(this.cbbNamHoc_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -261,5 +362,13 @@
         private DevExpress.XtraEditors.SplitContainerControl splitContainerControl1;
         private System.Windows.Forms.ComboBox cbbNamHoc;
         private System.Windows.Forms.Label label1;
+        private DevExpress.XtraGrid.Columns.GridColumn MaSV;
+        private DevExpress.XtraGrid.Columns.GridColumn HoTen;
+        private DevExpress.XtraGrid.Columns.GridColumn MaMH;
+        private DevExpress.XtraGrid.Columns.GridColumn TenMH;
+        private DevExpress.XtraGrid.Columns.GridColumn DiemGK;
+        private DevExpress.XtraGrid.Columns.GridColumn DiemCK;
+        private DevExpress.XtraGrid.Columns.GridColumn DiemTB;
+        private DevExpress.XtraGrid.Columns.GridColumn KetQua;
     }
 }

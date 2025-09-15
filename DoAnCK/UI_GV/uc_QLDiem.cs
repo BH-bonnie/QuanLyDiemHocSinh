@@ -112,7 +112,6 @@ namespace DoAnCK.UI_GV
             using (SqlCommand cmd = new SqlCommand("sp_CapNhatDiemHocPhan", conn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-
                 conn.Open();
                 SqlTransaction tran = conn.BeginTransaction();
                 cmd.Transaction = tran;
@@ -121,12 +120,24 @@ namespace DoAnCK.UI_GV
                 {
                     foreach (DataRow row in dtChanges.Rows)
                     {
-                        // Lấy dữ liệu từ Grid
                         string maSV = row["MaSV"].ToString();
                         decimal? diemGK = row["DiemGK"] != DBNull.Value ? Convert.ToDecimal(row["DiemGK"]) : (decimal?)null;
                         decimal? diemCK = row["DiemCK"] != DBNull.Value ? Convert.ToDecimal(row["DiemCK"]) : (decimal?)null;
 
-                        // Optional: Kiểm tra dữ liệu hợp lệ (0-10)
+                        // Lấy MaMH từ MaLHP
+                        string queryMaMH = $"SELECT MaMH FROM LopHocPhan WHERE MaLHP = '{maLHP}'";
+                        DataTable dtMaMH = frmGiangVien.getData(queryMaMH);
+
+                        if (dtMaMH == null || dtMaMH.Rows.Count == 0)
+                        {
+                            MessageBox.Show($"Không tìm thấy môn học cho LHP {maLHP}.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            tran.Rollback();
+                            return;
+                        }
+
+                        string maMH = dtMaMH.Rows[0]["MaMH"].ToString();
+
+                        // Kiểm tra dữ liệu hợp lệ
                         if ((diemGK.HasValue && (diemGK < 0 || diemGK > 10)) ||
                             (diemCK.HasValue && (diemCK < 0 || diemCK > 10)))
                         {
@@ -135,10 +146,10 @@ namespace DoAnCK.UI_GV
                             return;
                         }
 
-                        // Truyền tham số
+                        // Truyền tham số vào procedure
                         cmd.Parameters.Clear();
                         cmd.Parameters.AddWithValue("@MaSV", maSV);
-                        cmd.Parameters.AddWithValue("@MaLHP", maLHP);
+                        cmd.Parameters.AddWithValue("@MaMH", maMH);
                         cmd.Parameters.AddWithValue("@MaHocKyNamHoc", maHocKyNamHoc);
                         cmd.Parameters.AddWithValue("@DiemGK", (object)diemGK ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@DiemCK", (object)diemCK ?? DBNull.Value);
@@ -148,21 +159,18 @@ namespace DoAnCK.UI_GV
 
                     tran.Commit();
                     MessageBox.Show("Cập nhật điểm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    LoadBangDiemTheoLop();
+                    LoadBangDiemTheoLop(); 
                 }
                 catch (Exception ex)
                 {
                     tran.Rollback();
                     MessageBox.Show("Lỗi khi lưu điểm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+             
             }
+         
         }
-        
-       
 
-
-   
 
         private void btnThongKe_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
