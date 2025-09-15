@@ -121,6 +121,12 @@
     <Compile Include="UI\uc_XemDiem.Designer.cs">
       <DependentUpon>uc_XemDiem.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI_Admin\uc_Chitiet.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI_Admin\uc_Chitiet.Designer.cs">
+      <DependentUpon>uc_Chitiet.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI_Admin\uc_CT.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -229,6 +235,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\uc_XemDiem.resx">
       <DependentUpon>uc_XemDiem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI_Admin\uc_Chitiet.resx">
+      <DependentUpon>uc_Chitiet.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI_Admin\uc_CT.resx">
       <DependentUpon>uc_CT.cs</DependentUpon>

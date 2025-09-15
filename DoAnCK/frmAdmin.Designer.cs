@@ -37,12 +37,13 @@
             this.btnDSGD = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.btnDSDK = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.btnKQHT = new DevExpress.XtraBars.Navigation.AccordionControlElement();
+            this.btnChiTiet = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.accordionControlElement7 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.accordionControlElement8 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
+            this.btnQLMH = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.btnCT = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.fluentDesignFormControl1 = new DevExpress.XtraBars.FluentDesignSystem.FluentDesignFormControl();
             this.fluentFormDefaultManager1 = new DevExpress.XtraBars.FluentDesignSystem.FluentFormDefaultManager(this.components);
-            this.btnQLMH = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             ((System.ComponentModel.ISupportInitialize)(this.accordionControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fluentDesignFormControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fluentFormDefaultManager1)).BeginInit();
@@ -74,11 +75,16 @@
             this.accordionControlElement1.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] {
             this.btnQLSV,
             this.btnQLGV,
-            this.btnQLMH,
             this.btnDSGD,
             this.btnDSDK,
-            this.btnKQHT});
+            this.btnKQHT,
+            this.btnChiTiet});
             this.accordionControlElement1.Expanded = true;
+            this.accordionControlElement1.HeaderTemplate.AddRange(new DevExpress.XtraBars.Navigation.HeaderElementInfo[] {
+            new DevExpress.XtraBars.Navigation.HeaderElementInfo(DevExpress.XtraBars.Navigation.HeaderElementType.Text),
+            new DevExpress.XtraBars.Navigation.HeaderElementInfo(DevExpress.XtraBars.Navigation.HeaderElementType.Image),
+            new DevExpress.XtraBars.Navigation.HeaderElementInfo(DevExpress.XtraBars.Navigation.HeaderElementType.HeaderControl),
+            new DevExpress.XtraBars.Navigation.HeaderElementInfo(DevExpress.XtraBars.Navigation.HeaderElementType.ContextButtons)});
             this.accordionControlElement1.Name = "accordionControlElement1";
             this.accordionControlElement1.Text = "DANH MỤC";
             // 
@@ -117,10 +123,18 @@
             this.btnKQHT.Text = "Quản lý kết quả học tập";
             this.btnKQHT.Click += new System.EventHandler(this.btnKQHT_Click);
             // 
+            // btnChiTiet
+            // 
+            this.btnChiTiet.Name = "btnChiTiet";
+            this.btnChiTiet.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
+            this.btnChiTiet.Text = "Điểm chi tiết sinh viên";
+            this.btnChiTiet.Click += new System.EventHandler(this.btnChiTiet_Click);
+            // 
             // accordionControlElement7
             // 
             this.accordionControlElement7.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] {
             this.accordionControlElement8,
+            this.btnQLMH,
             this.btnCT});
             this.accordionControlElement7.Expanded = true;
             this.accordionControlElement7.HeaderTemplate.AddRange(new DevExpress.XtraBars.Navigation.HeaderElementInfo[] {
@@ -137,11 +151,18 @@
             this.accordionControlElement8.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
             this.accordionControlElement8.Text = "Quản lý tài khoản";
             // 
+            // btnQLMH
+            // 
+            this.btnQLMH.Name = "btnQLMH";
+            this.btnQLMH.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
+            this.btnQLMH.Text = "Thiết lập số tín chỉ ";
+            this.btnQLMH.Click += new System.EventHandler(this.btnQLMH_Click);
+            // 
             // btnCT
             // 
             this.btnCT.Name = "btnCT";
             this.btnCT.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
-            this.btnCT.Text = "Cài đặt công thức tính";
+            this.btnCT.Text = "Thiết lập trọng số";
             this.btnCT.Click += new System.EventHandler(this.btnCT_Click);
             // 
             // fluentDesignFormControl1
@@ -157,13 +178,6 @@
             // fluentFormDefaultManager1
             // 
             this.fluentFormDefaultManager1.Form = this;
-            // 
-            // btnQLMH
-            // 
-            this.btnQLMH.Name = "btnQLMH";
-            this.btnQLMH.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
-            this.btnQLMH.Text = "Quản lý môn học";
-            this.btnQLMH.Click += new System.EventHandler(this.btnQLMH_Click);
             // 
             // frmAdmin
             // 
@@ -201,5 +215,6 @@
         private DevExpress.XtraBars.Navigation.AccordionControlElement btnKQHT;
         private DevExpress.XtraBars.Navigation.AccordionControlElement btnCT;
         private DevExpress.XtraBars.Navigation.AccordionControlElement btnQLMH;
+        private DevExpress.XtraBars.Navigation.AccordionControlElement btnChiTiet;
     }
 }

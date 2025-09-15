@@ -29,6 +29,7 @@ namespace DoAnCK {
         uc_DSDK ucDSDK;
         uc_KQHT ucKQHT;
         uc_CT ucCT;
+        uc_Chitiet ucChitiet;
         private void frmAdmin_Load(object sender, EventArgs e)
         {
 
@@ -163,6 +164,22 @@ namespace DoAnCK {
                 ucQLMH.BringToFront();
             }
 
+        }
+
+        private void btnChiTiet_Click(object sender, EventArgs e)
+        {
+            if (ucChitiet == null)
+            {
+                ucChitiet = new uc_Chitiet();
+                ucChitiet.Dock = DockStyle.Fill;
+                ucChitiet.AutoSize = true; // tự động mở rộng theo nội dung
+                mainContainer.Controls.Add(ucChitiet);
+                ucChitiet.BringToFront();
+            }
+            else
+            {
+                ucChitiet.BringToFront();
+            }
         }
     }
 }

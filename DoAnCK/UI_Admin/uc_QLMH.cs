@@ -58,8 +58,22 @@ namespace DoAnCK.UI_Admin
                
                 return;
             }
+            foreach (DataRow row in changes.Rows)
+            {
+                // Ví dụ kiểm tra cột "SoTinChi"
+                if (row.Table.Columns.Contains("SoTinChi"))
+                {
+                    var value = row["SoTinChi"];
+                    int soTinChi;
+                    if (!int.TryParse(value.ToString(), out soTinChi) || soTinChi <= 0)
+                    {
+                        MessageBox.Show("Số tín chỉ phải là số nguyên không âm!", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+            }
 
-            using (SqlConnection conn = new SqlConnection(connStr))
+                using (SqlConnection conn = new SqlConnection(connStr))
             {
                 SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM MonHoc", conn);
                 SqlCommandBuilder builder = new SqlCommandBuilder(da);

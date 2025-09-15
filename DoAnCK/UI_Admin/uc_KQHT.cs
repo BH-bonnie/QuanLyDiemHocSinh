@@ -23,20 +23,33 @@ namespace DoAnCK.UI_Admin
 
         private void uc_KQHT_Load(object sender, EventArgs e)
         {
-            using (var conn = new SqlConnection(connStr))
+            string queryNamHoc = "SELECT MaHocKyNamHoc, HocKy, NamHoc FROM HocKyNamHoc ORDER BY MaHocKyNamHoc DESC";
+            DataTable dtNamHoc = frmAdmin.getData(queryNamHoc);
+
+            if (dtNamHoc != null && dtNamHoc.Rows.Count > 0)
             {
-                conn.Open();
-                dt = frmAdmin.getData("SELECT * FROM v_ChiTietHocPhan_Detail;");
-                if (dt != null)
+                // Thêm cột hiển thị
+                dtNamHoc.Columns.Add("HK_NamHoc", typeof(string));
+                foreach (DataRow row in dtNamHoc.Rows)
                 {
-                    gcDanhSachSV.DataSource = dt;
-                    // Cho phép chọn nhiều dòng
-                    gvDanhSachSV.OptionsSelection.MultiSelect = true;
-                    gvDanhSachSV.OptionsSelection.MultiSelectMode = GridMultiSelectMode.RowSelect;
-
-
+                    row["HK_NamHoc"] = $"HK{row["HocKy"]} - {row["NamHoc"]}";
                 }
-            }
+
+                // Gán vào ComboBox
+                cbbNamHoc.DataSource = dtNamHoc;
+                cbbNamHoc.DisplayMember = "HK_NamHoc";
+                cbbNamHoc.ValueMember = "MaHocKyNamHoc";
+            
+            int maHocKyNamHoc = Convert.ToInt32(cbbNamHoc.SelectedValue);
+            string querySV = $"SELECT * FROM fn_ChiTietHocPhan( {maHocKyNamHoc})";
+            DataTable dt = frmAdmin.getData(querySV);
+            gcDanhSachSV.DataSource = dt;
+
+
+
+        }
+        gvDanhSachSV.OptionsBehavior.Editable = false;
+
         }
 
 
@@ -86,5 +99,24 @@ namespace DoAnCK.UI_Admin
             }
 
         }
+
+        private void cbbNamHoc_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbbNamHoc.SelectedItem == null)
+                return;
+            DataRowView drv = cbbNamHoc.SelectedItem as DataRowView;
+            if (drv == null)
+                return;
+
+            int maHocKyNamHoc = Convert.ToInt32(drv["MaHocKyNamHoc"]);
+
+            string query = $"SELECT * FROM fn_ChiTietHocPhan({maHocKyNamHoc})";
+            DataTable dt = frmAdmin.getData(query);
+
+            // Bind vào grid
+            gcDanhSachSV.DataSource = dt;
+        }
+
+      
     }
 }

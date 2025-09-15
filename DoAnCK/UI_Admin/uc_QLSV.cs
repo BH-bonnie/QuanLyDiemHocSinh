@@ -87,10 +87,12 @@ namespace DoAnCK.UI_Admin
                         {
                             string maSV = row["MaSV"].ToString().Trim();
                             string hoTen = row["HoTen"].ToString().Trim();
+                            string lopSV = row["LopSV"].ToString().Trim();
 
-                            if (string.IsNullOrWhiteSpace(maSV) || string.IsNullOrWhiteSpace(hoTen))
+
+                    if (string.IsNullOrWhiteSpace(maSV) || string.IsNullOrWhiteSpace(hoTen) || string.IsNullOrWhiteSpace(lopSV))
                             {
-                                MessageBox.Show("Mã sinh viên và Họ tên không được để trống!");
+                                MessageBox.Show("Mã sinh viên, Họ tên, Lớp SV không được để trống!");
                                 return;
                             }
 
@@ -104,7 +106,7 @@ namespace DoAnCK.UI_Admin
                                     int exist = (int)cmd.ExecuteScalar();
                                     if (exist > 0)
                                     {
-                                        MessageBox.Show($"Mã giảng viên '{maSV}' đã tồn tại!");
+                                        MessageBox.Show($"Mã sinh viên '{maSV}' đã tồn tại!");
                                         return;
                                     }
                                 }

@@ -13,11 +13,13 @@ namespace DoAnCK.UI_Admin
 {
     public partial class uc_DSDK: UserControl
     {
-        string connStr = frmAdmin.ConnString;
+       
         private DataTable dt;
         public uc_DSDK()
         {
             InitializeComponent();
+            string connStr = frmAdmin.ConnString;
+
         }
 
         private void uc_DSDK_Load(object sender, EventArgs e)

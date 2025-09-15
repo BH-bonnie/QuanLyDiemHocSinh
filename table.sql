@@ -13,6 +13,8 @@
 	IF OBJECT_ID('dbo.SinhVien', 'U') IS NOT NULL DROP TABLE dbo.SinhVien;
 		IF OBJECT_ID('dbo.CongThucTinhDiem', 'U') IS NOT NULL DROP TABLE dbo.CongThucTinhDiem;
 		IF OBJECT_ID('dbo.HocKyNamHoc', 'U') IS NOT NULL DROP TABLE dbo.HocKyNamHoc;
+				IF OBJECT_ID('dbo.DiemRenLuyen', 'U') IS NOT NULL DROP TABLE dbo.DiemRenLuyen;
+
 
 
 	GO
@@ -30,7 +32,10 @@
 		LopSV      VARCHAR(20)
 	);
 
-
+	CREATE TABLE DiemRenLuyen (
+		MaSV       VARCHAR(10) PRIMARY KEY,
+		MaHocKyNamHoc INT NOT NULL
+	);
 
 	-- ==========================
 	-- Bảng MonHoc
