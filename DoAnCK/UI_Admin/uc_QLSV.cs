@@ -19,6 +19,8 @@ namespace DoAnCK.UI_Admin
     {
         string connStr = frmAdmin.ConnString;
         private DataTable dtSinhVien;
+        private bool isAdding = false;
+        private int editingRowHandle = -1;
         public uc_QLSV()
         {
             InitializeComponent();
@@ -28,6 +30,12 @@ namespace DoAnCK.UI_Admin
 
         private void uc_QLSV_Load(object sender, EventArgs e)
         {
+            btnLuu.Enabled = false;
+            btnHuy.Enabled = false;
+            btnSua.Enabled = true;
+            isAdding = false;
+            gvDanhSachSV.OptionsBehavior.Editable = false;
+            btnThem.Enabled = true;
             using (var conn = new SqlConnection(connStr))
             {
                 conn.Open();
@@ -38,48 +46,89 @@ namespace DoAnCK.UI_Admin
                     // Cho phép chọn nhiều dòng
                     gvDanhSachSV.OptionsSelection.MultiSelect = true;
                     gvDanhSachSV.OptionsSelection.MultiSelectMode = GridMultiSelectMode.RowSelect;
-
-
                 }
             }
         }
 
-        private void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            gvDanhSachSV.CloseEditor();
-            gvDanhSachSV.UpdateCurrentRow();
-
-            var changes = dtSinhVien.GetChanges();
-            if (changes == null)
-            {
-                MessageBox.Show("Không có thay đổi nào để lưu!");
-                return;
-            }
-
-            using (SqlConnection conn = new SqlConnection(connStr))
-            {
-                SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM SinhVien", conn);
-                SqlCommandBuilder builder = new SqlCommandBuilder(da);
-
-                da.Update(dtSinhVien);
-            }
-
-            dtSinhVien.AcceptChanges();
-            MessageBox.Show("Đã lưu thay đổi vào CSDL!");
-        }
+      
 
         private void btnThem_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            btnThem.Enabled = false;
+            btnHuy.Enabled = true;
+            btnXoa.Enabled = false;
+            btnSua.Enabled = false;
+            btnLuu.Enabled = true;
+            isAdding = true;
+
+            gvDanhSachSV.OptionsBehavior.Editable = true;
             gvDanhSachSV.AddNewRow();
 
-            int newRowHandle = gvDanhSachSV.FocusedRowHandle;
-            gvDanhSachSV.FocusedRowHandle = newRowHandle;
-            DataRow newRow = dtSinhVien.NewRow();
-
-            gvDanhSachSV.FocusedRowHandle = gvDanhSachSV.GetRowHandle(dtSinhVien.Rows.IndexOf(newRow));
-
+            gvDanhSachSV.FocusedRowHandle = DevExpress.XtraGrid.GridControl.NewItemRowHandle;
+            gvDanhSachSV.FocusedColumn = gvDanhSachSV.VisibleColumns[0];
+            gvDanhSachSV.ShowEditor();
         }
+          private void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+                {
+                   
 
+                    gvDanhSachSV.CloseEditor();
+                    gvDanhSachSV.UpdateCurrentRow();
+                    var changes = dtSinhVien.GetChanges();
+                    if (changes == null)
+                    {
+                        MessageBox.Show("Không có thay đổi nào để lưu!");
+                        
+                        return;
+                    }
+                    foreach (DataRow row in changes.Rows)
+                    {
+                        if (row.RowState == DataRowState.Added)
+                        {
+                            string maSV = row["MaSV"].ToString().Trim();
+                            string hoTen = row["HoTen"].ToString().Trim();
+
+                            if (string.IsNullOrWhiteSpace(maSV) || string.IsNullOrWhiteSpace(hoTen))
+                            {
+                                MessageBox.Show("Mã sinh viên và Họ tên không được để trống!");
+                                return;
+                            }
+
+                            using (SqlConnection conn = new SqlConnection(connStr))
+                            {
+                                conn.Open();
+                                string query = "SELECT COUNT(*) FROM SinhVien WHERE MaSV = @MaSV";
+                                using (SqlCommand cmd = new SqlCommand(query, conn))
+                                {
+                                    cmd.Parameters.AddWithValue("@MaSV", maSV);
+                                    int exist = (int)cmd.ExecuteScalar();
+                                    if (exist > 0)
+                                    {
+                                        MessageBox.Show($"Mã giảng viên '{maSV}' đã tồn tại!");
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                        using (SqlConnection conn = new SqlConnection(connStr))
+                    {
+                        SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM SinhVien", conn);
+                        SqlCommandBuilder builder = new SqlCommandBuilder(da);
+
+                        da.Update(dtSinhVien);
+                    }
+
+                    dtSinhVien.AcceptChanges();
+                    MessageBox.Show("Đã lưu thay đổi vào CSDL!");
+                    btnLuu.Enabled = false;
+                    btnSua.Enabled = true;
+                    btnXoa.Enabled = true;
+                    gvDanhSachSV.OptionsBehavior.Editable = false;
+                    btnThem.Enabled = true;
+
+                    isAdding = false;
+        }
         private void btnXoa_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             int[] selectedRows = gvDanhSachSV.GetSelectedRows();
@@ -93,11 +142,39 @@ namespace DoAnCK.UI_Admin
 
                 if (result == DialogResult.Yes)
                 {
-                    // Duyệt ngược để tránh lỗi index
-                    for (int i = selectedRows.Length - 1; i >= 0; i--)
+                    using (SqlConnection conn = new SqlConnection(connStr))
                     {
-                        gvDanhSachSV.DeleteRow(selectedRows[i]);
+                        conn.Open();
+
+                        for (int i = selectedRows.Length - 1; i >= 0; i--)
+                        {
+                            DataRow row = gvDanhSachSV.GetDataRow(selectedRows[i]);
+                            if (row != null && row.RowState == DataRowState.Added)
+                            {
+                                // Nếu là dòng mới chưa lưu DB thì chỉ cần remove khỏi DataTable
+                                row.Delete();
+                                gvDanhSachSV.DeleteRow(selectedRows[i]);
+                            }
+                            else
+                            {
+                                // Lấy MaSV từ hàng cũ
+                                string maSV = gvDanhSachSV.GetRowCellValue(selectedRows[i], "MaSV").ToString();
+
+                                // Xóa trong database
+                                string deleteQuery = "DELETE FROM SinhVien WHERE MaSV = @MaSV";
+                                using (SqlCommand cmd = new SqlCommand(deleteQuery, conn))
+                                {
+                                    cmd.Parameters.AddWithValue("@MaSV", maSV);
+                                    cmd.ExecuteNonQuery();
+                                }
+
+                                // Xóa trên GridView
+                                gvDanhSachSV.DeleteRow(selectedRows[i]);
+                            }
+                        }
                     }
+
+                    MessageBox.Show("Xóa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             else
@@ -107,25 +184,106 @@ namespace DoAnCK.UI_Admin
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
             }
+            isAdding = false;
+            editingRowHandle = -1;
+
+            btnThem.Enabled = true;
+            btnSua.Enabled = true;
+            btnLuu.Enabled = false;
+            gvDanhSachSV.OptionsBehavior.Editable = false;
         }
 
-        private void btnQuayLai_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        private void gvDanhSachSV_ShowingEditor(object sender, CancelEventArgs e)
         {
-            var result = MessageBox.Show("Bạn có chắc chắn muốn hủy các thay đổi chưa lưu?",
-                                "Xác nhận",
-                                MessageBoxButtons.YesNo,
-                                MessageBoxIcon.Question);
 
-            if (result == DialogResult.Yes)
+            GridView view = sender as GridView;
+            int rowHandle = view.FocusedRowHandle;
+
+            // Nếu là NewItemRow thì cho phép
+            if (view.IsNewItemRow(rowHandle) || rowHandle == DevExpress.XtraGrid.GridControl.NewItemRowHandle)
             {
-                dtSinhVien = frmAdmin.getData("SELECT * FROM v_SinhVien_Detail;");
-                gcDanhSachSV.DataSource = dtSinhVien;
-
-                MessageBox.Show("Dữ liệu đã được khôi phục về trạng thái trước khi thay đổi.",
-                                "Thông báo",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
+                return;
             }
+
+            // Lấy DataRow thực sự
+            DataRow row = view.GetDataRow(rowHandle);
+            if (row == null) return;
+
+            if (isAdding)
+            {
+                // Cho phép sửa các dòng mới thêm (RowState == Added)
+                if (row.RowState != DataRowState.Added)
+                {
+                    e.Cancel = true; // khóa dòng cũ
+                }
+            }
+            else
+            {
+                // Ở chế độ sửa: chỉ khóa cột MaSV
+                if (view.FocusedColumn != null && view.FocusedColumn.FieldName == "MaSV")
+                    e.Cancel = true;
+            }
+
+        }
+    
+
+
+        private void btnSua_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            btnLuu.Enabled = true;
+            btnHuy.Enabled = true;
+            btnSua.Enabled = false;
+            btnXoa.Enabled = false;
+            btnThem.Enabled = false;
+            gvDanhSachSV.OptionsBehavior.Editable = true;
+            editingRowHandle = gvDanhSachSV.FocusedRowHandle;
+
+        }
+
+        private void btnHuy_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            int rowHandle = gvDanhSachSV.FocusedRowHandle; // Thêm dòng này
+
+            if (isAdding)
+            {
+                // Nếu đang thêm mới, xóa dòng mới thêm
+                if (gvDanhSachSV.IsNewItemRow(rowHandle) || rowHandle == DevExpress.XtraGrid.GridControl.NewItemRowHandle)
+                {
+                    gvDanhSachSV.DeleteRow(rowHandle);
+                }
+                else
+                {
+                    // Tìm và xóa dòng có RowState = Added
+                    for (int i = gvDanhSachSV.RowCount - 1; i >= 0; i--)
+                    {
+                        DataRow row = gvDanhSachSV.GetDataRow(i);
+                        if (row != null && row.RowState == DataRowState.Added)
+                        {
+                            gvDanhSachSV.DeleteRow(i);
+                            break;
+                        }
+                    }
+                }
+
+                // Hủy các thay đổi trong DataTable
+                dtSinhVien.RejectChanges();
+            }
+            else
+            {
+                // Nếu đang sửa, hủy chỉnh sửa
+                gvDanhSachSV.CancelUpdateCurrentRow();
+                dtSinhVien.RejectChanges();
+            }
+
+            // Reset trạng thái các nút
+            btnLuu.Enabled = false;
+            btnSua.Enabled = true;
+            btnXoa.Enabled = true;
+            btnThem.Enabled = true;
+            btnHuy.Enabled = false;
+            gvDanhSachSV.OptionsBehavior.Editable = false;
+            isAdding = false;
+            editingRowHandle = -1;
         }
     }
 }

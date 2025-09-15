@@ -49,6 +49,8 @@ namespace DoAnCK.UI_GV
 
 
             }
+            gvDanhSach.OptionsBehavior.Editable = false;
+
         }
 
         private void cbbNamHoc_SelectedIndexChanged(object sender, EventArgs e)

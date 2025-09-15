@@ -42,6 +42,7 @@
             this.btnCT = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.fluentDesignFormControl1 = new DevExpress.XtraBars.FluentDesignSystem.FluentDesignFormControl();
             this.fluentFormDefaultManager1 = new DevExpress.XtraBars.FluentDesignSystem.FluentFormDefaultManager(this.components);
+            this.btnQLMH = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             ((System.ComponentModel.ISupportInitialize)(this.accordionControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fluentDesignFormControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fluentFormDefaultManager1)).BeginInit();
@@ -73,6 +74,7 @@
             this.accordionControlElement1.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] {
             this.btnQLSV,
             this.btnQLGV,
+            this.btnQLMH,
             this.btnDSGD,
             this.btnDSDK,
             this.btnKQHT});
@@ -156,6 +158,13 @@
             // 
             this.fluentFormDefaultManager1.Form = this;
             // 
+            // btnQLMH
+            // 
+            this.btnQLMH.Name = "btnQLMH";
+            this.btnQLMH.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
+            this.btnQLMH.Text = "Quản lý môn học";
+            this.btnQLMH.Click += new System.EventHandler(this.btnQLMH_Click);
+            // 
             // frmAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -191,5 +200,6 @@
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement8;
         private DevExpress.XtraBars.Navigation.AccordionControlElement btnKQHT;
         private DevExpress.XtraBars.Navigation.AccordionControlElement btnCT;
+        private DevExpress.XtraBars.Navigation.AccordionControlElement btnQLMH;
     }
 }

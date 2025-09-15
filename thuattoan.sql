@@ -1,22 +1,71 @@
 ﻿	USE QL_SinhVien;
 	GO
-IF OBJECT_ID('dbo.v_LopHocPhan_Detail', 'V') IS NOT NULL
-    DROP VIEW dbo.v_LopHocPhan_Detail;
+
+IF OBJECT_ID('dbo.fn_LopHocPhanTheoNamHoc', 'IF') IS NOT NULL
+    DROP FUNCTION dbo.fn_LopHocPhanTheoNamHoc;
 GO
-	
-CREATE VIEW v_LopHocPhan_Detail AS
+
+CREATE FUNCTION dbo.fn_LopHocPhanTheoNamHoc
+(
+    @MaHocKyNamHoc INT
+)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT 
+        LHP.MaMH,
+		MH.TenMH,
+        LHP.MaLHP,
+        LHP.MaGV,
+        GV.HoTenGV,
+		GV.Email
+    FROM LopHocPhan LHP
+    INNER JOIN MonHoc MH ON LHP.MaMH = MH.MaMH
+    INNER JOIN GiangVien GV ON LHP.MaGV = GV.MaGV
+    INNER JOIN HocKyNamHoc HKNH ON LHP.MaHocKyNamHoc = HKNH.MaHocKyNamHoc
+    WHERE LHP.MaHocKyNamHoc = @MaHocKyNamHoc
+);
+GO
+
+IF OBJECT_ID('dbo.v_MonHoc', 'V') IS NOT NULL
+    DROP VIEW dbo.v_MonHoc;
+GO
+
+-- Tạo view
+CREATE VIEW dbo.v_MonHoc
+AS
 SELECT 
-    HKNH.NamHoc,
-    LHP.MaLHP,
-    LHP.MaMH,
-    MH.TenMH,
-    LHP.MaGV,
-    GV.HoTenGV,
-    GV.Khoa
-FROM LopHocPhan LHP
-INNER JOIN MonHoc MH ON LHP.MaMH = MH.MaMH
-INNER JOIN GiangVien GV ON LHP.MaGV = GV.MaGV
-INNER JOIN HocKyNamHoc HKNH ON LHP.MaHocKyNamHoc = HKNH.MaHocKyNamHoc;
+    MaMH,       -- Mã môn học
+    TenMH,      -- Tên môn học
+    SoTinChi    -- Số tín chỉ
+FROM MonHoc;
+GO
+-- Nếu đã có function cũ, drop trước
+IF OBJECT_ID('dbo.fn_DangKyMonHocTheoNamHoc', 'IF') IS NOT NULL
+    DROP FUNCTION dbo.fn_DangKyMonHocTheoNamHoc;
+GO
+
+CREATE FUNCTION dbo.fn_DangKyMonHocTheoNamHoc
+(
+    @MaHocKyNamHoc INT
+)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT 
+		LHP.MaMH,
+		MH.TenMH,
+		DKMH.MaLHP,
+        DKMH.MaSV,
+        SV.HoTen
+    FROM DangKyMonHoc DKMH
+    INNER JOIN SinhVien SV ON DKMH.MaSV = SV.MaSV
+    INNER JOIN LopHocPhan LHP ON DKMH.MaLHP = LHP.MaLHP
+    INNER JOIN MonHoc MH ON LHP.MaMH = MH.MaMH
+    WHERE DKMH.MaHocKyNamHoc = @MaHocKyNamHoc
+);
 GO
 
 
@@ -37,7 +86,7 @@ RETURN
     SELECT 
         MH.MaMH,
         MH.TenMH,
-        LHP.MaLHP
+        LHP.MaLHP	
     FROM LopHocPhan LHP
     INNER JOIN MonHoc MH ON LHP.MaMH = MH.MaMH
     WHERE LHP.MaGV = @MaGV
@@ -163,7 +212,8 @@ BEGIN
     SELECT TOP 1 
            @TiLeGK = TiLeGK, 
            @TiLeCK = TiLeCK
-    FROM CongThucTinhDiem;
+    FROM CongThucTinhDiem
+	ORDER BY Ma DESC;
 
     -- Nếu không có tỉ lệ, mặc định 0.5 / 0.5
     IF @TiLeGK IS NULL OR @TiLeCK IS NULL
@@ -181,12 +231,11 @@ BEGIN
     -- Nếu điểm CK < 3 thì kết quả = 0
     IF @DiemCK < 3
     BEGIN
-        SET @DiemTB = 0;
+        SET @DiemGK=0;
     END
-    ELSE
-    BEGIN
-        SET @DiemTB = ROUND(@DiemGK * @TiLeGK + @DiemCK * @TiLeCK, 2);
-    END
+    
+    SET @DiemTB = ROUND(@DiemGK * @TiLeGK + @DiemCK * @TiLeCK, 2);
+
 
     RETURN @DiemTB;
 END
@@ -295,3 +344,50 @@ BEGIN
       AND LHP.MaLHP = @MaLHP;
 END
 GO
+IF OBJECT_ID('dbo.sp_ThongKeDiemLopHocPhan', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_ThongKeDiemLopHocPhan;
+GO
+
+CREATE PROCEDURE dbo.sp_ThongKeDiemLopHocPhan
+    @MaLHP VARCHAR(10),
+    @MaHocKyNamHoc INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        COUNT(*) AS TongSoSinhVien,
+        SUM(CASE WHEN TrangThai = N'Đạt' THEN 1 ELSE 0 END) AS SoSinhVienDat,
+        SUM(CASE WHEN TrangThai = N'Không đạt' THEN 1 ELSE 0 END) AS SoSinhVienRớt,
+        SUM(CASE WHEN TrangThai IS NULL THEN 1 ELSE 0 END) AS SoSinhVienChuaCham
+    FROM fn_SinhVienVaDiemTheoLopHocPhan(@MaLHP, @MaHocKyNamHoc);
+END
+GO
+IF OBJECT_ID('dbo.sp_ThongKeDiemTheoKhoangNho', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_ThongKeDiemTheoKhoangNho;
+GO
+
+CREATE PROCEDURE dbo.sp_ThongKeDiemTheoKhoangNho
+    @MaLHP VARCHAR(10),
+    @MaHocKyNamHoc INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        COUNT(*) AS TongSoSinhVien,
+        SUM(CASE WHEN DiemTB >= 0 AND DiemTB < 1 THEN 1 ELSE 0 END) AS Khoang0_1,
+        SUM(CASE WHEN DiemTB >= 1 AND DiemTB < 2 THEN 1 ELSE 0 END) AS Khoang1_2,
+        SUM(CASE WHEN DiemTB >= 2 AND DiemTB < 3 THEN 1 ELSE 0 END) AS Khoang2_3,
+        SUM(CASE WHEN DiemTB >= 3 AND DiemTB < 4 THEN 1 ELSE 0 END) AS Khoang3_4,
+        SUM(CASE WHEN DiemTB >= 4 AND DiemTB < 5 THEN 1 ELSE 0 END) AS Khoang4_5,
+        SUM(CASE WHEN DiemTB >= 5 AND DiemTB < 6 THEN 1 ELSE 0 END) AS Khoang5_6,
+        SUM(CASE WHEN DiemTB >= 6 AND DiemTB < 7 THEN 1 ELSE 0 END) AS Khoang6_7,
+        SUM(CASE WHEN DiemTB >= 7 AND DiemTB < 8 THEN 1 ELSE 0 END) AS Khoang7_8,
+        SUM(CASE WHEN DiemTB >= 8 AND DiemTB < 9 THEN 1 ELSE 0 END) AS Khoang8_9,
+        SUM(CASE WHEN DiemTB >= 9 AND DiemTB <= 10 THEN 1 ELSE 0 END) AS Khoang9_10
+    FROM fn_SinhVienVaDiemTheoLopHocPhan(@MaLHP, @MaHocKyNamHoc)
+    WHERE DiemTB IS NOT NULL;
+END
+GO
+	SELECT * FROM fn_SinhVienVaDiemTheoLopHocPhan('MH1_001', 4)

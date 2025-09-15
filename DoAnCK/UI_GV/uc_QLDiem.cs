@@ -149,7 +149,6 @@ namespace DoAnCK.UI_GV
                     tran.Commit();
                     MessageBox.Show("Cập nhật điểm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Reload lại bảng điểm
                     LoadBangDiemTheoLop();
                 }
                 catch (Exception ex)
@@ -167,7 +166,7 @@ namespace DoAnCK.UI_GV
 
         private void btnThongKe_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            if (cbbMa.SelectedValue == null)
+           if (cbbMa.SelectedValue == null)
             {
                 MessageBox.Show("Vui lòng chọn lớp học phần.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;

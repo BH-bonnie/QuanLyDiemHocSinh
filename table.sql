@@ -23,9 +23,9 @@
 	CREATE TABLE SinhVien (
 		MaSV       VARCHAR(10) PRIMARY KEY,
 		HoTen      NVARCHAR(100) NOT NULL,
-		NgaySinh   DATE NOT NULL,
+		NgaySinh   DATE,
 		NoiSinh    NVARCHAR(100),
-		GioiTinh   NVARCHAR(10) NOT NULL CHECK (GioiTinh IN (N'Nam', N'Nữ')),
+		GioiTinh   NVARCHAR(10) CHECK (GioiTinh IN (N'Nam', N'Nữ')),
 		CMND_CCCD  VARCHAR(20),
 		LopSV      VARCHAR(20)
 	);
@@ -101,12 +101,12 @@ CREATE TABLE ChiTietHocPhan (
 );
 
 
-
-	CREATE TABLE CongThucTinhDiem
+CREATE TABLE CongThucTinhDiem
 (
-	Namhoc INT PRIMARY KEY,
-    TiLeGK DECIMAL(4,2),  -- Trọng số điểm giữa kỳ
-    TiLeCK DECIMAL(4,2)   -- Trọng số điểm cuối kỳ
+    Ma INT IDENTITY(1,1) PRIMARY KEY,  -- Tự tăng từ 1, tăng 1
+    TiLeGK DECIMAL(4,2) NOT NULL CHECK (TiLeGK >= 0 AND TiLeGK <= 1),
+    TiLeCK DECIMAL(4,2) NOT NULL CHECK (TiLeCK >= 0 AND TiLeCK <= 1),
 );
+
 
 	

@@ -151,6 +151,12 @@
     <Compile Include="UI_Admin\uc_DSGD.Designer.cs">
       <DependentUpon>uc_DSGD.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI_Admin\uc_QLMH.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI_Admin\uc_QLMH.Designer.cs">
+      <DependentUpon>uc_QLMH.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI_Admin\uc_QLSV.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -238,6 +244,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI_Admin\uc_DSGD.resx">
       <DependentUpon>uc_DSGD.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI_Admin\uc_QLMH.resx">
+      <DependentUpon>uc_QLMH.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI_Admin\uc_QLSV.resx">
       <DependentUpon>uc_QLSV.cs</DependentUpon>

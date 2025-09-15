@@ -42,6 +42,8 @@ namespace DoAnCK.UI_GV
             isLoading = false;
 
             LoadSinhVien();
+            gvDanhSach.OptionsBehavior.Editable = false;
+
         }
         private void LoadMaLop()
         {

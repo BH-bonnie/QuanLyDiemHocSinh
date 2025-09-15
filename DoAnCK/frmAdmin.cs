@@ -24,6 +24,7 @@ namespace DoAnCK {
       
         uc_QLSV ucQLSV;
         uc_QLGV ucQLGV;
+        uc_QLMH ucQLMH;
         uc_DSGD ucDSGD;
         uc_DSDK ucDSDK;
         uc_KQHT ucKQHT;
@@ -145,6 +146,23 @@ namespace DoAnCK {
             {
                 ucCT.BringToFront();
             }
+        }
+
+        private void btnQLMH_Click(object sender, EventArgs e)
+        {
+            if (ucQLMH == null)
+            {
+                ucQLMH = new uc_QLMH();
+                ucQLMH.Dock = DockStyle.Fill;
+                ucQLMH.AutoSize = true; // tự động mở rộng theo nội dung
+                mainContainer.Controls.Add(ucQLMH);
+                ucQLMH.BringToFront();
+            }
+            else
+            {
+                ucQLMH.BringToFront();
+            }
+
         }
     }
 }
