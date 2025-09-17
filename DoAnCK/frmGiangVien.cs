@@ -11,16 +11,20 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace DoAnCK {
-    public partial class frmGiangVien : DevExpress.XtraBars.FluentDesignSystem.FluentDesignForm {
+    public partial class frmGiangVien : DevExpress.XtraBars.FluentDesignSystem.FluentDesignForm
+    {
         public static string ConnString { get; private set; }
+        public static string MaGV { get; private set; } // Thêm property MaGV
 
-        public frmGiangVien() {
+        // Constructor nhận mã giảng viên từ đăng nhập
+        public frmGiangVien(string maGV)
+        {
             InitializeComponent();
             ConnString = @"Data Source=.;Initial Catalog=QL_SinhVien;Integrated Security=True";
-            
+            MaGV = maGV; // Gán mã giảng viên
             this.mainContainer.AutoScroll = true;
-      
         }
+
         uc_DSGD ucDSGD;
         uc_DSSV ucDSSV;
         uc_QLDiem ucQLD;
@@ -28,10 +32,8 @@ namespace DoAnCK {
 
         private void frmGiangVien_Load(object sender, EventArgs e)
         {
-
-            
+           
         }
- 
 
         public static DataTable getData(string query)
         {
@@ -45,9 +47,10 @@ namespace DoAnCK {
                 }
             }
         }
+
         public static void executeQuery(string query)
         {
-            using (SqlConnection conn = new SqlConnection(ConnString)) // connectionString là chuỗi kết nối DB
+            using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -63,7 +66,7 @@ namespace DoAnCK {
             {
                 ucDSGD = new uc_DSGD();
                 ucDSGD.Dock = DockStyle.Fill;
-                ucDSGD.AutoSize = true; 
+                ucDSGD.AutoSize = true;
                 mainContainer.Controls.Add(ucDSGD);
                 ucDSGD.BringToFront();
             }
@@ -91,7 +94,7 @@ namespace DoAnCK {
 
         private void btnQLD_Click(object sender, EventArgs e)
         {
-            if(ucQLD == null)
+            if (ucQLD == null)
             {
                 ucQLD = new uc_QLDiem();
                 ucQLD.Dock = DockStyle.Fill;

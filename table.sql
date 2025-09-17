@@ -15,6 +15,8 @@
 		IF OBJECT_ID('dbo.HocKyNamHoc', 'U') IS NOT NULL DROP TABLE dbo.HocKyNamHoc;
 				IF OBJECT_ID('dbo.DiemRenLuyen', 'U') IS NOT NULL DROP TABLE dbo.DiemRenLuyen;
 	IF OBJECT_ID('dbo.Lop', 'U') IS NOT NULL DROP TABLE dbo.Lop;
+		IF OBJECT_ID('dbo.TaiKhoan', 'U') IS NOT NULL DROP TABLE dbo.TaiKhoan;
+
 
 
 
@@ -64,7 +66,7 @@
 		Email     VARCHAR(100),
 		DienThoai VARCHAR(15)
 	);
-
+		
 
 -- Bảng HocKyNamHoc
 -- ==========================
@@ -122,7 +124,7 @@ CREATE TABLE CongThucTinhDiem
 
 
 	
-	CREATE TABLE KetQuaThi
+/*	CREATE TABLE KetQuaThi
 (
     MaSV VARCHAR(10) NOT NULL,
     MaMH VARCHAR(10) NOT NULL,
@@ -133,3 +135,14 @@ CREATE TABLE CongThucTinhDiem
     FOREIGN KEY (MaSV) REFERENCES SinhVien(MaSV),
     FOREIGN KEY (MaMH) REFERENCES MonHoc(MaMH),
 );
+*/
+USE QL_SinhVien;
+	GO
+	CREATE TABLE TaiKhoan (
+    MaTK INT IDENTITY(1,1) PRIMARY KEY,
+    TenDangNhap NVARCHAR(50) NOT NULL UNIQUE,
+    MatKhau NVARCHAR(255) NOT NULL,
+    Quyen NVARCHAR(20) NOT NULL,
+    MaGV VARCHAR(10),
+    TrangThai BIT DEFAULT 1,
+    FOREIGN KEY (MaGV) REFERENCES GiangVien(MaGV));

@@ -13,6 +13,8 @@ namespace DoAnCK.UI_GV
 {
     public partial class uc_DSGD : UserControl
     {
+        private string MaGV => frmGiangVien.MaGV;
+
         private string connStr;
         private DataTable dt;
 
@@ -42,7 +44,7 @@ namespace DoAnCK.UI_GV
                 cbbNamHoc.DisplayMember = "HK_NamHoc";
                 cbbNamHoc.ValueMember = "MaHocKyNamHoc";
                 int maHocKyNamHoc = Convert.ToInt32(cbbNamHoc.SelectedValue);
-                string queryMonHoc = $"SELECT * FROM fn_DanhSachMonHoc_GiangVien('{"GV001"}', {maHocKyNamHoc})";
+                string queryMonHoc = $"SELECT * FROM fn_DanhSachMonHoc_GiangVien('{MaGV}', {maHocKyNamHoc})";
                 DataTable dt = frmGiangVien.getData(queryMonHoc);
                 gcDanhSach.DataSource = dt;
 
@@ -59,7 +61,6 @@ namespace DoAnCK.UI_GV
             if (cbbNamHoc.SelectedItem == null)
                 return;
 
-            string maGV = "GV001";
 
             // Lấy DataRowView từ SelectedItem
             DataRowView drv = cbbNamHoc.SelectedItem as DataRowView;
@@ -70,7 +71,7 @@ namespace DoAnCK.UI_GV
             int maHocKyNamHoc = Convert.ToInt32(drv["MaHocKyNamHoc"]);
 
             // Gọi function SQL
-            string query = $"SELECT * FROM fn_DanhSachMonHoc_GiangVien('{maGV}', {maHocKyNamHoc})";
+            string query = $"SELECT * FROM fn_DanhSachMonHoc_GiangVien('{MaGV}', {maHocKyNamHoc})";
             DataTable dt = frmGiangVien.getData(query);
 
             // Bind vào grid

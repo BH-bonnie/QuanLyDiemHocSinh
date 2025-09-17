@@ -151,3 +151,13 @@ INSERT INTO DangKyMonHoc (MaSV, MaLHP, MaHocKyNamHoc) VALUES
 ('SV040','MH3_001', 4),
 ('SV037','MH3_001', 4),
 ('SV039','MH3_001', 4);
+
+USE QL_SinhVien;
+GO
+INSERT INTO TaiKhoan (TenDangNhap, MatKhau, Quyen, MaGV)
+VALUES
+(N'admin', N'123456', N'Admin', NULL),        
+(N'gv001', N'123456', N'GiangVien', 'GV001'),
+(N'gv002', N'123456', N'GiangVien', 'GV002'),
+(N'gv003', N'123456', N'GiangVien', 'GV003');
+SELECT * FROM LopHocPhan WHERE MaGV = 'GV002'

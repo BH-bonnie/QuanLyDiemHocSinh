@@ -60,7 +60,8 @@ namespace DoAnCK.UI_Dangnhap
                 using (SqlConnection conn = new SqlConnection(connStr))
                 {
                     conn.Open();
-                    string query = "SELECT Quyen, TrangThai FROM TaiKhoan WHERE TenDangNhap = @TenDangNhap AND MatKhau = @MatKhau";
+                    // Thêm MaGV vào SELECT
+                    string query = "SELECT Quyen, TrangThai, MaGV FROM TaiKhoan WHERE TenDangNhap = @TenDangNhap AND MatKhau = @MatKhau";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
@@ -80,6 +81,9 @@ namespace DoAnCK.UI_Dangnhap
                                 }
 
                                 string quyen = reader["Quyen"].ToString();
+                                string maGV = reader["MaGV"]?.ToString(); // Lấy MaGV từ database
+
+                                
 
                                 // Kiểm tra quyền có khớp với role được chọn không
                                 if ((role == "Admin" && quyen == "Admin") ||
@@ -99,7 +103,8 @@ namespace DoAnCK.UI_Dangnhap
                                     }
                                     else if (quyen == "GiangVien")
                                     {
-                                        frmGiangVien gvForm = new frmGiangVien();
+                                        // Truyền MaGV vào constructor
+                                        frmGiangVien gvForm = new frmGiangVien(maGV);
                                         gvForm.ShowDialog();
                                     }
 

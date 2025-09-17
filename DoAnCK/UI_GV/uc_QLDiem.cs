@@ -13,18 +13,21 @@ using DevExpress.XtraCharts;
 
 namespace DoAnCK.UI_GV
 {
-    public partial class uc_QLDiem: UserControl
+    public partial class uc_QLDiem : UserControl
     {
+        // Thêm property để tránh khai báo nhiều lần
+        private string MaGV => frmGiangVien.MaGV;
+
         public uc_QLDiem()
         {
             InitializeComponent();
             string connStr = frmGiangVien.ConnString;
-
         }
 
         private int maHocKyNamHoc;
         private DataTable dt;
         private bool isLoading = false;
+
         private void cbbMa_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (isLoading) return;
@@ -48,18 +51,21 @@ namespace DoAnCK.UI_GV
 
             LoadBangDiemTheoLop();
         }
+
         private void LoadMaLop()
         {
+            // Sử dụng property MaGV thay vì mã cứng "GV001"
             string queryMa = $@"
-            SELECT DISTINCT MaLHP 
-            FROM LopHocPhan 
-            WHERE MaHocKyNamHoc = {maHocKyNamHoc} 
-              AND MaGV = '{"GV001"}'
-            ORDER BY MaLHP";
+                SELECT DISTINCT MaLHP 
+                FROM LopHocPhan 
+                WHERE MaHocKyNamHoc = {maHocKyNamHoc} 
+                  AND MaGV = '{MaGV}'
+                ORDER BY MaLHP";
 
+          
             DataTable dtMa = frmGiangVien.getData(queryMa);
 
-            if (dtMa != null && dtMa.Rows.Count > 0)
+           if (dtMa != null && dtMa.Rows.Count > 0)
             {
                 cbbMa.DataSource = dtMa;
                 cbbMa.DisplayMember = "MaLHP";
@@ -89,8 +95,6 @@ namespace DoAnCK.UI_GV
                 MessageBox.Show("Không có dữ liệu sinh viên cho lớp học phần này.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-
-
 
         private void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -159,22 +163,19 @@ namespace DoAnCK.UI_GV
 
                     tran.Commit();
                     MessageBox.Show("Cập nhật điểm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadBangDiemTheoLop(); 
+                    LoadBangDiemTheoLop();
                 }
                 catch (Exception ex)
                 {
                     tran.Rollback();
                     MessageBox.Show("Lỗi khi lưu điểm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-             
             }
-         
         }
-
 
         private void btnThongKe_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-           if (cbbMa.SelectedValue == null)
+            if (cbbMa.SelectedValue == null)
             {
                 MessageBox.Show("Vui lòng chọn lớp học phần.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;

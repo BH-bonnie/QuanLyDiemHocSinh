@@ -18,6 +18,7 @@ namespace DoAnCK.UI_GV
     {
         string connStr = frmGiangVien.ConnString;
 
+        private string MaGV => frmGiangVien.MaGV;
 
         public uc_DSSV()
         {
@@ -51,7 +52,7 @@ namespace DoAnCK.UI_GV
             SELECT DISTINCT MaLHP 
             FROM LopHocPhan 
             WHERE MaHocKyNamHoc = {maHocKyNamHoc} 
-              AND MaGV = '{"GV001"}'
+              AND MaGV = '{MaGV}'
             ORDER BY MaLHP";
 
             DataTable dtMa = frmGiangVien.getData(queryMa);
@@ -62,7 +63,7 @@ namespace DoAnCK.UI_GV
                 cbbMa.DisplayMember = "MaLHP";
                 cbbMa.ValueMember = "MaLHP";
             }
-            else
+           else
             {
                 cbbMa.DataSource = null;
                 MessageBox.Show("Giảng viên này chưa phụ trách lớp học phần nào trong học kỳ hiện tại.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -80,7 +81,7 @@ namespace DoAnCK.UI_GV
 
             if (dt != null && dt.Rows.Count > 0)
                 gcDanhSach.DataSource = dt;
-            else
+           else
             {
                 gcDanhSach.DataSource = null;
                 MessageBox.Show("Không có dữ liệu sinh viên cho lớp học phần này.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -98,12 +99,7 @@ namespace DoAnCK.UI_GV
 
 
 
-        private void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-
-        }
-
-
+     
 
 
 
@@ -150,15 +146,12 @@ namespace DoAnCK.UI_GV
             MessageBox.Show("test");
         }
 
-        // Event handler to load classes before the dropdown is shown
         private void barListItem_GetItemData(object sender, EventArgs e)
         {
-            // Check if a student is selected and current class is available
             if (gvDanhSach.FocusedRowHandle >= 0 && cbbMa.SelectedValue != null)
             {
                 string maLHPHienTai = cbbMa.SelectedValue.ToString();
-                string maGV = "GV001"; // or get from login context
-                LoadLopChuyen(maLHPHienTai, maGV);
+                LoadLopChuyen(maLHPHienTai, MaGV);
             }
         }
 
@@ -175,7 +168,7 @@ namespace DoAnCK.UI_GV
 
             DataTable dtLop = frmGiangVien.getData(query);
 
-            barListItem.Strings.Clear(); // Clear the list of items using the Strings property
+            barListItem.Strings.Clear(); 
 
             if (dtLop != null && dtLop.Rows.Count > 0)
             {
@@ -186,7 +179,10 @@ namespace DoAnCK.UI_GV
             }
             else
             {
-                MessageBox.Show("Không có lớp học phần khác để chuyển trong cùng môn và giảng viên.", "Thông báo");
+                if (!isLoading)
+                {
+                    MessageBox.Show("Không có lớp học phần khác để chuyển trong cùng môn và giảng viên.", "Thông báo");
+                }
             }
         }
 
