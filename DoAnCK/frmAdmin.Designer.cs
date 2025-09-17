@@ -75,8 +75,8 @@
             this.accordionControlElement1.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] {
             this.btnQLSV,
             this.btnQLGV,
-            this.btnDSGD,
             this.btnDSDK,
+            this.btnDSGD,
             this.btnKQHT,
             this.btnChiTiet});
             this.accordionControlElement1.Expanded = true;

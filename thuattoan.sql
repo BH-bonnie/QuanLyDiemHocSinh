@@ -192,54 +192,6 @@ BEGIN
     END CATCH
 END
 GO
-IF OBJECT_ID('dbo.fn_TinhDiemTrungBinh', 'FN') IS NOT NULL
-    DROP FUNCTION dbo.fn_TinhDiemTrungBinh;
-GO
-
-CREATE FUNCTION dbo.fn_TinhDiemTrungBinh
-(
-    @DiemGK DECIMAL(4,2),
-    @DiemCK DECIMAL(4,2)
-)
-RETURNS DECIMAL(4,2)
-AS
-BEGIN
-    DECLARE @DiemTB DECIMAL(4,2);
-    DECLARE @TiLeGK DECIMAL(4,2);
-    DECLARE @TiLeCK DECIMAL(4,2);
-
-    -- Lấy tỉ lệ GK, CK từ bảng công thức
-    SELECT TOP 1 
-           @TiLeGK = TiLeGK, 
-           @TiLeCK = TiLeCK
-    FROM CongThucTinhDiem
-	ORDER BY Ma DESC;
-
-    -- Nếu không có tỉ lệ, mặc định 0.5 / 0.5
-    IF @TiLeGK IS NULL OR @TiLeCK IS NULL
-    BEGIN
-        SET @TiLeGK = 0.5;
-        SET @TiLeCK = 0.5;
-    END
-
-    -- Nếu một trong hai điểm là NULL, trả về NULL
-    IF @DiemGK IS NULL OR @DiemCK IS NULL
-    BEGIN
-        RETURN NULL;
-    END
-
-    -- Nếu điểm CK < 3 thì kết quả = 0
-    IF @DiemCK < 3
-    BEGIN
-        SET @DiemGK=0;
-    END
-    
-    SET @DiemTB = ROUND(@DiemGK * @TiLeGK + @DiemCK * @TiLeCK, 2);
-
-
-    RETURN @DiemTB;
-END
-GO
 
 
 
@@ -319,13 +271,13 @@ RETURN
 GO
 
 
+
 IF OBJECT_ID('dbo.sp_CapNhatDiemHocPhan', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_CapNhatDiemHocPhan;
 GO
-
 CREATE PROCEDURE dbo.sp_CapNhatDiemHocPhan
     @MaSV VARCHAR(10),
-    @MaLHP VARCHAR(10),
+    @MaMH VARCHAR(10),
     @MaHocKyNamHoc INT,
     @DiemGK DECIMAL(4,2),
     @DiemCK DECIMAL(4,2)
@@ -341,9 +293,11 @@ BEGIN
         ON CTHP.MaMH = LHP.MaMH
        AND CTHP.MaHocKyNamHoc = LHP.MaHocKyNamHoc
     WHERE CTHP.MaSV = @MaSV
-      AND LHP.MaLHP = @MaLHP;
+      
 END
 GO
+
+
 IF OBJECT_ID('dbo.sp_ThongKeDiemLopHocPhan', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_ThongKeDiemLopHocPhan;
 GO
@@ -390,4 +344,190 @@ BEGIN
     WHERE DiemTB IS NOT NULL;
 END
 GO
-	SELECT * FROM fn_SinhVienVaDiemTheoLopHocPhan('MH1_001', 4)
+
+IF OBJECT_ID('dbo.fn_SinhVienTheoLop', 'IF') IS NOT NULL
+    DROP FUNCTION dbo.fn_SinhVienTheoLop;
+GO
+CREATE FUNCTION fn_SinhVienTheoLop (@LopSV VARCHAR(20))
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT MaSV,HoTen
+    FROM SinhVien
+    WHERE LopSV = @LopSV
+);
+GO
+IF OBJECT_ID('dbo.fn_QuyDoiDiemHe4', 'FN') IS NOT NULL
+    DROP FUNCTION dbo.fn_QuyDoiDiemHe4;
+GO
+CREATE  FUNCTION fn_QuyDoiDiemHe4 (@DiemHe10 DECIMAL(4,2))
+RETURNS DECIMAL(3,2)
+AS
+BEGIN
+    DECLARE @DiemHe4 DECIMAL(3,2);
+	IF @DiemHe10 IS NULL
+    RETURN NULL;
+    IF @DiemHe10 >= 9.0 SET @DiemHe4 = 4.0;         
+    ELSE IF @DiemHe10 >= 8.5 SET @DiemHe4 = 3.7;  
+    ELSE IF @DiemHe10 >= 8.0 SET @DiemHe4 = 3.5;  
+    ELSE IF @DiemHe10 >= 7.0 SET @DiemHe4 = 3.0;  
+    ELSE IF @DiemHe10 >= 6.5 SET @DiemHe4 = 2.5;  
+    ELSE IF @DiemHe10 >= 5.5 SET @DiemHe4 = 2.0;  
+    ELSE IF @DiemHe10 >= 5.0 SET @DiemHe4 = 1.5;    
+    ELSE IF @DiemHe10 >= 4.0 SET @DiemHe4 = 1.0;  
+    ELSE SET @DiemHe4 = 0.0;                       
+    RETURN @DiemHe4;
+END
+GOIF OBJECT_ID('dbo.fn_QuyDoiDiemChu', 'FN') IS NOT NULL
+    DROP FUNCTION dbo.fn_QuyDoiDiemChu;
+GO
+CREATE  FUNCTION fn_QuyDoiDiemChu (@DiemHe10 DECIMAL(4,2))
+RETURNS NVARCHAR(2)
+AS
+BEGIN
+    DECLARE @Chu NVARCHAR(2);
+	IF @DiemHe10 IS NULL
+    RETURN NULL;
+
+
+    IF @DiemHe10 >= 9.0 SET @Chu = N'A+';  
+    ELSE IF @DiemHe10 >= 8.5 SET @Chu = N'A';  
+    ELSE IF @DiemHe10 >= 8.0 SET @Chu = N'B+';  
+    ELSE IF @DiemHe10 >= 7.0 SET @Chu = N'B';  
+    ELSE IF @DiemHe10 >= 6.5 SET @Chu = N'C+';  
+    ELSE IF @DiemHe10 >= 5.5 SET @Chu = N'C';  
+    ELSE IF @DiemHe10 >= 5.0 SET @Chu = N'D+';  
+    ELSE IF @DiemHe10 >= 4.0 SET @Chu = N'D';  
+    ELSE SET @Chu = N'F';
+
+    RETURN @Chu;
+END
+GO
+IF OBJECT_ID('dbo.fn_TinhDiemTrungBinh', 'FN') IS NOT NULL
+    DROP FUNCTION dbo.fn_TinhDiemTrungBinh;
+GO
+
+CREATE FUNCTION dbo.fn_TinhDiemTrungBinh
+(
+    @DiemGK DECIMAL(4,2),
+    @DiemCK DECIMAL(4,2)
+)
+RETURNS DECIMAL(4,2)
+AS
+BEGIN
+    DECLARE @DiemTB DECIMAL(4,2);
+    DECLARE @TiLeGK DECIMAL(4,2);
+    DECLARE @TiLeCK DECIMAL(4,2);
+
+    -- Lấy tỉ lệ GK, CK từ bảng công thức
+    SELECT TOP 1 
+           @TiLeGK = TiLeGK, 
+           @TiLeCK = TiLeCK
+    FROM CongThucTinhDiem
+	ORDER BY Ma DESC;
+
+    -- Nếu không có tỉ lệ, mặc định 0.5 / 0.5
+    IF @TiLeGK IS NULL OR @TiLeCK IS NULL
+    BEGIN
+        SET @TiLeGK = 0.5;
+        SET @TiLeCK = 0.5;
+    END
+
+    -- Nếu một trong hai điểm là NULL, trả về NULL
+    IF @DiemGK IS NULL OR @DiemCK IS NULL
+    BEGIN
+        RETURN NULL;
+    END
+
+    -- Nếu điểm CK < 3 thì kết quả = 0
+    IF @DiemCK < 3
+    BEGIN
+        SET @DiemGK=0;
+    END
+    
+    SET @DiemTB = ROUND(@DiemGK * @TiLeGK + @DiemCK * @TiLeCK, 2);
+
+
+    RETURN @DiemTB;
+END
+GO
+IF OBJECT_ID('dbo.fn_ChiTietDiemSV', 'IF') IS NOT NULL
+    DROP FUNCTION dbo.fn_ChiTietDiemSV;
+GO
+
+CREATE FUNCTION dbo.fn_ChiTietDiemSV(@MaSV VARCHAR(10))
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT
+        mh.MaMH,
+        mh.TenMH,
+        mh.SoTinChi,
+        dbo.fn_TinhDiemTrungBinh(cthp.DiemGK, cthp.DiemCK) AS DiemHe10,
+        dbo.fn_QuyDoiDiemHe4(dbo.fn_TinhDiemTrungBinh(cthp.DiemGK, cthp.DiemCK)) AS DiemHe4,
+        dbo.fn_QuyDoiDiemChu(dbo.fn_TinhDiemTrungBinh(cthp.DiemGK, cthp.DiemCK)) AS DiemChu,
+        CASE 
+            WHEN dbo.fn_TinhDiemTrungBinh(cthp.DiemGK, cthp.DiemCK) IS NULL THEN N''
+            WHEN dbo.fn_TinhDiemTrungBinh(cthp.DiemGK, cthp.DiemCK) >= 5.0 THEN N'Đậu'
+            ELSE N'Rớt'
+        END AS TrangThai
+    FROM MonHoc mh
+    OUTER APPLY
+    (
+        SELECT TOP 1 *
+        FROM ChiTietHocPhan cthp
+        WHERE cthp.MaSV = @MaSV
+          AND cthp.MaMH = mh.MaMH
+        ORDER BY dbo.fn_TinhDiemTrungBinh(cthp.DiemGK, cthp.DiemCK) DESC
+    ) AS cthp
+);
+
+IF OBJECT_ID('dbo.vw_ThongTinChiTietSV', 'V') IS NOT NULL
+    DROP VIEW dbo.vw_ThongTinChiTietSV;
+GO
+
+
+CREATE VIEW vw_ThongTinChiTietSV AS
+SELECT
+    sv.MaSV,
+    sv.HoTen,
+    sv.NgaySinh,
+    sv.NoiSinh,
+    sv.GioiTinh,
+    ISNULL(drl.Diem, 0) AS DiemRenLuyen -- nếu chưa có điểm rèn luyện thì trả về 0
+FROM SinhVien sv
+LEFT JOIN DiemRenLuyen drl ON sv.MaSV = drl.MaSV;
+GO
+
+
+IF OBJECT_ID('dbo.fn_ChiTietHocPhan', 'IF') IS NOT NULL
+    DROP FUNCTION dbo.fn_ChiTietHocPhan;
+GO
+
+CREATE FUNCTION dbo.fn_ChiTietHocPhan (@MaHocKyNamHoc INT)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT 
+        CTHP.MaSV,
+        SV.HoTen ,
+        CTHP.MaMH,
+        MH.TenMH,
+        CTHP.DiemGK,
+        CTHP.DiemCK,
+        dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK) AS DiemTB,
+        CASE 
+			WHEN CTHP.DiemGK IS NULL OR CTHP.DiemCK IS NULL THEN NULL
+            WHEN dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK) >= 5 THEN N'Đạt'
+            ELSE N'Không đạt'
+        END AS KetQua
+    FROM ChiTietHocPhan CTHP
+    INNER JOIN SinhVien SV ON CTHP.MaSV = SV.MaSV
+    INNER JOIN MonHoc MH ON CTHP.MaMH = MH.MaMH
+    WHERE CTHP.MaHocKyNamHoc = @MaHocKyNamHoc
+);
+GO
+SELECT * FROM fn_ChiTietHocPhan( 4)

@@ -1,5 +1,10 @@
 ﻿USE QL_SinhVien;
 GO
+INSERT INTO Lop (LopSV, TenLop)
+VALUES 
+('CNTT01','Công nghệ thông tin'),
+('CNTT02','Công nghệ thông tin');
+
 
 INSERT INTO SinhVien (MaSV, HoTen, NgaySinh, NoiSinh, GioiTinh, CMND_CCCD, LopSV)
 VALUES

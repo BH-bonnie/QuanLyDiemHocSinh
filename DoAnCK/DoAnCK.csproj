@@ -169,6 +169,18 @@
     <Compile Include="UI_Admin\uc_QLSV.Designer.cs">
       <DependentUpon>uc_QLSV.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI_Dangnhap\uc_Chonquyen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI_Dangnhap\uc_Chonquyen.Designer.cs">
+      <DependentUpon>uc_Chonquyen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI_Dangnhap\uc_Dangnhap.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI_Dangnhap\uc_Dangnhap.Designer.cs">
+      <DependentUpon>uc_Dangnhap.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI_GV\frmThongKe.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -259,6 +271,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI_Admin\uc_QLSV.resx">
       <DependentUpon>uc_QLSV.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI_Dangnhap\uc_Chonquyen.resx">
+      <DependentUpon>uc_Chonquyen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI_Dangnhap\uc_Dangnhap.resx">
+      <DependentUpon>uc_Dangnhap.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI_GV\frmThongKe.resx">
       <DependentUpon>frmThongKe.cs</DependentUpon>

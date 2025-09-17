@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using DevExpress.XtraEditors.Mask.Design;
 
 namespace DoAnCK.UI_Admin
 {
@@ -24,11 +25,44 @@ namespace DoAnCK.UI_Admin
         }
         private DataTable dt;
         private int LopSV;
-
         private bool isLoading = false;
+
         private void cbbLop_SelectedIndexChanged(object sender, EventArgs e)
         {
-            treeViewTen.Nodes.Clear();
+            if (isLoading) return;
+            LoadTreeView();
+          
+        }
+
+        private void uc_Chitiet_Load(object sender, EventArgs e)
+        {
+            isLoading = true;
+
+       
+
+            LoadLopSV();
+
+            isLoading = false;
+
+            LoadTreeView();
+        }
+        private void LoadLopSV()
+        {
+            string queryMa = $@"
+            SELECT DISTINCT LopSV 
+            FROM Lop";
+            DataTable dtMa = frmAdmin.getData(queryMa);
+
+
+            cbbMa.DataSource = dtMa;
+            cbbMa.DisplayMember = "LopSV";
+            cbbMa.ValueMember = "LopSV";
+        }
+        private void LoadTreeView()
+        {
+            if (isLoading || cbbMa.SelectedValue == null) return;
+
+            string lopSV = cbbMa.SelectedValue.ToString();
             if (cbbMa.SelectedValue == null) return;
 
             string selectedLop = cbbMa.SelectedValue.ToString();
@@ -44,29 +78,7 @@ namespace DoAnCK.UI_Admin
                 string nodeText = $"{row["MaSV"]} - {row["HoTen"]}";
                 treeViewTen.Nodes.Add(nodeText);
             }
-        }
-
-        private void uc_Chitiet_Load(object sender, EventArgs e)
-        {
-            LoadLopSV();
-
-        }
-        private void LoadLopSV()
-        {
-            string queryMa = $@"
-            SELECT DISTINCT LopSV 
-            FROM Lop";
-            DataTable dtMa = frmAdmin.getData(queryMa);
-
-
-            cbbMa.DataSource = dtMa;
-            cbbMa.DisplayMember = "LopSV";
-            cbbMa.ValueMember = "LopSV";
-
-
-
-
-
+            
         }
 
         private double TinhTrungBinhDiemDau(string tenCotDiem)
