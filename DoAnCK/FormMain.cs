@@ -36,7 +36,7 @@ namespace DoAnCK
                 ucChonquyen = new uc_Chonquyen();
                 ucChonquyen.Dock = DockStyle.Fill;
                 ucChonquyen.AutoSize = true;
-                ucChonquyen.OnChonQuyen += UcChonquyen_OnChonQuyen; // Bắt sự kiện
+                ucChonquyen.OnChonQuyen += UcChonquyen_OnChonQuyen; 
 
                 panelMain.Controls.Add(ucChonquyen);
                 ucChonquyen.BringToFront();
@@ -49,19 +49,16 @@ namespace DoAnCK
 
         private void UcChonquyen_OnChonQuyen(object sender, string role)
         {
-            // Xóa cũ nếu có
             if (ucDangnhap != null)
             {
                 panelMain.Controls.Remove(ucDangnhap);
                 ucDangnhap.Dispose();
             }
 
-            // Luôn tạo mới với role mới
             ucDangnhap = new uc_Dangnhap(role);
             ucDangnhap.Dock = DockStyle.Fill;
             ucDangnhap.AutoSize = true;
             ucDangnhap.OnExit += UcDangnhap_OnExit;
-
             panelMain.Controls.Add(ucDangnhap);
             ucDangnhap.BringToFront();
         }

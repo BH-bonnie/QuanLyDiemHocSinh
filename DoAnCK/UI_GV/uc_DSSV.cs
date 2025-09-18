@@ -16,16 +16,22 @@ namespace DoAnCK.UI_GV
 {
     public partial class uc_DSSV : UserControl
     {
-        string connStr = frmGiangVien.ConnString;
-
-        private string MaGV => frmGiangVien.MaGV;
-
+        private string MaGV;
+        private string connStr;
+        private DataTable dt;
         public uc_DSSV()
         {
             InitializeComponent();
+            connStr = frmGiangVien.ConnString;
+            MaGV = frmGiangVien.MaGV;
+        }
+        public uc_DSSV(string connectionString, string maGV)
+        {
+            InitializeComponent();
+            connStr = connectionString;
+            MaGV = maGV;
         }
         private int maHocKyNamHoc;
-        private DataTable dt;
         private bool isLoading = false;
         private void uc_DSSV_Load(object sender, EventArgs e)
         {
@@ -48,14 +54,9 @@ namespace DoAnCK.UI_GV
         }
         private void LoadMaLop()
         {
-            string queryMa = $@"
-            SELECT DISTINCT MaLHP 
-            FROM LopHocPhan 
-            WHERE MaHocKyNamHoc = {maHocKyNamHoc} 
-              AND MaGV = '{MaGV}'
-            ORDER BY MaLHP";
+            string query = $"EXEC sp_GetLopHocPhanByGV @MaHocKyNamHoc = {maHocKyNamHoc}, @MaGV = '{MaGV}'";
 
-            DataTable dtMa = frmGiangVien.getData(queryMa);
+            DataTable dtMa = frmGiangVien.getData(query);
 
             if (dtMa != null && dtMa.Rows.Count > 0)
             {
@@ -63,7 +64,7 @@ namespace DoAnCK.UI_GV
                 cbbMa.DisplayMember = "MaLHP";
                 cbbMa.ValueMember = "MaLHP";
             }
-           else
+            else
             {
                 cbbMa.DataSource = null;
                 MessageBox.Show("Giảng viên này chưa phụ trách lớp học phần nào trong học kỳ hiện tại.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -98,12 +99,6 @@ namespace DoAnCK.UI_GV
 
 
 
-
-     
-
-
-
-
         private void btnXoa_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             int rowHandle = gvDanhSach.FocusedRowHandle;
@@ -115,7 +110,6 @@ namespace DoAnCK.UI_GV
             string maSV = row["MaSV"].ToString();
             string maLHP = cbbMa.SelectedValue.ToString();
 
-            // Hiển thị hộp thoại xác nhận
             DialogResult result = MessageBox.Show(
                 $"Bạn có chắc chắn muốn xóa sinh viên {maSV} khỏi lớp học phần {maLHP} không?",
                 "Xác nhận xóa",
@@ -125,14 +119,13 @@ namespace DoAnCK.UI_GV
 
             if (result == DialogResult.Yes)
             {
-                string query = $"DELETE FROM DangKyMonHoc WHERE MaSV='{maSV}' AND MaLHP='{maLHP}'";
+                string query = $"EXEC sp_XoaDangKyMonHoc @MaSV = '{maSV}', @MaLHP = '{maLHP}'";
                 try
                 {
-                    frmGiangVien.executeQuery(query); // gọi phương thức executeQuery đúng cách
-
-                    // Xóa dòng khỏi DataTable cục bộ
+                    frmGiangVien.executeQuery(query);
                     dt.Rows.Remove(row);
                     gvDanhSach.RefreshData();
+                    MessageBox.Show("Xóa sinh viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
@@ -141,40 +134,29 @@ namespace DoAnCK.UI_GV
             }
         }
 
-        private void btn_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("test");
-        }
-
-        private void barListItem_GetItemData(object sender, EventArgs e)
-        {
-            if (gvDanhSach.FocusedRowHandle >= 0 && cbbMa.SelectedValue != null)
+     
+         private void barListItem_GetItemData(object sender, EventArgs e)
+         {
+             if (gvDanhSach.FocusedRowHandle >= 0 && cbbMa.SelectedValue != null)
             {
                 string maLHPHienTai = cbbMa.SelectedValue.ToString();
-                LoadLopChuyen(maLHPHienTai, MaGV);
-            }
-        }
+                LoadLopChuyen(maLHPHienTai, MaGV); }
+           }
+       
 
-        private void LoadLopChuyen(string maLHPHienTai, string maGV)
-        {
-            string query = $@"
-                SELECT MaLHP
-                FROM LopHocPhan
-                WHERE MaHocKyNamHoc = {maHocKyNamHoc}
-                  AND MaGV = '{maGV}'
-                  AND MaMH = (SELECT MaMH FROM LopHocPhan WHERE MaLHP = '{maLHPHienTai}')
-                  AND MaLHP <> '{maLHPHienTai}'
-                ORDER BY MaLHP";
+         void LoadLopChuyen(string maLHPHienTai, string maGV)
+         {
+            string query = $"EXEC sp_LayLopHocPhanKhac @MaHocKyNamHoc = {maHocKyNamHoc}, @MaGV = '{maGV}', @MaLHPHienTai = '{maLHPHienTai}'";
 
             DataTable dtLop = frmGiangVien.getData(query);
 
-            barListItem.Strings.Clear(); 
+            barListItem.Strings.Clear();
 
             if (dtLop != null && dtLop.Rows.Count > 0)
             {
                 foreach (DataRow row in dtLop.Rows)
                 {
-                    barListItem.Strings.Add(row["MaLHP"].ToString()); 
+                    barListItem.Strings.Add(row["MaLHP"].ToString());
                 }
             }
             else
@@ -189,16 +171,19 @@ namespace DoAnCK.UI_GV
 
         private void barListItem_ListItemClick(object sender, ListItemClickEventArgs e)
         {
+            if (gvDanhSach.FocusedRowHandle >= 0 && cbbMa.SelectedValue != null)
+            {
+                string maLHPHienTai = cbbMa.SelectedValue.ToString();
+                LoadLopChuyen(maLHPHienTai, MaGV);
+            }
             if (gvDanhSach.FocusedRowHandle < 0) return;
 
             DataRow row = gvDanhSach.GetDataRow(gvDanhSach.FocusedRowHandle);
             if (row == null) return;
 
             string maSV = row["MaSV"].ToString();
-            string maLHPNguon = cbbMa.SelectedValue.ToString();  // Lớp nguồn (hiện tại)
+            string maLHPNguon = cbbMa.SelectedValue.ToString();
             string maLHPDich = barListItem.Strings[e.Index];
-
-            string maGV = "GV001";
 
             DialogResult result = MessageBox.Show(
                 $"Bạn có chắc chắn muốn chuyển sinh viên {maSV} từ lớp {maLHPNguon} sang lớp {maLHPDich} không?",
@@ -209,31 +194,12 @@ namespace DoAnCK.UI_GV
 
             if (result == DialogResult.Yes)
             {
+                string query = $"EXEC sp_ChuyenLopHocPhan @MaSV = '{maSV}', @MaLHPNguon = '{maLHPNguon}', @MaLHPDich = '{maLHPDich}'";
                 try
                 {
-                    // Sử dụng UPDATE đơn giản
-                    string updateQuery = "UPDATE DangKyMonHoc SET MaLHP = @MaLHPDich WHERE MaSV = @MaSV AND MaLHP = @MaLHPNguon";
-
-                    using (SqlConnection conn = new SqlConnection(connStr))
-                    using (SqlCommand cmd = new SqlCommand(updateQuery, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@MaSV", maSV);
-                        cmd.Parameters.AddWithValue("@MaLHPNguon", maLHPNguon);
-                        cmd.Parameters.AddWithValue("@MaLHPDich", maLHPDich);
-
-                        conn.Open();
-                        int rowsAffected = cmd.ExecuteNonQuery();
-
-                        if (rowsAffected > 0)
-                        {
-                            MessageBox.Show($"Đã chuyển sinh viên {maSV} từ lớp {maLHPNguon} sang lớp {maLHPDich}.", "Thành công");
-                            LoadSinhVien();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Không tìm thấy đăng ký để chuyển!", "Lỗi");
-                        }
-                    }
+                    frmGiangVien.executeQuery(query);
+                    MessageBox.Show($"Đã chuyển sinh viên {maSV} từ lớp {maLHPNguon} sang lớp {maLHPDich}.", "Thành công");
+                    LoadSinhVien();
                 }
                 catch (Exception ex)
                 {
@@ -242,7 +208,7 @@ namespace DoAnCK.UI_GV
             }
         }
 
-  
+      
     }
 
 }

@@ -14,14 +14,12 @@ namespace DoAnCK {
     public partial class frmGiangVien : DevExpress.XtraBars.FluentDesignSystem.FluentDesignForm
     {
         public static string ConnString { get; private set; }
-        public static string MaGV { get; private set; } // Thêm property MaGV
-
-        // Constructor nhận mã giảng viên từ đăng nhập
-        public frmGiangVien(string maGV)
+        public static string MaGV { get; private set; } 
+      public frmGiangVien(string maGV)
         {
             InitializeComponent();
-            ConnString = @"Data Source=.;Initial Catalog=QL_SinhVien;Integrated Security=True";
-            MaGV = maGV; // Gán mã giảng viên
+            ConnString = FormMain.ConnString; 
+            MaGV = maGV;
             this.mainContainer.AutoScroll = true;
         }
 
@@ -64,7 +62,7 @@ namespace DoAnCK {
         {
             if (ucDSGD == null)
             {
-                ucDSGD = new uc_DSGD();
+                ucDSGD =  new uc_DSGD(FormMain.ConnString, MaGV);
                 ucDSGD.Dock = DockStyle.Fill;
                 ucDSGD.AutoSize = true;
                 mainContainer.Controls.Add(ucDSGD);
@@ -80,7 +78,7 @@ namespace DoAnCK {
         {
             if (ucDSSV == null)
             {
-                ucDSSV = new uc_DSSV();
+                ucDSSV = new uc_DSSV(FormMain.ConnString, MaGV);
                 ucDSSV.Dock = DockStyle.Fill;
                 ucDSSV.AutoSize = true;
                 mainContainer.Controls.Add(ucDSSV);
@@ -96,7 +94,7 @@ namespace DoAnCK {
         {
             if (ucQLD == null)
             {
-                ucQLD = new uc_QLDiem();
+                ucQLD = new uc_QLDiem(FormMain.ConnString, MaGV);
                 ucQLD.Dock = DockStyle.Fill;
                 ucQLD.AutoSize = true;
                 mainContainer.Controls.Add(ucQLD);
@@ -112,7 +110,7 @@ namespace DoAnCK {
         {
             if (ucTTGV == null)
             {
-                ucTTGV = new uc_ThongTinGV();
+                ucTTGV = new uc_ThongTinGV(FormMain.ConnString, MaGV);
                 ucTTGV.Dock = DockStyle.Fill;
                 ucTTGV.AutoSize = true;
                 mainContainer.Controls.Add(ucTTGV);
@@ -122,6 +120,27 @@ namespace DoAnCK {
             {
                 ucTTGV.BringToFront();
             }
+            lblTieude.Caption = btnThongTin.Text;
         }
+
+        private void btnDangXuat_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show(
+                "Bạn có chắc chắn muốn đăng xuất không?",
+                "Xác nhận đăng xuất",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (result == DialogResult.Yes)
+            {
+                this.Close();
+
+                FormMain formMain = new FormMain();
+                formMain.Show();
+            }
+        }
+
+        
     }
 }

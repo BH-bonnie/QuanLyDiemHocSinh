@@ -35,6 +35,7 @@
             this.btnSua = new DevExpress.XtraBars.BarButtonItem();
             this.btnXoa = new DevExpress.XtraBars.BarButtonItem();
             this.btnLuu = new DevExpress.XtraBars.BarButtonItem();
+            this.btnHuy = new DevExpress.XtraBars.BarButtonItem();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
@@ -49,7 +50,6 @@
             this.CMND_CCCD = new DevExpress.XtraGrid.Columns.GridColumn();
             this.LopSV = new DevExpress.XtraGrid.Columns.GridColumn();
             this.bar1 = new DevExpress.XtraBars.Bar();
-            this.btnHuy = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSachSV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSachSV)).BeginInit();
@@ -84,7 +84,7 @@
             new DevExpress.XtraBars.LinkPersistInfo(this.btnSua, true),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnXoa, true),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnLuu, true),
-            new DevExpress.XtraBars.LinkPersistInfo(this.btnHuy)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.btnHuy, true)});
             this.bar2.OptionsBar.MultiLine = true;
             this.bar2.OptionsBar.UseWholeRow = true;
             this.bar2.Text = "Main menu";
@@ -94,6 +94,7 @@
             this.btnThem.Caption = "Thêm";
             this.btnThem.Id = 0;
             this.btnThem.Name = "btnThem";
+            this.btnThem.Size = new System.Drawing.Size(50, 30);
             this.btnThem.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnThem_ItemClick);
             // 
             // btnSua
@@ -101,6 +102,7 @@
             this.btnSua.Caption = "Sửa";
             this.btnSua.Id = 5;
             this.btnSua.Name = "btnSua";
+            this.btnSua.Size = new System.Drawing.Size(50, 30);
             this.btnSua.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnSua_ItemClick);
             // 
             // btnXoa
@@ -108,6 +110,7 @@
             this.btnXoa.Caption = "Xoá ";
             this.btnXoa.Id = 2;
             this.btnXoa.Name = "btnXoa";
+            this.btnXoa.Size = new System.Drawing.Size(50, 30);
             this.btnXoa.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnXoa_ItemClick);
             // 
             // btnLuu
@@ -115,7 +118,16 @@
             this.btnLuu.Caption = "Lưu";
             this.btnLuu.Id = 4;
             this.btnLuu.Name = "btnLuu";
+            this.btnLuu.Size = new System.Drawing.Size(50, 30);
             this.btnLuu.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnLuu_ItemClick);
+            // 
+            // btnHuy
+            // 
+            this.btnHuy.Caption = "Huỷ";
+            this.btnHuy.Id = 6;
+            this.btnHuy.Name = "btnHuy";
+            this.btnHuy.Size = new System.Drawing.Size(50, 30);
+            this.btnHuy.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnHuy_ItemClick);
             // 
             // barDockControlTop
             // 
@@ -123,7 +135,7 @@
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barManager1;
-            this.barDockControlTop.Size = new System.Drawing.Size(941, 25);
+            this.barDockControlTop.Size = new System.Drawing.Size(941, 37);
             // 
             // barDockControlBottom
             // 
@@ -137,26 +149,26 @@
             // 
             this.barDockControlLeft.CausesValidation = false;
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
-            this.barDockControlLeft.Location = new System.Drawing.Point(0, 25);
+            this.barDockControlLeft.Location = new System.Drawing.Point(0, 37);
             this.barDockControlLeft.Manager = this.barManager1;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 540);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 528);
             // 
             // barDockControlRight
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(941, 25);
+            this.barDockControlRight.Location = new System.Drawing.Point(941, 37);
             this.barDockControlRight.Manager = this.barManager1;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 540);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 528);
             // 
             // gcDanhSachSV
             // 
             this.gcDanhSachSV.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gcDanhSachSV.Location = new System.Drawing.Point(0, 25);
+            this.gcDanhSachSV.Location = new System.Drawing.Point(0, 37);
             this.gcDanhSachSV.MainView = this.gvDanhSachSV;
             this.gcDanhSachSV.MenuManager = this.barManager1;
             this.gcDanhSachSV.Name = "gcDanhSachSV";
-            this.gcDanhSachSV.Size = new System.Drawing.Size(941, 540);
+            this.gcDanhSachSV.Size = new System.Drawing.Size(941, 528);
             this.gcDanhSachSV.TabIndex = 9;
             this.gcDanhSachSV.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gvDanhSachSV});
@@ -259,13 +271,6 @@
             this.bar1.OptionsBar.MultiLine = true;
             this.bar1.OptionsBar.UseWholeRow = true;
             this.bar1.Text = "Main menu";
-            // 
-            // btnHuy
-            // 
-            this.btnHuy.Caption = "Huỷ";
-            this.btnHuy.Id = 6;
-            this.btnHuy.Name = "btnHuy";
-            this.btnHuy.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnHuy_ItemClick);
             // 
             // uc_QLSV
             // 

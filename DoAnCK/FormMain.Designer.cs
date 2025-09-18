@@ -48,7 +48,7 @@
             this.ClientSize = new System.Drawing.Size(723, 349);
             this.Controls.Add(this.panelMain);
             this.Name = "FormMain";
-            this.Text = "HANHK NINH";
+            this.Text = "DANG NHAP";
             this.Load += new System.EventHandler(this.FormMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.panelMain)).EndInit();
             this.ResumeLayout(false);

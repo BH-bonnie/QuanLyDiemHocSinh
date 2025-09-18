@@ -91,16 +91,18 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(53, 34);
+            this.label1.Font = new System.Drawing.Font("Tahoma", 10F);
+            this.label1.Location = new System.Drawing.Point(37, 30);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(106, 16);
+            this.label1.Size = new System.Drawing.Size(137, 21);
             this.label1.TabIndex = 4;
             this.label1.Text = "Mã lớp học phần:";
             // 
             // cbbMa
             // 
+            this.cbbMa.Font = new System.Drawing.Font("Tahoma", 8F);
             this.cbbMa.FormattingEnabled = true;
-            this.cbbMa.Location = new System.Drawing.Point(178, 31);
+            this.cbbMa.Location = new System.Drawing.Point(180, 27);
             this.cbbMa.Name = "cbbMa";
             this.cbbMa.Size = new System.Drawing.Size(203, 24);
             this.cbbMa.TabIndex = 5;
@@ -114,7 +116,7 @@
             this.gcDanhSach.Name = "gcDanhSach";
             this.gcDanhSach.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.btn});
-            this.gcDanhSach.Size = new System.Drawing.Size(834, 382);
+            this.gcDanhSach.Size = new System.Drawing.Size(856, 417);
             this.gcDanhSach.TabIndex = 6;
             this.gcDanhSach.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gvDanhSach});
@@ -176,7 +178,6 @@
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "hanh", -1, true, true, false, editorButtonImageOptions1, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, serializableAppearanceObject2, serializableAppearanceObject3, serializableAppearanceObject4, "", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
             this.btn.Name = "btn";
             this.btn.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.HideTextEditor;
-            this.btn.Click += new System.EventHandler(this.btn_Click);
             // 
             // splitContainerControl1
             // 
@@ -195,7 +196,7 @@
             // 
             this.splitContainerControl1.Panel2.Controls.Add(this.gcDanhSach);
             this.splitContainerControl1.Panel2.Text = "Panel2";
-            this.splitContainerControl1.Size = new System.Drawing.Size(834, 456);
+            this.splitContainerControl1.Size = new System.Drawing.Size(856, 491);
             this.splitContainerControl1.SplitterPosition = 62;
             this.splitContainerControl1.TabIndex = 11;
             // 
@@ -268,15 +269,15 @@
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barManager1;
-            this.barDockControlTop.Size = new System.Drawing.Size(834, 25);
+            this.barDockControlTop.Size = new System.Drawing.Size(856, 25);
             // 
             // barDockControlBottom
             // 
             this.barDockControlBottom.CausesValidation = false;
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.barDockControlBottom.Location = new System.Drawing.Point(0, 481);
+            this.barDockControlBottom.Location = new System.Drawing.Point(0, 516);
             this.barDockControlBottom.Manager = this.barManager1;
-            this.barDockControlBottom.Size = new System.Drawing.Size(834, 0);
+            this.barDockControlBottom.Size = new System.Drawing.Size(856, 0);
             // 
             // barDockControlLeft
             // 
@@ -284,15 +285,15 @@
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.barDockControlLeft.Location = new System.Drawing.Point(0, 25);
             this.barDockControlLeft.Manager = this.barManager1;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 456);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 491);
             // 
             // barDockControlRight
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(834, 25);
+            this.barDockControlRight.Location = new System.Drawing.Point(856, 25);
             this.barDockControlRight.Manager = this.barManager1;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 456);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 491);
             // 
             // btnSua
             // 
@@ -316,7 +317,7 @@
             this.Controls.Add(this.barDockControlBottom);
             this.Controls.Add(this.barDockControlTop);
             this.Name = "uc_DSSV";
-            this.Size = new System.Drawing.Size(834, 481);
+            this.Size = new System.Drawing.Size(856, 516);
             this.Load += new System.EventHandler(this.uc_DSSV_Load);
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSach)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSach)).EndInit();

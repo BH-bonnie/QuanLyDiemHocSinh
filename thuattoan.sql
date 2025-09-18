@@ -272,9 +272,11 @@ GO
 
 
 
+
 IF OBJECT_ID('dbo.sp_CapNhatDiemHocPhan', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_CapNhatDiemHocPhan;
 GO
+
 CREATE PROCEDURE dbo.sp_CapNhatDiemHocPhan
     @MaSV VARCHAR(10),
     @MaMH VARCHAR(10),
@@ -285,17 +287,32 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    UPDATE CTHP
-    SET CTHP.DiemGK = @DiemGK,
-        CTHP.DiemCK = @DiemCK
-    FROM ChiTietHocPhan CTHP
-    INNER JOIN LopHocPhan LHP
-        ON CTHP.MaMH = LHP.MaMH
-       AND CTHP.MaHocKyNamHoc = LHP.MaHocKyNamHoc
-    WHERE CTHP.MaSV = @MaSV
-      
+    BEGIN TRY
+        BEGIN TRAN;
+
+        UPDATE CTHP
+        SET CTHP.DiemGK = @DiemGK,
+            CTHP.DiemCK = @DiemCK
+        FROM ChiTietHocPhan CTHP
+        INNER JOIN LopHocPhan LHP
+            ON CTHP.MaMH = LHP.MaMH
+           AND CTHP.MaHocKyNamHoc = LHP.MaHocKyNamHoc
+        WHERE CTHP.MaSV = @MaSV
+          AND CTHP.MaMH = @MaMH
+          AND CTHP.MaHocKyNamHoc = @MaHocKyNamHoc;
+
+        COMMIT TRAN;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRAN;
+
+        -- Có thể log lỗi ra hoặc trả về mã lỗi
+        THROW;
+    END CATCH
 END
 GO
+
 
 
 IF OBJECT_ID('dbo.sp_ThongKeDiemLopHocPhan', 'P') IS NOT NULL
@@ -379,7 +396,8 @@ BEGIN
     ELSE SET @DiemHe4 = 0.0;                       
     RETURN @DiemHe4;
 END
-GOIF OBJECT_ID('dbo.fn_QuyDoiDiemChu', 'FN') IS NOT NULL
+GO
+IF OBJECT_ID('dbo.fn_QuyDoiDiemChu', 'FN') IS NOT NULL
     DROP FUNCTION dbo.fn_QuyDoiDiemChu;
 GO
 CREATE  FUNCTION fn_QuyDoiDiemChu (@DiemHe10 DECIMAL(4,2))
@@ -530,4 +548,186 @@ RETURN
     WHERE CTHP.MaHocKyNamHoc = @MaHocKyNamHoc
 );
 GO
-SELECT * FROM fn_ChiTietHocPhan( 4)
+IF OBJECT_ID('dbo.trg_LogDangNhap', 'TR') IS NOT NULL
+    DROP TRIGGER dbo.trg_LogDangNhap;
+GO
+
+CREATE TRIGGER trg_LogDangNhap
+ON LogDangNhap
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- In thông báo cho tất cả bản ghi vừa thêm
+    SELECT 
+        '📌 Người dùng: ' + ISNULL(TenDangNhap, 'NULL') + 
+        ' | Kết quả: ' + ISNULL(KetQua, 'NULL') AS ThongBao
+    FROM inserted;
+END; 
+
+
+IF OBJECT_ID('dbo.sp_DangNhap', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_DangNhap;
+GO
+
+CREATE PROCEDURE sp_DangNhap
+    @TenDangNhap NVARCHAR(50),
+    @MatKhau NVARCHAR(255),
+    @Role NVARCHAR(20),
+    @Quyen NVARCHAR(20) OUTPUT,
+    @TrangThai BIT OUTPUT,
+    @MaGV VARCHAR(10) OUTPUT,
+    @KetQua NVARCHAR(100) OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        -- Lấy thông tin tài khoản
+        SELECT @Quyen = Quyen, @TrangThai = TrangThai, @MaGV = MaGV
+        FROM TaiKhoan
+        WHERE TenDangNhap = @TenDangNhap
+          AND MatKhau = @MatKhau;
+
+        IF @Quyen IS NULL
+        BEGIN
+            SET @KetQua = N'Tên đăng nhập hoặc mật khẩu không chính xác!';
+			INSERT INTO LogDangNhap(TenDangNhap, KetQua) 
+			 VALUES (@TenDangNhap, @KetQua);
+            RETURN;
+			
+        END
+
+        IF @TrangThai = 0
+        BEGIN
+            SET @KetQua = N'Tài khoản đã bị khóa!';
+			INSERT INTO LogDangNhap(TenDangNhap, KetQua) 
+			VALUES (@TenDangNhap, @KetQua);
+            RETURN;
+        END
+
+        IF (@Role = 'Admin' AND @Quyen = 'Admin') OR (@Role = 'GV' AND @Quyen = 'GiangVien')
+        BEGIN
+            SET @KetQua = N'Đăng nhập thành công với quyền ' + @Quyen;
+			INSERT INTO LogDangNhap(TenDangNhap, KetQua) 
+			VALUES (@TenDangNhap, @KetQua);
+        END
+        ELSE
+        BEGIN
+            SET @KetQua = N'Tài khoản này không có quyền ' + @Role + N'!';
+			INSERT INTO LogDangNhap(TenDangNhap, KetQua) 
+			VALUES (@TenDangNhap, @KetQua);
+        END
+		
+    END TRY
+    BEGIN CATCH
+        SET @KetQua = N'Lỗi trong quá trình đăng nhập: ' + ERROR_MESSAGE();
+    END CATCH
+END
+
+IF OBJECT_ID('dbo.sp_GetLopHocPhanByGV', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_GetLopHocPhanByGV;
+GO
+
+CREATE PROCEDURE sp_GetLopHocPhanByGV
+    @MaHocKyNamHoc INT,
+    @MaGV VARCHAR(10)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT DISTINCT MaLHP
+    FROM LopHocPhan
+    WHERE MaHocKyNamHoc = @MaHocKyNamHoc
+      AND MaGV = @MaGV
+    ORDER BY MaLHP;
+END;
+GO
+
+-- Xóa thủ tục cũ nếu có
+IF OBJECT_ID('sp_XoaDangKyMonHoc', 'P') IS NOT NULL
+    DROP PROCEDURE sp_XoaDangKyMonHoc;
+GO
+
+-- Thủ tục xóa đăng ký môn học
+CREATE PROCEDURE sp_XoaDangKyMonHoc
+    @MaSV VARCHAR(10),
+    @MaLHP VARCHAR(10)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DELETE FROM DangKyMonHoc
+    WHERE MaSV = @MaSV AND MaLHP = @MaLHP;
+END;
+IF OBJECT_ID('sp_LayLopHocPhanKhac', 'P') IS NOT NULL
+    DROP PROCEDURE sp_LayLopHocPhanKhac;
+GO
+
+CREATE PROCEDURE sp_LayLopHocPhanKhac
+    @MaHocKyNamHoc INT,
+    @MaGV VARCHAR(10),
+    @MaLHPHienTai VARCHAR(10)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT MaLHP
+    FROM LopHocPhan
+    WHERE MaHocKyNamHoc = @MaHocKyNamHoc
+      AND MaGV = @MaGV
+      AND MaMH = (SELECT MaMH FROM LopHocPhan WHERE MaLHP = @MaLHPHienTai)
+      AND MaLHP <> @MaLHPHienTai
+    ORDER BY MaLHP;
+END;
+IF OBJECT_ID('sp_ChuyenLopHocPhan', 'P') IS NOT NULL
+    DROP PROCEDURE sp_ChuyenLopHocPhan;
+GO
+
+CREATE PROCEDURE sp_ChuyenLopHocPhan
+    @MaSV VARCHAR(10),
+    @MaLHPNguon VARCHAR(10),
+    @MaLHPDich VARCHAR(10)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE DangKyMonHoc
+    SET MaLHP = @MaLHPDich
+    WHERE MaSV = @MaSV
+      AND MaLHP = @MaLHPNguon;
+END;
+IF OBJECT_ID('dbo.fn_GetThongTinGV', 'IF') IS NOT NULL
+    DROP FUNCTION dbo.fn_GetThongTinGV;
+GO
+
+CREATE FUNCTION dbo.fn_GetThongTinGV(@MaGV VARCHAR(10))
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT MaGV, HoTenGV, HocVi, Khoa, Email, DienThoai
+    FROM GiangVien
+    WHERE MaGV = @MaGV
+);
+GO
+
+IF OBJECT_ID('dbo.sp_UpdateGiangVienContact', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_UpdateGiangVienContact;
+GO
+
+CREATE PROCEDURE dbo.sp_UpdateGiangVienContact
+    @MaGV VARCHAR(10),
+    @Email VARCHAR(100),
+    @DienThoai VARCHAR(15)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE GiangVien
+    SET Email = @Email,
+        DienThoai = @DienThoai
+    WHERE MaGV = @MaGV;
+END;
+GO

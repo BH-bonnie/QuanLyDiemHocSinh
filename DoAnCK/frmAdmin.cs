@@ -17,11 +17,12 @@ namespace DoAnCK {
         public frmAdmin() {
 
             InitializeComponent();
-            ConnString = @"Data Source=.;Initial Catalog=QL_SinhVien;Integrated Security=True";
+            ConnString = FormMain.ConnString;
             this.mainContainer.AutoScroll = true;
 
+
         }
-      
+
         uc_QLSV ucQLSV;
         uc_QLGV ucQLGV;
         uc_QLMH ucQLMH;
@@ -43,6 +44,18 @@ namespace DoAnCK {
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
                     return dt;
+                }
+            }
+        }
+
+        public static void executeQuery(string query)
+        {
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

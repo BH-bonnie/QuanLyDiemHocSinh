@@ -13,17 +13,23 @@ namespace DoAnCK.UI_GV
 {
     public partial class uc_DSGD : UserControl
     {
-        private string MaGV => frmGiangVien.MaGV;
-
+        private string MaGV;
         private string connStr;
         private DataTable dt;
+
 
         public uc_DSGD()
         {
             InitializeComponent();
             connStr = frmGiangVien.ConnString;
+            MaGV = frmGiangVien.MaGV;
         }
-
+        public uc_DSGD(string connectionString, string maGV)
+        {
+            InitializeComponent();
+            connStr = connectionString;
+            MaGV = maGV;
+        }
         private void uc_DSGD_Load(object sender, EventArgs e)
         {
 
@@ -77,6 +83,8 @@ namespace DoAnCK.UI_GV
             // Bind vào grid
             gcDanhSach.DataSource = dt;
         }
+
+       
     }
         
 }

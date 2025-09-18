@@ -54,7 +54,7 @@
             this.gcDanhSachSV.Location = new System.Drawing.Point(0, 0);
             this.gcDanhSachSV.MainView = this.gvDanhSachSV;
             this.gcDanhSachSV.Name = "gcDanhSachSV";
-            this.gcDanhSachSV.Size = new System.Drawing.Size(881, 518);
+            this.gcDanhSachSV.Size = new System.Drawing.Size(856, 433);
             this.gcDanhSachSV.TabIndex = 11;
             this.gcDanhSachSV.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gvDanhSachSV});
@@ -143,25 +143,27 @@
             // 
             this.splitContainerControl1.Panel2.Controls.Add(this.gcDanhSachSV);
             this.splitContainerControl1.Panel2.Text = "Panel2";
-            this.splitContainerControl1.Size = new System.Drawing.Size(881, 580);
-            this.splitContainerControl1.SplitterPosition = 50;
+            this.splitContainerControl1.Size = new System.Drawing.Size(856, 516);
+            this.splitContainerControl1.SplitterPosition = 71;
             this.splitContainerControl1.TabIndex = 12;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(41, 22);
+            this.label1.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(32, 22);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(62, 16);
+            this.label1.Size = new System.Drawing.Size(75, 19);
             this.label1.TabIndex = 3;
             this.label1.Text = "Năm học:";
             // 
             // cbbNamHoc
             // 
+            this.cbbNamHoc.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbbNamHoc.FormattingEnabled = true;
-            this.cbbNamHoc.Location = new System.Drawing.Point(109, 19);
+            this.cbbNamHoc.Location = new System.Drawing.Point(119, 19);
             this.cbbNamHoc.Name = "cbbNamHoc";
-            this.cbbNamHoc.Size = new System.Drawing.Size(193, 24);
+            this.cbbNamHoc.Size = new System.Drawing.Size(279, 27);
             this.cbbNamHoc.TabIndex = 2;
             this.cbbNamHoc.SelectedIndexChanged += new System.EventHandler(this.cbbNamHoc_SelectedIndexChanged);
             // 
@@ -171,7 +173,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainerControl1);
             this.Name = "uc_DSDK";
-            this.Size = new System.Drawing.Size(881, 580);
+            this.Size = new System.Drawing.Size(856, 516);
             this.Load += new System.EventHandler(this.uc_DSDK_Load);
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSachSV)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSachSV)).EndInit();

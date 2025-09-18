@@ -14,8 +14,7 @@ namespace DoAnCK.UI_Dangnhap
     public partial class uc_Dangnhap : UserControl
     {
         public event EventHandler OnExit;
-        private string connStr;
-
+        private string connStr = FormMain.ConnString;
 
         private string role;
 
@@ -23,24 +22,17 @@ namespace DoAnCK.UI_Dangnhap
         {
             InitializeComponent();
             this.role = role;
-            connStr = FormMain.ConnString;
-
         }
 
-        // Nút Thoát (thêm vào Designer hoặc code)
         private Button btnThoat;
 
         private void uc_Dangnhap_Load(object sender, EventArgs e)
         {
-           
         }
-
-      
 
         private void txtThoat_Click(object sender, EventArgs e)
         {
             OnExit?.Invoke(this, EventArgs.Empty);
-
         }
 
         private void btnDangNhap_Click(object sender, EventArgs e)
@@ -60,68 +52,79 @@ namespace DoAnCK.UI_Dangnhap
                 using (SqlConnection conn = new SqlConnection(connStr))
                 {
                     conn.Open();
-                    // Thêm MaGV vào SELECT
-                    string query = "SELECT Quyen, TrangThai, MaGV FROM TaiKhoan WHERE TenDangNhap = @TenDangNhap AND MatKhau = @MatKhau";
 
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    using (SqlCommand cmd = new SqlCommand("sp_DangNhap", conn))
                     {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        // Thêm parameters cho stored procedure
                         cmd.Parameters.AddWithValue("@TenDangNhap", tenDangNhap);
                         cmd.Parameters.AddWithValue("@MatKhau", matKhau);
+                        cmd.Parameters.AddWithValue("@Role", role);
 
-                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        SqlParameter paramQuyen = new SqlParameter("@Quyen", SqlDbType.NVarChar, 20)
                         {
-                            if (reader.Read())
+                            Direction = ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(paramQuyen);
+
+                        SqlParameter paramTrangThai = new SqlParameter("@TrangThai", SqlDbType.Bit)
+                        {
+                            Direction = ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(paramTrangThai);
+
+                        SqlParameter paramMaGV = new SqlParameter("@MaGV", SqlDbType.VarChar, 10)
+                        {
+                            Direction = ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(paramMaGV);
+
+                        SqlParameter paramKetQua = new SqlParameter("@KetQua", SqlDbType.NVarChar, 100)
+                        {
+                            Direction = ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(paramKetQua);
+
+                        cmd.ExecuteNonQuery();
+
+                        string ketQua = paramKetQua.Value?.ToString();
+                        string quyen = paramQuyen.Value?.ToString();
+                        string maGV = paramMaGV.Value?.ToString();
+
+                        if (ketQua.Contains("không chính xác"))
+                        {
+                            MessageBox.Show(ketQua, "Lỗi đăng nhập",
+                                           MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else if (ketQua.Contains("bị khóa"))
+                        {
+                            MessageBox.Show(ketQua, "Thông báo",
+                                           MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                        else if (ketQua.Contains("không có quyền"))
+                        {
+                            MessageBox.Show(ketQua, "Lỗi quyền truy cập",
+                                           MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else if (ketQua.Contains("thành công"))
+                        {
+                            MessageBox.Show(ketQua, "Thành công",
+                                           MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            this.FindForm().Hide();
+
+                            if (quyen == "Admin")
                             {
-                                bool trangThai = Convert.ToBoolean(reader["TrangThai"]);
-                                if (!trangThai)
-                                {
-                                    MessageBox.Show("Tài khoản đã bị khóa!", "Thông báo",
-                                                   MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                    return;
-                                }
-
-                                string quyen = reader["Quyen"].ToString();
-                                string maGV = reader["MaGV"]?.ToString(); // Lấy MaGV từ database
-
-                                
-
-                                // Kiểm tra quyền có khớp với role được chọn không
-                                if ((role == "Admin" && quyen == "Admin") ||
-                                    (role == "GV" && quyen == "GiangVien"))
-                                {
-                                    MessageBox.Show($"Đăng nhập thành công với quyền {quyen}!", "Thành công",
-                                                   MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                                    // Ẩn FormMain
-                                    this.FindForm().Hide();
-
-                                    // Mở form tương ứng
-                                    if (quyen == "Admin")
-                                    {
-                                        frmAdmin adminForm = new frmAdmin();
-                                        adminForm.ShowDialog();
-                                    }
-                                    else if (quyen == "GiangVien")
-                                    {
-                                        // Truyền MaGV vào constructor
-                                        frmGiangVien gvForm = new frmGiangVien(maGV);
-                                        gvForm.ShowDialog();
-                                    }
-
-                                    // Hiển thị lại FormMain khi đóng form chính
-                                    this.FindForm().Show();
-                                }
-                                else
-                                {
-                                    MessageBox.Show($"Tài khoản này không có quyền {role}!", "Lỗi quyền truy cập",
-                                                   MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                }
+                                frmAdmin adminForm = new frmAdmin();
+                                adminForm.ShowDialog();
                             }
-                            else
+                            else if (quyen == "GiangVien")
                             {
-                                MessageBox.Show("Tên đăng nhập hoặc mật khẩu không chính xác!", "Lỗi đăng nhập",
-                                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                frmGiangVien gvForm = new frmGiangVien(maGV);
+                                gvForm.ShowDialog();
                             }
+
                         }
                     }
                 }

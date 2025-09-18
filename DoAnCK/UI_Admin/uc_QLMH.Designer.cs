@@ -83,6 +83,7 @@
             this.btnSua.Caption = "Sửa";
             this.btnSua.Id = 6;
             this.btnSua.Name = "btnSua";
+            this.btnSua.Size = new System.Drawing.Size(50, 30);
             this.btnSua.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnSua_ItemClick);
             // 
             // btnLuu
@@ -90,6 +91,7 @@
             this.btnLuu.Caption = "Lưu";
             this.btnLuu.Id = 4;
             this.btnLuu.Name = "btnLuu";
+            this.btnLuu.Size = new System.Drawing.Size(50, 30);
             this.btnLuu.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnLuu_ItemClick);
             // 
             // barButtonItem1
@@ -97,6 +99,7 @@
             this.barButtonItem1.Caption = "Xuất";
             this.barButtonItem1.Id = 7;
             this.barButtonItem1.Name = "barButtonItem1";
+            this.barButtonItem1.Size = new System.Drawing.Size(50, 30);
             // 
             // barDockControlTop
             // 
@@ -104,40 +107,40 @@
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barManager1;
-            this.barDockControlTop.Size = new System.Drawing.Size(790, 25);
+            this.barDockControlTop.Size = new System.Drawing.Size(856, 37);
             // 
             // barDockControlBottom
             // 
             this.barDockControlBottom.CausesValidation = false;
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.barDockControlBottom.Location = new System.Drawing.Point(0, 424);
+            this.barDockControlBottom.Location = new System.Drawing.Point(0, 516);
             this.barDockControlBottom.Manager = this.barManager1;
-            this.barDockControlBottom.Size = new System.Drawing.Size(790, 0);
+            this.barDockControlBottom.Size = new System.Drawing.Size(856, 0);
             // 
             // barDockControlLeft
             // 
             this.barDockControlLeft.CausesValidation = false;
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
-            this.barDockControlLeft.Location = new System.Drawing.Point(0, 25);
+            this.barDockControlLeft.Location = new System.Drawing.Point(0, 37);
             this.barDockControlLeft.Manager = this.barManager1;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 399);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 479);
             // 
             // barDockControlRight
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(790, 25);
+            this.barDockControlRight.Location = new System.Drawing.Point(856, 37);
             this.barDockControlRight.Manager = this.barManager1;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 399);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 479);
             // 
             // gcDanhSachSV
             // 
             this.gcDanhSachSV.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gcDanhSachSV.Location = new System.Drawing.Point(0, 25);
+            this.gcDanhSachSV.Location = new System.Drawing.Point(0, 37);
             this.gcDanhSachSV.MainView = this.gvDanhSachSV;
             this.gcDanhSachSV.MenuManager = this.barManager1;
             this.gcDanhSachSV.Name = "gcDanhSachSV";
-            this.gcDanhSachSV.Size = new System.Drawing.Size(790, 399);
+            this.gcDanhSachSV.Size = new System.Drawing.Size(856, 479);
             this.gcDanhSachSV.TabIndex = 10;
             this.gcDanhSachSV.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gvDanhSachSV});
@@ -194,7 +197,7 @@
             this.Controls.Add(this.barDockControlBottom);
             this.Controls.Add(this.barDockControlTop);
             this.Name = "uc_QLMH";
-            this.Size = new System.Drawing.Size(790, 424);
+            this.Size = new System.Drawing.Size(856, 516);
             this.Load += new System.EventHandler(this.uc_QLMH_Load);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSachSV)).EndInit();

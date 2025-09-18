@@ -12,7 +12,7 @@ namespace DoAnCK.UI_Dangnhap
 {
     public partial class uc_Chonquyen : UserControl
     {
-        public event EventHandler<string> OnChonQuyen; // Pass role as string
+        public event EventHandler<string> OnChonQuyen; 
 
         public uc_Chonquyen()
         {

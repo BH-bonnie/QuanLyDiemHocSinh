@@ -37,13 +37,12 @@
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar2 = new DevExpress.XtraBars.Bar();
             this.btnLuu = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
+            this.btnXuat = new DevExpress.XtraBars.BarButtonItem();
             this.btnThongKe = new DevExpress.XtraBars.BarButtonItem();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
-            this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
             this.cbbMa = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -83,8 +82,7 @@
             this.barManager1.Form = this;
             this.barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
             this.btnLuu,
-            this.barButtonItem2,
-            this.barButtonItem1,
+            this.btnXuat,
             this.btnThongKe});
             this.barManager1.MainMenu = this.bar2;
             this.barManager1.MaxItemId = 4;
@@ -97,7 +95,7 @@
             this.bar2.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
             this.bar2.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.btnLuu),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem2),
+            new DevExpress.XtraBars.LinkPersistInfo(this.btnXuat),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnThongKe)});
             this.bar2.OptionsBar.MultiLine = true;
             this.bar2.OptionsBar.UseWholeRow = true;
@@ -108,19 +106,22 @@
             this.btnLuu.Caption = "Lưu";
             this.btnLuu.Id = 0;
             this.btnLuu.Name = "btnLuu";
+            this.btnLuu.Size = new System.Drawing.Size(50, 30);
             this.btnLuu.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnLuu_ItemClick);
             // 
-            // barButtonItem2
+            // btnXuat
             // 
-            this.barButtonItem2.Caption = "Xuất";
-            this.barButtonItem2.Id = 1;
-            this.barButtonItem2.Name = "barButtonItem2";
+            this.btnXuat.Caption = "Xuất";
+            this.btnXuat.Id = 1;
+            this.btnXuat.Name = "btnXuat";
+            this.btnXuat.Size = new System.Drawing.Size(50, 30);
             // 
             // btnThongKe
             // 
             this.btnThongKe.Caption = "Thống kê";
             this.btnThongKe.Id = 3;
             this.btnThongKe.Name = "btnThongKe";
+            this.btnThongKe.Size = new System.Drawing.Size(70, 30);
             this.btnThongKe.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnThongKe_ItemClick);
             // 
             // barDockControlTop
@@ -129,43 +130,37 @@
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barManager1;
-            this.barDockControlTop.Size = new System.Drawing.Size(902, 25);
+            this.barDockControlTop.Size = new System.Drawing.Size(856, 37);
             // 
             // barDockControlBottom
             // 
             this.barDockControlBottom.CausesValidation = false;
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.barDockControlBottom.Location = new System.Drawing.Point(0, 503);
+            this.barDockControlBottom.Location = new System.Drawing.Point(0, 516);
             this.barDockControlBottom.Manager = this.barManager1;
-            this.barDockControlBottom.Size = new System.Drawing.Size(902, 0);
+            this.barDockControlBottom.Size = new System.Drawing.Size(856, 0);
             // 
             // barDockControlLeft
             // 
             this.barDockControlLeft.CausesValidation = false;
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
-            this.barDockControlLeft.Location = new System.Drawing.Point(0, 25);
+            this.barDockControlLeft.Location = new System.Drawing.Point(0, 37);
             this.barDockControlLeft.Manager = this.barManager1;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 478);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 479);
             // 
             // barDockControlRight
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(902, 25);
+            this.barDockControlRight.Location = new System.Drawing.Point(856, 37);
             this.barDockControlRight.Manager = this.barManager1;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 478);
-            // 
-            // barButtonItem1
-            // 
-            this.barButtonItem1.Caption = "Thống kê";
-            this.barButtonItem1.Id = 2;
-            this.barButtonItem1.Name = "barButtonItem1";
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 479);
             // 
             // splitContainerControl1
             // 
             this.splitContainerControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainerControl1.Horizontal = false;
-            this.splitContainerControl1.Location = new System.Drawing.Point(0, 25);
+            this.splitContainerControl1.Location = new System.Drawing.Point(0, 37);
             this.splitContainerControl1.Name = "splitContainerControl1";
             // 
             // splitContainerControl1.Panel1
@@ -178,25 +173,27 @@
             // 
             this.splitContainerControl1.Panel2.Controls.Add(this.gcDanhSach);
             this.splitContainerControl1.Panel2.Text = "Panel2";
-            this.splitContainerControl1.Size = new System.Drawing.Size(902, 478);
+            this.splitContainerControl1.Size = new System.Drawing.Size(856, 479);
             this.splitContainerControl1.SplitterPosition = 62;
             this.splitContainerControl1.TabIndex = 16;
             // 
             // cbbMa
             // 
+            this.cbbMa.Font = new System.Drawing.Font("Tahoma", 9F);
             this.cbbMa.FormattingEnabled = true;
-            this.cbbMa.Location = new System.Drawing.Point(173, 37);
+            this.cbbMa.Location = new System.Drawing.Point(190, 25);
             this.cbbMa.Name = "cbbMa";
-            this.cbbMa.Size = new System.Drawing.Size(203, 24);
+            this.cbbMa.Size = new System.Drawing.Size(203, 26);
             this.cbbMa.TabIndex = 5;
             this.cbbMa.SelectedIndexChanged += new System.EventHandler(this.cbbMa_SelectedIndexChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(61, 40);
+            this.label1.Font = new System.Drawing.Font("Tahoma", 10F);
+            this.label1.Location = new System.Drawing.Point(47, 26);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(106, 16);
+            this.label1.Size = new System.Drawing.Size(137, 21);
             this.label1.TabIndex = 4;
             this.label1.Text = "Mã lớp học phần:";
             // 
@@ -208,7 +205,7 @@
             this.gcDanhSach.Name = "gcDanhSach";
             this.gcDanhSach.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.btn});
-            this.gcDanhSach.Size = new System.Drawing.Size(902, 404);
+            this.gcDanhSach.Size = new System.Drawing.Size(856, 405);
             this.gcDanhSach.TabIndex = 6;
             this.gcDanhSach.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gvDanhSach});
@@ -227,7 +224,7 @@
             // 
             // MaSV
             // 
-            this.MaSV.Caption = "Mã SV";
+            this.MaSV.Caption = "MSSV";
             this.MaSV.FieldName = "MaSV";
             this.MaSV.MinWidth = 25;
             this.MaSV.Name = "MaSV";
@@ -301,33 +298,33 @@
             // 
             this.barDockControl1.CausesValidation = false;
             this.barDockControl1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.barDockControl1.Location = new System.Drawing.Point(0, 25);
+            this.barDockControl1.Location = new System.Drawing.Point(0, 37);
             this.barDockControl1.Manager = this.barManager1;
-            this.barDockControl1.Size = new System.Drawing.Size(0, 478);
+            this.barDockControl1.Size = new System.Drawing.Size(0, 479);
             // 
             // barDockControl2
             // 
             this.barDockControl2.CausesValidation = false;
             this.barDockControl2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControl2.Location = new System.Drawing.Point(902, 25);
+            this.barDockControl2.Location = new System.Drawing.Point(856, 37);
             this.barDockControl2.Manager = this.barManager1;
-            this.barDockControl2.Size = new System.Drawing.Size(0, 478);
+            this.barDockControl2.Size = new System.Drawing.Size(0, 479);
             // 
             // barDockControl3
             // 
             this.barDockControl3.CausesValidation = false;
             this.barDockControl3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.barDockControl3.Location = new System.Drawing.Point(0, 503);
+            this.barDockControl3.Location = new System.Drawing.Point(0, 516);
             this.barDockControl3.Manager = this.barManager1;
-            this.barDockControl3.Size = new System.Drawing.Size(902, 0);
+            this.barDockControl3.Size = new System.Drawing.Size(856, 0);
             // 
             // barDockControl4
             // 
             this.barDockControl4.CausesValidation = false;
             this.barDockControl4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.barDockControl4.Location = new System.Drawing.Point(0, 25);
+            this.barDockControl4.Location = new System.Drawing.Point(0, 37);
             this.barDockControl4.Manager = this.barManager1;
-            this.barDockControl4.Size = new System.Drawing.Size(902, 0);
+            this.barDockControl4.Size = new System.Drawing.Size(856, 0);
             // 
             // uc_QLDiem
             // 
@@ -343,7 +340,7 @@
             this.Controls.Add(this.barDockControlBottom);
             this.Controls.Add(this.barDockControlTop);
             this.Name = "uc_QLDiem";
-            this.Size = new System.Drawing.Size(902, 503);
+            this.Size = new System.Drawing.Size(856, 516);
             this.Load += new System.EventHandler(this.uc_QLDiem_Load);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1.Panel1)).EndInit();
@@ -370,7 +367,7 @@
         private DevExpress.XtraBars.BarDockControl barDockControlLeft;
         private DevExpress.XtraBars.BarDockControl barDockControlRight;
         private DevExpress.XtraBars.BarButtonItem btnLuu;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem2;
+        private DevExpress.XtraBars.BarButtonItem btnXuat;
         private DevExpress.XtraEditors.SplitContainerControl splitContainerControl1;
         private System.Windows.Forms.ComboBox cbbMa;
         private System.Windows.Forms.Label label1;
@@ -387,7 +384,6 @@
         private DevExpress.XtraBars.BarDockControl barDockControl4;
         private DevExpress.XtraGrid.Columns.GridColumn DiemTB;
         private DevExpress.XtraGrid.Columns.GridColumn TrangThai;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem1;
         private DevExpress.XtraBars.BarButtonItem btnThongKe;
     }
 }

@@ -38,8 +38,9 @@
             this.btnDSSV = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.btnQLD = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.accordionControlElement4 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
-            this.accordionControlElement6 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
+            this.btnDangXuat = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.fluentDesignFormControl1 = new DevExpress.XtraBars.FluentDesignSystem.FluentDesignFormControl();
+            this.lblTieude = new DevExpress.XtraBars.BarHeaderItem();
             this.fluentFormDefaultManager1 = new DevExpress.XtraBars.FluentDesignSystem.FluentFormDefaultManager(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.accordionControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fluentDesignFormControl1)).BeginInit();
@@ -49,9 +50,10 @@
             // mainContainer
             // 
             this.mainContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainContainer.Location = new System.Drawing.Point(260, 39);
+            this.mainContainer.Location = new System.Drawing.Point(294, 53);
+            this.mainContainer.Margin = new System.Windows.Forms.Padding(6);
             this.mainContainer.Name = "mainContainer";
-            this.mainContainer.Size = new System.Drawing.Size(775, 494);
+            this.mainContainer.Size = new System.Drawing.Size(781, 502);
             this.mainContainer.TabIndex = 0;
             // 
             // accordionControl1
@@ -61,15 +63,18 @@
             this.accordionControlElement7,
             this.accordionControlElement1,
             this.accordionControlElement4});
-            this.accordionControl1.Location = new System.Drawing.Point(0, 39);
+            this.accordionControl1.Location = new System.Drawing.Point(0, 53);
+            this.accordionControl1.Margin = new System.Windows.Forms.Padding(6);
             this.accordionControl1.Name = "accordionControl1";
             this.accordionControl1.ScrollBarMode = DevExpress.XtraBars.Navigation.ScrollBarMode.Touch;
-            this.accordionControl1.Size = new System.Drawing.Size(260, 494);
+            this.accordionControl1.Size = new System.Drawing.Size(294, 502);
             this.accordionControl1.TabIndex = 1;
             this.accordionControl1.ViewType = DevExpress.XtraBars.Navigation.AccordionControlViewType.HamburgerMenu;
             // 
             // accordionControlElement7
             // 
+            this.accordionControlElement7.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
+            this.accordionControlElement7.Appearance.Default.Options.UseFont = true;
             this.accordionControlElement7.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] {
             this.btnThongTin});
             this.accordionControlElement7.Expanded = true;
@@ -78,6 +83,8 @@
             // 
             // btnThongTin
             // 
+            this.btnThongTin.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.btnThongTin.Appearance.Default.Options.UseFont = true;
             this.btnThongTin.Name = "btnThongTin";
             this.btnThongTin.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
             this.btnThongTin.Text = "Thông tin cá nhân";
@@ -85,6 +92,8 @@
             // 
             // accordionControlElement1
             // 
+            this.accordionControlElement1.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
+            this.accordionControlElement1.Appearance.Default.Options.UseFont = true;
             this.accordionControlElement1.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] {
             this.btnDSGD,
             this.btnDSSV,
@@ -95,6 +104,8 @@
             // 
             // btnDSGD
             // 
+            this.btnDSGD.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.btnDSGD.Appearance.Default.Options.UseFont = true;
             this.btnDSGD.Name = "btnDSGD";
             this.btnDSGD.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
             this.btnDSGD.Text = "Danh sách giảng dạy";
@@ -102,6 +113,8 @@
             // 
             // btnDSSV
             // 
+            this.btnDSSV.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.btnDSSV.Appearance.Default.Options.UseFont = true;
             this.btnDSSV.Name = "btnDSSV";
             this.btnDSSV.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
             this.btnDSSV.Text = "Danh sách sinh viên";
@@ -109,6 +122,8 @@
             // 
             // btnQLD
             // 
+            this.btnQLD.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.btnQLD.Appearance.Default.Options.UseFont = true;
             this.btnQLD.Name = "btnQLD";
             this.btnQLD.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
             this.btnQLD.Text = "Quản lý điểm";
@@ -116,37 +131,56 @@
             // 
             // accordionControlElement4
             // 
+            this.accordionControlElement4.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
+            this.accordionControlElement4.Appearance.Default.Options.UseFont = true;
             this.accordionControlElement4.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] {
-            this.accordionControlElement6});
+            this.btnDangXuat});
             this.accordionControlElement4.Expanded = true;
             this.accordionControlElement4.Name = "accordionControlElement4";
             this.accordionControlElement4.Text = "HỆ THỐNG";
             // 
-            // accordionControlElement6
+            // btnDangXuat
             // 
-            this.accordionControlElement6.Name = "accordionControlElement6";
-            this.accordionControlElement6.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
-            this.accordionControlElement6.Text = "Đăng xuất";
+            this.btnDangXuat.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.btnDangXuat.Appearance.Default.Options.UseFont = true;
+            this.btnDangXuat.Name = "btnDangXuat";
+            this.btnDangXuat.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
+            this.btnDangXuat.Text = "Đăng xuất";
+            this.btnDangXuat.Click += new System.EventHandler(this.btnDangXuat_Click);
             // 
             // fluentDesignFormControl1
             // 
             this.fluentDesignFormControl1.FluentDesignForm = this;
+            this.fluentDesignFormControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
+            this.lblTieude});
             this.fluentDesignFormControl1.Location = new System.Drawing.Point(0, 0);
             this.fluentDesignFormControl1.Manager = this.fluentFormDefaultManager1;
             this.fluentDesignFormControl1.Name = "fluentDesignFormControl1";
-            this.fluentDesignFormControl1.Size = new System.Drawing.Size(1035, 39);
+            this.fluentDesignFormControl1.Size = new System.Drawing.Size(1075, 53);
             this.fluentDesignFormControl1.TabIndex = 2;
             this.fluentDesignFormControl1.TabStop = false;
+            this.fluentDesignFormControl1.TitleItemLinks.Add(this.lblTieude);
+            // 
+            // lblTieude
+            // 
+            this.lblTieude.Appearance.FontSizeDelta = 12;
+            this.lblTieude.Appearance.Options.UseFont = true;
+            this.lblTieude.Caption = "Tieude";
+            this.lblTieude.Id = 0;
+            this.lblTieude.Name = "lblTieude";
             // 
             // fluentFormDefaultManager1
             // 
             this.fluentFormDefaultManager1.Form = this;
+            this.fluentFormDefaultManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
+            this.lblTieude});
+            this.fluentFormDefaultManager1.MaxItemId = 1;
             // 
             // frmGiangVien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1035, 533);
+            this.ClientSize = new System.Drawing.Size(1075, 555);
             this.ControlContainer = this.mainContainer;
             this.Controls.Add(this.mainContainer);
             this.Controls.Add(this.accordionControl1);
@@ -173,8 +207,9 @@
         private DevExpress.XtraBars.Navigation.AccordionControlElement btnDSSV;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement4;
         private DevExpress.XtraBars.Navigation.AccordionControlElement btnQLD;
-        private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement6;
+        private DevExpress.XtraBars.Navigation.AccordionControlElement btnDangXuat;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement7;
         private DevExpress.XtraBars.Navigation.AccordionControlElement btnThongTin;
+        private DevExpress.XtraBars.BarHeaderItem lblTieude;
     }
 }

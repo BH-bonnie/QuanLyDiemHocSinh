@@ -15,17 +15,23 @@ namespace DoAnCK.UI_GV
 {
     public partial class uc_QLDiem : UserControl
     {
-        // Thêm property để tránh khai báo nhiều lần
-        private string MaGV => frmGiangVien.MaGV;
-
+        private string MaGV;
+        private string connStr;
+        private DataTable dt;
         public uc_QLDiem()
         {
             InitializeComponent();
-            string connStr = frmGiangVien.ConnString;
+            connStr = frmGiangVien.ConnString;
+            MaGV = frmGiangVien.MaGV;
+        }
+        public uc_QLDiem(string connectionString, string maGV)
+        {
+            InitializeComponent();
+            connStr = connectionString;
+            MaGV = maGV;
         }
 
         private int maHocKyNamHoc;
-        private DataTable dt;
         private bool isLoading = false;
 
         private void cbbMa_SelectedIndexChanged(object sender, EventArgs e)
@@ -54,18 +60,11 @@ namespace DoAnCK.UI_GV
 
         private void LoadMaLop()
         {
-            // Sử dụng property MaGV thay vì mã cứng "GV001"
-            string queryMa = $@"
-                SELECT DISTINCT MaLHP 
-                FROM LopHocPhan 
-                WHERE MaHocKyNamHoc = {maHocKyNamHoc} 
-                  AND MaGV = '{MaGV}'
-                ORDER BY MaLHP";
+            string query = $"EXEC sp_GetLopHocPhanByGV @MaHocKyNamHoc = {maHocKyNamHoc}, @MaGV = '{MaGV}'";
 
-          
-            DataTable dtMa = frmGiangVien.getData(queryMa);
+            DataTable dtMa = frmGiangVien.getData(query);
 
-           if (dtMa != null && dtMa.Rows.Count > 0)
+            if (dtMa != null && dtMa.Rows.Count > 0)
             {
                 cbbMa.DataSource = dtMa;
                 cbbMa.DisplayMember = "MaLHP";
@@ -98,7 +97,6 @@ namespace DoAnCK.UI_GV
 
         private void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            // Kết thúc chỉnh sửa trên GridView
             gvDanhSach.CloseEditor();
             gvDanhSach.UpdateCurrentRow();
 
@@ -112,64 +110,49 @@ namespace DoAnCK.UI_GV
 
             string maLHP = cbbMa.SelectedValue.ToString();
 
-            using (SqlConnection conn = new SqlConnection(frmGiangVien.ConnString))
-            using (SqlCommand cmd = new SqlCommand("sp_CapNhatDiemHocPhan", conn))
+            // Lấy MaMH từ MaLHP một lần duy nhất
+            string queryMaMH = $"SELECT MaMH FROM LopHocPhan WHERE MaLHP = '{maLHP}'";
+            DataTable dtMaMH = frmGiangVien.getData(queryMaMH);
+
+            if (dtMaMH == null || dtMaMH.Rows.Count == 0)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                conn.Open();
-                SqlTransaction tran = conn.BeginTransaction();
-                cmd.Transaction = tran;
+                MessageBox.Show($"Không tìm thấy môn học cho LHP {maLHP}.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-                try
+            string maMH = dtMaMH.Rows[0]["MaMH"].ToString();
+
+            try
+            {
+                foreach (DataRow row in dtChanges.Rows)
                 {
-                    foreach (DataRow row in dtChanges.Rows)
+                    string maSV = row["MaSV"].ToString();
+                    decimal? diemGK = row["DiemGK"] != DBNull.Value ? Convert.ToDecimal(row["DiemGK"]) : (decimal?)null;
+                    decimal? diemCK = row["DiemCK"] != DBNull.Value ? Convert.ToDecimal(row["DiemCK"]) : (decimal?)null;
+
+                    // Kiểm tra dữ liệu hợp lệ
+                    if ((diemGK.HasValue && (diemGK < 0 || diemGK > 10)) ||
+                        (diemCK.HasValue && (diemCK < 0 || diemCK > 10)))
                     {
-                        string maSV = row["MaSV"].ToString();
-                        decimal? diemGK = row["DiemGK"] != DBNull.Value ? Convert.ToDecimal(row["DiemGK"]) : (decimal?)null;
-                        decimal? diemCK = row["DiemCK"] != DBNull.Value ? Convert.ToDecimal(row["DiemCK"]) : (decimal?)null;
-
-                        // Lấy MaMH từ MaLHP
-                        string queryMaMH = $"SELECT MaMH FROM LopHocPhan WHERE MaLHP = '{maLHP}'";
-                        DataTable dtMaMH = frmGiangVien.getData(queryMaMH);
-
-                        if (dtMaMH == null || dtMaMH.Rows.Count == 0)
-                        {
-                            MessageBox.Show($"Không tìm thấy môn học cho LHP {maLHP}.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            tran.Rollback();
-                            return;
-                        }
-
-                        string maMH = dtMaMH.Rows[0]["MaMH"].ToString();
-
-                        // Kiểm tra dữ liệu hợp lệ
-                        if ((diemGK.HasValue && (diemGK < 0 || diemGK > 10)) ||
-                            (diemCK.HasValue && (diemCK < 0 || diemCK > 10)))
-                        {
-                            MessageBox.Show($"Điểm của sinh viên {maSV} không hợp lệ (0-10).", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            tran.Rollback();
-                            return;
-                        }
-
-                        // Truyền tham số vào procedure
-                        cmd.Parameters.Clear();
-                        cmd.Parameters.AddWithValue("@MaSV", maSV);
-                        cmd.Parameters.AddWithValue("@MaMH", maMH);
-                        cmd.Parameters.AddWithValue("@MaHocKyNamHoc", maHocKyNamHoc);
-                        cmd.Parameters.AddWithValue("@DiemGK", (object)diemGK ?? DBNull.Value);
-                        cmd.Parameters.AddWithValue("@DiemCK", (object)diemCK ?? DBNull.Value);
-
-                        cmd.ExecuteNonQuery();
+                        MessageBox.Show($"Điểm của sinh viên {maSV} không hợp lệ (0-10).", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
                     }
 
-                    tran.Commit();
-                    MessageBox.Show("Cập nhật điểm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadBangDiemTheoLop();
+                    // Gọi stored procedure bằng executeQuery
+                    string diemGKValue = diemGK.HasValue ? diemGK.Value.ToString("F2") : "NULL";
+                    string diemCKValue = diemCK.HasValue ? diemCK.Value.ToString("F2") : "NULL";
+
+                    string query = $"EXEC sp_CapNhatDiemHocPhan @MaSV = '{maSV}', @MaMH = '{maMH}', @MaHocKyNamHoc = {maHocKyNamHoc}, @DiemGK = {diemGKValue}, @DiemCK = {diemCKValue}";
+
+                    frmGiangVien.executeQuery(query);
                 }
-                catch (Exception ex)
-                {
-                    tran.Rollback();
-                    MessageBox.Show("Lỗi khi lưu điểm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+
+                MessageBox.Show("Cập nhật điểm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadBangDiemTheoLop();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi lưu điểm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -183,7 +166,6 @@ namespace DoAnCK.UI_GV
 
             string maLHP = cbbMa.SelectedValue.ToString();
 
-            // Mở form thống kê
             frmThongKe frm = new frmThongKe();
             frm.HienThiBieuDoThongKe(maLHP, maHocKyNamHoc);
             frm.ShowDialog();
