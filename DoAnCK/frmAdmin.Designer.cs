@@ -190,6 +190,7 @@
             this.btnTK.Name = "btnTK";
             this.btnTK.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
             this.btnTK.Text = "Quản lý tài khoản";
+            this.btnTK.Click += new System.EventHandler(this.btnTK_Click);
             // 
             // btnLichsu
             // 

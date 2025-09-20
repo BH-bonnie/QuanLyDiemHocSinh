@@ -189,7 +189,7 @@ BEGIN
         ROLLBACK TRANSACTION;
         THROW;
     END CATCH
-END
+END;
 GO
 
 
@@ -205,27 +205,21 @@ ON DangKyMonHoc
 AFTER INSERT
 AS
 BEGIN
-    SET NOCOUNT ON;
-    SET XACT_ABORT ON;
-
-    INSERT INTO ChiTietHocPhan(MaSV, MaMH, DiemGK, DiemCK, MaHocKyNamHoc)
+    INSERT INTO ChiTietHocPhan (MaSV, MaMH, DiemGK, DiemCK, MaHocKyNamHoc)
     SELECT 
-        i.MaSV, 
-        LHP.MaMH, 
-        NULL, 
+        i.MaSV,
+        LHP.MaMH,
         NULL,
-        i.MaHocKyNamHoc      
+        NULL,
+        i.MaHocKyNamHoc
     FROM inserted i
-    INNER JOIN LopHocPhan LHP ON i.MaLHP = LHP.MaLHP
-    WHERE NOT EXISTS (
-        SELECT 1 
-        FROM ChiTietHocPhan CTHP
-        WHERE CTHP.MaSV = i.MaSV 
-          AND CTHP.MaMH = LHP.MaMH
-          AND CTHP.MaHocKyNamHoc = i.MaHocKyNamHoc       
-    );
-END
-GO
+    JOIN LopHocPhan LHP
+      ON i.MaLHP = LHP.MaLHP 
+     AND i.MaHocKyNamHoc = LHP.MaHocKyNamHoc;
+END;
+
+
+
 
 
 
@@ -683,7 +677,7 @@ BEGIN
     FROM LopHocPhan
     WHERE MaHocKyNamHoc = @MaHocKyNamHoc
       AND MaGV = @MaGV
-      AND MaMH = (SELECT MaMH FROM LopHocPhan WHERE MaLHP = @MaLHPHienTai)
+      AND MaMH = (SELECT MaMH FROM LopHocPhan WHERE MaLHP = @MaLHPHienTai AND MaHocKyNamHoc = @MaHocKyNamHoc)
       AND MaLHP <> @MaLHPHienTai
     ORDER BY MaLHP;
 END;
@@ -695,7 +689,9 @@ GO
 CREATE PROCEDURE sp_ChuyenLopHocPhan
     @MaSV VARCHAR(10),
     @MaLHPNguon VARCHAR(20),
-    @MaLHPDich VARCHAR(20)
+    @MaLHPDich VARCHAR(20),
+	@MaHocKyNamHoc INT
+
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -703,7 +699,8 @@ BEGIN
     UPDATE DangKyMonHoc
     SET MaLHP = @MaLHPDich
     WHERE MaSV = @MaSV
-      AND MaLHP = @MaLHPNguon;
+      AND MaLHP = @MaLHPNguon
+	  AND MaHocKyNamHoc = @MaHocKyNamHoc;
 END;
 go
 IF OBJECT_ID('dbo.fn_GetThongTinGV', 'IF') IS NOT NULL
@@ -990,3 +987,59 @@ BEGIN
     END CATCH
 END
 GO
+-- Xóa thủ tục cũ nếu có
+IF OBJECT_ID('sp_TrungBinhMonHoc', 'P') IS NOT NULL
+    DROP PROCEDURE sp_TrungBinhMonHoc;
+GO
+
+IF OBJECT_ID('sp_TrungBinhMonHoc', 'P') IS NOT NULL
+    DROP PROCEDURE sp_TrungBinhMonHoc;
+GO
+
+CREATE PROCEDURE sp_TrungBinhMonHoc
+    @MaHocKyNamHoc INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        MH.MaMH,
+        MH.TenMH,
+		COUNT(*) AS SoSV_Tong,
+        -- Điểm trung bình chỉ tính sinh viên đã có điểm
+        ROUND(AVG(CASE 
+                    WHEN CTHP.DiemGK IS NOT NULL AND CTHP.DiemCK IS NOT NULL
+                    THEN dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK)
+                 END), 2) AS DiemTB,
+
+       
+
+        -- Số sinh viên đạt
+        SUM(CASE 
+                WHEN CTHP.DiemGK IS NOT NULL AND CTHP.DiemCK IS NOT NULL
+                     AND dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK) >= 5 
+                THEN 1 ELSE 0 
+            END) AS SoSV_Dat,
+
+        -- Số sinh viên rớt
+        SUM(CASE 
+                WHEN CTHP.DiemGK IS NOT NULL AND CTHP.DiemCK IS NOT NULL
+                     AND dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK) < 5 
+                THEN 1 ELSE 0 
+            END) AS SoSV_Rot,
+			 -- Số sinh viên chưa chấm
+        SUM(CASE 
+                WHEN CTHP.DiemGK IS NULL OR CTHP.DiemCK IS NULL THEN 1 ELSE 0 
+            END) AS SoSV_Chuacham
+
+        -- Tổng số sinh viên đăng ký môn
+       
+    FROM ChiTietHocPhan CTHP
+    INNER JOIN MonHoc MH ON CTHP.MaMH = MH.MaMH
+    WHERE CTHP.MaHocKyNamHoc = @MaHocKyNamHoc
+    GROUP BY MH.MaMH, MH.TenMH
+    ORDER BY DiemTB DESC;
+END
+GO
+
+

@@ -31,15 +31,17 @@
             this.components = new System.ComponentModel.Container();
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar2 = new DevExpress.XtraBars.Bar();
+            this.btnSua = new DevExpress.XtraBars.BarButtonItem();
             this.btnLuu = new DevExpress.XtraBars.BarButtonItem();
             this.btnHuy = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
+            this.btnThongKe = new DevExpress.XtraBars.BarButtonItem();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
             this.btnThem = new DevExpress.XtraBars.BarButtonItem();
             this.btnXoa = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.gcDanhSachSV = new DevExpress.XtraGrid.GridControl();
             this.gvDanhSachSV = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.MaSV = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -54,7 +56,6 @@
             this.cbbNamHoc = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
-            this.btnSua = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSachSV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSachSV)).BeginInit();
@@ -81,9 +82,10 @@
             this.btnHuy,
             this.btnLuu,
             this.barButtonItem1,
-            this.btnSua});
+            this.btnSua,
+            this.btnThongKe});
             this.barManager1.MainMenu = this.bar2;
-            this.barManager1.MaxItemId = 9;
+            this.barManager1.MaxItemId = 10;
             // 
             // bar2
             // 
@@ -94,10 +96,19 @@
             this.bar2.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.btnSua, true),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnLuu),
-            new DevExpress.XtraBars.LinkPersistInfo(this.btnHuy, true)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.btnHuy, true),
+            new DevExpress.XtraBars.LinkPersistInfo(this.btnThongKe)});
             this.bar2.OptionsBar.MultiLine = true;
             this.bar2.OptionsBar.UseWholeRow = true;
             this.bar2.Text = "Main menu";
+            // 
+            // btnSua
+            // 
+            this.btnSua.Caption = "Sửa";
+            this.btnSua.Id = 8;
+            this.btnSua.Name = "btnSua";
+            this.btnSua.Size = new System.Drawing.Size(50, 30);
+            this.btnSua.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnSua_ItemClick);
             // 
             // btnLuu
             // 
@@ -115,12 +126,12 @@
             this.btnHuy.Size = new System.Drawing.Size(50, 30);
             this.btnHuy.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnHuy_ItemClick);
             // 
-            // barButtonItem1
+            // btnThongKe
             // 
-            this.barButtonItem1.Caption = "Xuất";
-            this.barButtonItem1.Id = 7;
-            this.barButtonItem1.Name = "barButtonItem1";
-            this.barButtonItem1.Size = new System.Drawing.Size(50, 30);
+            this.btnThongKe.Caption = "Thống kê";
+            this.btnThongKe.Id = 9;
+            this.btnThongKe.Name = "btnThongKe";
+            this.btnThongKe.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnThongKe_ItemClick);
             // 
             // barDockControlTop
             // 
@@ -163,6 +174,13 @@
             // 
             this.btnXoa.Id = 6;
             this.btnXoa.Name = "btnXoa";
+            // 
+            // barButtonItem1
+            // 
+            this.barButtonItem1.Caption = "Xuất";
+            this.barButtonItem1.Id = 7;
+            this.barButtonItem1.Name = "barButtonItem1";
+            this.barButtonItem1.Size = new System.Drawing.Size(50, 30);
             // 
             // gcDanhSachSV
             // 
@@ -306,6 +324,7 @@
             this.cbbNamHoc.Name = "cbbNamHoc";
             this.cbbNamHoc.Size = new System.Drawing.Size(193, 27);
             this.cbbNamHoc.TabIndex = 3;
+            this.cbbNamHoc.SelectedIndexChanged += new System.EventHandler(this.cbbNamHoc_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -323,14 +342,6 @@
             this.barButtonItem2.Id = 5;
             this.barButtonItem2.Name = "barButtonItem2";
             this.barButtonItem2.Size = new System.Drawing.Size(50, 30);
-            // 
-            // btnSua
-            // 
-            this.btnSua.Caption = "Sửa";
-            this.btnSua.Id = 8;
-            this.btnSua.Name = "btnSua";
-            this.btnSua.Size = new System.Drawing.Size(50, 30);
-            this.btnSua.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnSua_ItemClick);
             // 
             // uc_KQHT
             // 
@@ -387,5 +398,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn KetQua;
         private DevExpress.XtraBars.BarButtonItem barButtonItem2;
         private DevExpress.XtraBars.BarButtonItem btnSua;
+        private DevExpress.XtraBars.BarButtonItem btnThongKe;
     }
 }

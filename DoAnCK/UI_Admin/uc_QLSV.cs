@@ -131,7 +131,6 @@ namespace DoAnCK.UI_Admin
                             return;
                         }
 
-                        // Gọi stored procedure để cập nhật sinh viên
                         string query = $@"EXEC sp_CapNhatSinhVien 
                                             @MaSV = '{maSV}', 
                                             @HoTen = N'{hoTen}', 
@@ -183,7 +182,6 @@ namespace DoAnCK.UI_Admin
                             DataRow row = gvDanhSachSV.GetDataRow(selectedRows[i]);
                             if (row != null && row.RowState == DataRowState.Added)
                             {
-                                // Nếu là dòng mới chưa lưu DB thì chỉ cần remove khỏi DataTable
                                 row.Delete();
                                 gvDanhSachSV.DeleteRow(selectedRows[i]);
                             }
@@ -192,7 +190,6 @@ namespace DoAnCK.UI_Admin
                                 // Lấy MaSV từ hàng cũ
                                 string maSV = gvDanhSachSV.GetRowCellValue(selectedRows[i], "MaSV").ToString();
 
-                                // Sử dụng stored procedure thay vì DELETE trực tiếp
                                 string query = $"EXEC sp_XoaSinhVien @MaSV = '{maSV}'";
                                 frmAdmin.executeQuery(query);
 

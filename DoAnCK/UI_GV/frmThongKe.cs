@@ -29,7 +29,6 @@ namespace DoAnCK.UI_GV
         }
         public void HienThiBieuDoThongKe(string maLHP, int maHocKyNamHoc)
         {
-            // Kiểm tra tham số đầu vào
             if (string.IsNullOrEmpty(maLHP) || maHocKyNamHoc <= 0)
             {
                 MessageBox.Show("Chưa có dữ liệu để hiển thị biểu đồ.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -193,18 +192,18 @@ namespace DoAnCK.UI_GV
         {
            
             // Kiểm tra nếu đã có dữ liệu để hiển thị
-            if (!string.IsNullOrEmpty(currentMaLHP) && currentMaHocKyNamHoc > 0)
-            {
-                switch (comboBoxEdit.SelectedIndex)
+                if (!string.IsNullOrEmpty(currentMaLHP) && currentMaHocKyNamHoc > 0)
                 {
-                    case 0: // "Thống kê đạt rớt"
-                             HienThiBieuDoThongKe(currentMaLHP, currentMaHocKyNamHoc);
-                        break;
-                    case 1: // "Thống kê phổ điểm"
-                        HienThiBieuDoPhoDiem(currentMaLHP, currentMaHocKyNamHoc);
-                        break;
+                    switch (comboBoxEdit.SelectedIndex)
+                    {
+                        case 0: // "Thống kê đạt rớt"
+                                 HienThiBieuDoThongKe(currentMaLHP, currentMaHocKyNamHoc);
+                            break;
+                        case 1: // "Thống kê phổ điểm"
+                            HienThiBieuDoPhoDiem(currentMaLHP, currentMaHocKyNamHoc);
+                            break;
+                    }
                 }
-            }
         }
 
         private void frmThongKe_Load(object sender, EventArgs e)

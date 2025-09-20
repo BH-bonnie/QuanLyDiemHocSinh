@@ -1,30 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraGrid.Views.Grid;
-using System.Data.SqlClient;
+using DoAnCK.UI_GV;
 
 namespace DoAnCK.UI_Admin
 {
-    public partial class uc_KQHT: UserControl
+    public partial class uc_KQHT : UserControl
     {
-        string connStr;
+        private string connStr;
         private int maHocKyNamHoc;
         private bool isAdding = false;
         private int editingRowHandle = -1;
         private DataTable dt;
         private bool isLoading = false;
+
         public uc_KQHT()
         {
             InitializeComponent();
-            string connStr = frmAdmin.ConnString;
-
+            connStr = frmAdmin.ConnString;
         }
 
         private void uc_KQHT_Load(object sender, EventArgs e)
@@ -32,22 +26,17 @@ namespace DoAnCK.UI_Admin
             btnLuu.Enabled = false;
             btnHuy.Enabled = false;
             btnSua.Enabled = true;
-            isAdding = false;
             gvDanhSachSV.OptionsBehavior.Editable = false;
-            LoadMaHKNH();
+           
 
-            isLoading = false;
-
-            LoadBangDiem();
-
-
-            
-
+            LoadMaHKNH(); // load ComboBox năm học
+            LoadBangDiem(); // load dữ liệu sinh viên
         }
+
         private void LoadMaHKNH()
         {
-            string queryNamHoc = $@" SELECT MaHocKyNamHoc, HocKy, NamHoc FROM HocKyNamHoc ORDER BY MaHocKyNamHoc DESC";
-
+            isLoading = true; // bắt đầu load dữ liệu
+            string queryNamHoc = @"SELECT MaHocKyNamHoc, HocKy, NamHoc FROM HocKyNamHoc ORDER BY MaHocKyNamHoc DESC";
             DataTable dtNamHoc = frmAdmin.getData(queryNamHoc);
 
             if (dtNamHoc != null && dtNamHoc.Rows.Count > 0)
@@ -58,30 +47,30 @@ namespace DoAnCK.UI_Admin
                     row["HK_NamHoc"] = $"HK{row["HocKy"]} - {row["NamHoc"]}";
                 }
 
-                // Gán vào ComboBox
                 cbbNamHoc.DataSource = dtNamHoc;
                 cbbNamHoc.DisplayMember = "HK_NamHoc";
                 cbbNamHoc.ValueMember = "MaHocKyNamHoc";
-                maHocKyNamHoc = Convert.ToInt32(cbbNamHoc.SelectedValue);
+                cbbNamHoc.SelectedIndex = 0; // chọn mặc định
 
-                string querySV = $"SELECT * FROM fn_ChiTietHocPhan( {maHocKyNamHoc})";
-                DataTable dt = frmAdmin.getData(querySV);
-                gcDanhSachSV.DataSource = dt;
+                maHocKyNamHoc = Convert.ToInt32(cbbNamHoc.SelectedValue);
             }
             else
             {
                 MessageBox.Show("Không tìm thấy học kỳ/năm học hiện tại.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
             }
+            isLoading = false; // kết thúc load dữ liệu
         }
 
         private void LoadBangDiem()
         {
             if (isLoading || cbbNamHoc.SelectedValue == null) return;
 
-            string maLHP = cbbNamHoc.SelectedValue.ToString();
-            string query = $"SELECT * FROM fn_ChiTietHocPhan( {maHocKyNamHoc})";
+            DataRowView drv = cbbNamHoc.SelectedItem as DataRowView;
+            if (drv == null)
+                return;
 
+            maHocKyNamHoc = Convert.ToInt32(drv["MaHocKyNamHoc"]);
+            string query = $"SELECT * FROM fn_ChiTietHocPhan({maHocKyNamHoc})";
             dt = frmAdmin.getData(query);
 
             if (dt != null && dt.Rows.Count > 0)
@@ -93,11 +82,65 @@ namespace DoAnCK.UI_Admin
             }
         }
 
+        private void cbbNamHoc_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (isLoading) return;
 
+            LoadBangDiem();
 
-        
+            btnSua.Enabled = (cbbNamHoc.SelectedIndex == 0);
+        }
 
-void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        private void btnSua_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            btnLuu.Enabled = true;
+            btnHuy.Enabled = true;
+            btnSua.Enabled = false;
+            btnXoa.Enabled = false;
+            gvDanhSachSV.OptionsBehavior.Editable = true;
+            editingRowHandle = gvDanhSachSV.FocusedRowHandle;
+        }
+
+        private void btnHuy_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            int rowHandle = gvDanhSachSV.FocusedRowHandle;
+
+            if (isAdding)
+            {
+                if (gvDanhSachSV.IsNewItemRow(rowHandle) || rowHandle == DevExpress.XtraGrid.GridControl.NewItemRowHandle)
+                {
+                    gvDanhSachSV.DeleteRow(rowHandle);
+                }
+                else
+                {
+                    for (int i = gvDanhSachSV.RowCount - 1; i >= 0; i--)
+                    {
+                        DataRow row = gvDanhSachSV.GetDataRow(i);
+                        if (row != null && row.RowState == DataRowState.Added)
+                        {
+                            gvDanhSachSV.DeleteRow(i);
+                            break;
+                        }
+                    }
+                }
+                dt.RejectChanges();
+            }
+            else
+            {
+                gvDanhSachSV.CancelUpdateCurrentRow();
+                dt.RejectChanges();
+            }
+
+            btnLuu.Enabled = false;
+            btnSua.Enabled = true;
+            btnXoa.Enabled = true;
+            btnHuy.Enabled = false;
+            gvDanhSachSV.OptionsBehavior.Editable = false;
+            isAdding = false;
+            editingRowHandle = -1;
+        }
+
+        private void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             gvDanhSachSV.CloseEditor();
             gvDanhSachSV.UpdateCurrentRow();
@@ -118,7 +161,6 @@ void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
                     decimal? diemGK = row["DiemGK"] != DBNull.Value ? Convert.ToDecimal(row["DiemGK"]) : (decimal?)null;
                     decimal? diemCK = row["DiemCK"] != DBNull.Value ? Convert.ToDecimal(row["DiemCK"]) : (decimal?)null;
 
-                    // Kiểm tra điểm hợp lệ
                     if ((diemGK.HasValue && (diemGK < 0 || diemGK > 10)) ||
                         (diemCK.HasValue && (diemCK < 0 || diemCK > 10)))
                     {
@@ -126,7 +168,6 @@ void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
                         return;
                     }
 
-                    // Xây dựng câu lệnh EXEC stored procedure
                     string diemGKValue = diemGK.HasValue ? diemGK.Value.ToString() : "NULL";
                     string diemCKValue = diemCK.HasValue ? diemCK.Value.ToString() : "NULL";
 
@@ -142,7 +183,6 @@ void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
 
                 dt.AcceptChanges();
                 MessageBox.Show("Cập nhật điểm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                 LoadBangDiem();
             }
             catch (Exception ex)
@@ -151,63 +191,13 @@ void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
             }
         }
 
-        private void cbbNamHoc_SelectedIndexChanged(object sender, EventArgs e)
+        private void btnThongKe_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-
-            if (isLoading) return;
-            LoadBangDiem();
+            frmThongKeAD frm = new frmThongKeAD();
+            frm.SetData(maHocKyNamHoc);
+            frm.ShowDialog();
         }
 
-        private void btnSua_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            btnLuu.Enabled = true;
-            btnHuy.Enabled = true;
-            btnSua.Enabled = false;
-            btnXoa.Enabled = false;
-            gvDanhSachSV.OptionsBehavior.Editable = true;
-            editingRowHandle = gvDanhSachSV.FocusedRowHandle;
-        }
 
-        private void btnHuy_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            {
-                int rowHandle = gvDanhSachSV.FocusedRowHandle;
-
-                if (isAdding)
-                {
-                    if (gvDanhSachSV.IsNewItemRow(rowHandle) || rowHandle == DevExpress.XtraGrid.GridControl.NewItemRowHandle)
-                    {
-                        gvDanhSachSV.DeleteRow(rowHandle);
-                    }
-                    else
-                    {
-                        for (int i = gvDanhSachSV.RowCount - 1; i >= 0; i--)
-                        {
-                            DataRow row = gvDanhSachSV.GetDataRow(i);
-                            if (row != null && row.RowState == DataRowState.Added)
-                            {
-                                gvDanhSachSV.DeleteRow(i);
-                                break;
-                            }
-                        }
-                    }
-
-                    dt.RejectChanges();
-                }
-                else
-                {
-                    gvDanhSachSV.CancelUpdateCurrentRow();
-                    dt.RejectChanges();
-                }
-
-                btnLuu.Enabled = false;
-                btnSua.Enabled = true;
-                btnXoa.Enabled = true;
-                btnHuy.Enabled = false;
-                gvDanhSachSV.OptionsBehavior.Editable = false;
-                isAdding = false;
-                editingRowHandle = -1;
-            }
-        }
     }
 }

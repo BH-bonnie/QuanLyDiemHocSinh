@@ -31,6 +31,7 @@ namespace DoAnCK {
         uc_KQHT ucKQHT;
         uc_CT ucCT;
         uc_Chitiet ucChitiet;
+        uc_TaiKhoan ucTK;
         private void frmAdmin_Load(object sender, EventArgs e)
         {
 
@@ -210,6 +211,22 @@ namespace DoAnCK {
 
                 FormMain formMain = new FormMain();
                 formMain.Show();
+            }
+        }
+
+        private void btnTK_Click(object sender, EventArgs e)
+        {
+            if(ucTK == null)
+            {
+                ucTK = new uc_TaiKhoan();
+                ucTK.Dock = DockStyle.Fill;
+                ucTK.AutoSize = true; // tự động mở rộng theo nội dung
+                mainContainer.Controls.Add(ucTK);
+                ucTK.BringToFront();
+            }
+            else
+            {
+                ucTK.BringToFront();
             }
         }
     }

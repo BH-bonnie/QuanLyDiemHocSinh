@@ -181,8 +181,7 @@ INSERT INTO HocKyNamHoc (HocKy, NamHoc) VALUES
 (2, '2023-2024'),
 (1, '2024-2025'),
 (2, '2024-2025');
-	USE QL_SinhVien;
-	GO
+
 INSERT INTO LopHocPhan (MaLHP, MaMH, MaGV, MaHocKyNamHoc) VALUES 
 ('MATH132401_01', 'MATH132401', '2002', 3),
 ('MATH132401_02', 'MATH132401', '2002', 3),
@@ -201,9 +200,10 @@ INSERT INTO LopHocPhan (MaLHP, MaMH, MaGV, MaHocKyNamHoc) VALUES
 -- Đăng ký 76 SV cho 3 lớp MATH132401
 -- ==============================
 
- truncate table DangKyMonHoc
+ 
  -- ==============================
 -- Đăng ký 76 SV cho MATH132401_01, _02, _03
+truncate table DangKyMonHoc;
 -- ==============================
 INSERT INTO DangKyMonHoc (MaSV, MaLHP, MaHocKyNamHoc) VALUES
 ('23131177', 'MATH132401_01', 4),
@@ -282,6 +282,9 @@ INSERT INTO DangKyMonHoc (MaSV, MaLHP, MaHocKyNamHoc) VALUES
 ('23110370', 'MATH132401_03', 4),
 ('23110371', 'MATH132401_03', 4),
 ('23131372', 'MATH132401_03', 4);
+
+
+
 
 -- ==============================
 -- Đăng ký 45 SV cho MATH132501_01
@@ -432,7 +435,6 @@ INSERT INTO DangKyMonHoc (MaSV, MaLHP, MaHocKyNamHoc) VALUES
 
 
 
-truncate table ChiTietHocPhan
 INSERT INTO ChiTietHocPhan (MaSV, MaMH, MaHocKyNamHoc, DiemGK, DiemCK) VALUES
 ('23131177', 'INPR140285', 3, 2.1, 8.7),
 ('23110178', 'PHYS130902', 3, 9.9, 1.3),
@@ -591,29 +593,3 @@ VALUES
 
 
 
-INSERT INTO ChiTietHocPhan (MaSV, MaMH, MaHocKyNamHoc, DiemGK, DiemCK) VALUES
-('23131177', 'MATH132401', 4, 7.23, 8.45),
-('23110178', 'MATH132401', 4, 5.67, 6.89),
-('23110184', 'MATH132401', 4, 9.12, 7.34),
-('23110186', 'MATH132401', 4, 6.45, 5.78),
-('23131189', 'MATH132401', 4, 8.56, 9.01),
-('23131191', 'MATH132401', 4, 7.89, 6.12),
-('23110192', 'MATH132401', 4, 5.34, 7.45),
-('23110193', 'MATH132401', 4, 6.78, 8.23),
-('23110196', 'MATH132401', 4, 4.56, 5.67),
-('23131200', 'MATH132401', 4, 9.45, 8.78),
-('23110201', 'MATH132401', 4, 7.12, 6.45),
-('23110204', 'MATH132401', 4, 8.34, 7.56),
-('23131205', 'MATH132401', 4, 6.89, 3.34),
-('23131207', 'MATH132401', 4, 7.45, 2.12),
-('23110210', 'MATH132401', 4, 5.67, 4.23),
-('23110212', 'MATH132401', 4, 8.56, 7.89),
-('23110213', 'MATH132401', 4, 6.34, 5.78),
-('23110220', 'MATH132401', 4, 7.78, 9.12),
-('23110222', 'MATH132401', 4, 8.12, 2.45),
-('23110226', 'MATH132401', 4, 5.45, 7.34),
-('23110227', 'MATH132401', 4, 4.89, 4.56),
-('23110231', 'MATH132401', 4, 7.23, 5.67),
-('23110234', 'MATH132401', 4, 8.45, 6.12),
-('23110236', 'MATH132401', 4, 6.56, 9.01),
-('23131237', 'MATH132401', 4, 7.89, 8.34);
