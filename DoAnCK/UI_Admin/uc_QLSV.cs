@@ -68,68 +68,100 @@ namespace DoAnCK.UI_Admin
             gvDanhSachSV.FocusedColumn = gvDanhSachSV.VisibleColumns[0];
             gvDanhSachSV.ShowEditor();
         }
-          private void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        private void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            gvDanhSachSV.CloseEditor();
+            gvDanhSachSV.UpdateCurrentRow();
+            var changes = dtSinhVien.GetChanges();
+            if (changes == null)
+            {
+                MessageBox.Show("Không có thay đổi nào để lưu!");
+                return;
+            }
+
+            try
+            {
+                foreach (DataRow row in changes.Rows)
                 {
-                   
+                    if (row.RowState == DataRowState.Added)
+                    {
+                        string maSV = row["MaSV"].ToString().Trim();
+                        string hoTen = row["HoTen"].ToString().Trim();
+                        string lopSV = row["LopSV"].ToString().Trim();
+                        string ngaySinh = row["NgaySinh"] == DBNull.Value ? "NULL" :
+                            $"'{Convert.ToDateTime(row["NgaySinh"]).ToString("yyyy-MM-dd")}'";
+                        string noiSinh = row["NoiSinh"]?.ToString() ?? "";
+                        string gioiTinh = row["GioiTinh"]?.ToString() ?? "";
+                        string cmnd = row["CMND_CCCD"]?.ToString() ?? "";
 
-                    gvDanhSachSV.CloseEditor();
-                    gvDanhSachSV.UpdateCurrentRow();
-                    var changes = dtSinhVien.GetChanges();
-                    if (changes == null)
-                    {
-                        MessageBox.Show("Không có thay đổi nào để lưu!");
-                        
-                        return;
-                    }
-                    foreach (DataRow row in changes.Rows)
-                    {
-                        if (row.RowState == DataRowState.Added)
+                        // Kiểm tra dữ liệu bắt buộc
+                        if (string.IsNullOrWhiteSpace(maSV) || string.IsNullOrWhiteSpace(hoTen) || string.IsNullOrWhiteSpace(lopSV))
                         {
-                            string maSV = row["MaSV"].ToString().Trim();
-                            string hoTen = row["HoTen"].ToString().Trim();
-                            string lopSV = row["LopSV"].ToString().Trim();
-
-
-                    if (string.IsNullOrWhiteSpace(maSV) || string.IsNullOrWhiteSpace(hoTen) || string.IsNullOrWhiteSpace(lopSV))
-                            {
-                                MessageBox.Show("Mã sinh viên, Họ tên, Lớp SV không được để trống!");
-                                return;
-                            }
-
-                            using (SqlConnection conn = new SqlConnection(connStr))
-                            {
-                                conn.Open();
-                                string query = "SELECT COUNT(*) FROM SinhVien WHERE MaSV = @MaSV";
-                                using (SqlCommand cmd = new SqlCommand(query, conn))
-                                {
-                                    cmd.Parameters.AddWithValue("@MaSV", maSV);
-                                    int exist = (int)cmd.ExecuteScalar();
-                                    if (exist > 0)
-                                    {
-                                        MessageBox.Show($"Mã sinh viên '{maSV}' đã tồn tại!");
-                                        return;
-                                    }
-                                }
-                            }
+                            MessageBox.Show("Mã sinh viên, Họ tên, Lớp SV không được để trống!");
+                            return;
                         }
+
+                        // Gọi stored procedure để thêm sinh viên
+                        string query = $@"EXEC sp_ThemSinhVien 
+                                            @MaSV = '{maSV}', 
+                                            @HoTen = N'{hoTen}', 
+                                            @LopSV = '{lopSV}', 
+                                            @NgaySinh = {ngaySinh}, 
+                                            @NoiSinh = {(string.IsNullOrWhiteSpace(noiSinh) ? "NULL" : $"N'{noiSinh}'")}, 
+                                            @GioiTinh = {(string.IsNullOrWhiteSpace(gioiTinh) ? "NULL" : $"N'{gioiTinh}'")}, 
+                                            @CMND_CCCD = {(string.IsNullOrWhiteSpace(cmnd) ? "NULL" : $"'{cmnd}'")}";
+
+                        frmAdmin.executeQuery(query);
                     }
-                        using (SqlConnection conn = new SqlConnection(connStr))
+                    else if (row.RowState == DataRowState.Modified)
                     {
-                        SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM SinhVien", conn);
-                        SqlCommandBuilder builder = new SqlCommandBuilder(da);
+                        string maSV = row["MaSV"].ToString().Trim();
+                        string hoTen = row["HoTen"].ToString().Trim();
+                        string lopSV = row["LopSV"].ToString().Trim();
+                        string ngaySinh = row["NgaySinh"] == DBNull.Value ? "NULL" :
+                            $"'{Convert.ToDateTime(row["NgaySinh"]).ToString("yyyy-MM-dd")}'";
+                        string noiSinh = row["NoiSinh"]?.ToString() ?? "";
+                        string gioiTinh = row["GioiTinh"]?.ToString() ?? "";
+                        string cmnd = row["CMND_CCCD"]?.ToString() ?? "";
 
-                        da.Update(dtSinhVien);
+                        // Kiểm tra dữ liệu bắt buộc
+                        if (string.IsNullOrWhiteSpace(maSV) || string.IsNullOrWhiteSpace(hoTen) || string.IsNullOrWhiteSpace(lopSV))
+                        {
+                            MessageBox.Show("Mã sinh viên, Họ tên, Lớp SV không được để trống!");
+                            return;
+                        }
+
+                        // Gọi stored procedure để cập nhật sinh viên
+                        string query = $@"EXEC sp_CapNhatSinhVien 
+                                            @MaSV = '{maSV}', 
+                                            @HoTen = N'{hoTen}', 
+                                            @LopSV = '{lopSV}', 
+                                            @NgaySinh = {ngaySinh}, 
+                                            @NoiSinh = {(string.IsNullOrWhiteSpace(noiSinh) ? "NULL" : $"N'{noiSinh}'")}, 
+                                            @GioiTinh = {(string.IsNullOrWhiteSpace(gioiTinh) ? "NULL" : $"N'{gioiTinh}'")}, 
+                                            @CMND_CCCD = {(string.IsNullOrWhiteSpace(cmnd) ? "NULL" : $"'{cmnd}'")}";
+
+                        frmAdmin.executeQuery(query);
                     }
+                }
 
-                    dtSinhVien.AcceptChanges();
-                    MessageBox.Show("Đã lưu thay đổi vào CSDL!");
-                    btnLuu.Enabled = false;
-                    btnSua.Enabled = true;
-                    btnXoa.Enabled = true;
-                    gvDanhSachSV.OptionsBehavior.Editable = false;
-                    btnThem.Enabled = true;
+                dtSinhVien.AcceptChanges();
+                MessageBox.Show("Đã lưu thay đổi vào CSDL!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    isAdding = false;
+                dtSinhVien = frmAdmin.getData("SELECT * FROM v_SinhVien_Detail;");
+                gcDanhSachSV.DataSource = dtSinhVien;
+
+                btnLuu.Enabled = false;
+                btnSua.Enabled = true;
+                btnXoa.Enabled = true;
+                gvDanhSachSV.OptionsBehavior.Editable = false;
+                btnThem.Enabled = true;
+                isAdding = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi lưu thông tin sinh viên: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void btnXoa_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -144,10 +176,8 @@ namespace DoAnCK.UI_Admin
 
                 if (result == DialogResult.Yes)
                 {
-                    using (SqlConnection conn = new SqlConnection(connStr))
+                    try
                     {
-                        conn.Open();
-
                         for (int i = selectedRows.Length - 1; i >= 0; i--)
                         {
                             DataRow row = gvDanhSachSV.GetDataRow(selectedRows[i]);
@@ -162,21 +192,21 @@ namespace DoAnCK.UI_Admin
                                 // Lấy MaSV từ hàng cũ
                                 string maSV = gvDanhSachSV.GetRowCellValue(selectedRows[i], "MaSV").ToString();
 
-                                // Xóa trong database
-                                string deleteQuery = "DELETE FROM SinhVien WHERE MaSV = @MaSV";
-                                using (SqlCommand cmd = new SqlCommand(deleteQuery, conn))
-                                {
-                                    cmd.Parameters.AddWithValue("@MaSV", maSV);
-                                    cmd.ExecuteNonQuery();
-                                }
+                                // Sử dụng stored procedure thay vì DELETE trực tiếp
+                                string query = $"EXEC sp_XoaSinhVien @MaSV = '{maSV}'";
+                                frmAdmin.executeQuery(query);
 
                                 // Xóa trên GridView
                                 gvDanhSachSV.DeleteRow(selectedRows[i]);
                             }
                         }
-                    }
 
-                    MessageBox.Show("Xóa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Xóa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi khi xóa sinh viên: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             else
@@ -186,6 +216,7 @@ namespace DoAnCK.UI_Admin
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
             }
+
             isAdding = false;
             editingRowHandle = -1;
 
@@ -201,19 +232,16 @@ namespace DoAnCK.UI_Admin
             GridView view = sender as GridView;
             int rowHandle = view.FocusedRowHandle;
 
-            // Nếu là NewItemRow thì cho phép
             if (view.IsNewItemRow(rowHandle) || rowHandle == DevExpress.XtraGrid.GridControl.NewItemRowHandle)
             {
                 return;
             }
 
-            // Lấy DataRow thực sự
             DataRow row = view.GetDataRow(rowHandle);
             if (row == null) return;
 
             if (isAdding)
             {
-                // Cho phép sửa các dòng mới thêm (RowState == Added)
                 if (row.RowState != DataRowState.Added)
                 {
                     e.Cancel = true; // khóa dòng cũ
@@ -221,7 +249,6 @@ namespace DoAnCK.UI_Admin
             }
             else
             {
-                // Ở chế độ sửa: chỉ khóa cột MaSV
                 if (view.FocusedColumn != null && view.FocusedColumn.FieldName == "MaSV")
                     e.Cancel = true;
             }

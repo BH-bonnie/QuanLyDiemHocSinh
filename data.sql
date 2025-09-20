@@ -1,9 +1,14 @@
 ﻿USE QL_SinhVien;
 GO
-INSERT INTO Lop (LopSV, TenLop)
+
+INSERT INTO Khoa (MaKhoa,TenKhoa)
 VALUES 
-('CNTT01','Công nghệ thông tin'),
-('CNTT02','Công nghệ thông tin');
+('CNTT','Công nghệ thông tin');
+
+INSERT INTO Lop (LopSV, TenLop,MaKhoa)
+VALUES 
+('CNTT01','Công nghệ thông tin 1','CNTT'),
+('CNTT02','Công nghệ thông tin 2','CNTT');
 
 
 INSERT INTO SinhVien (MaSV, HoTen, NgaySinh, NoiSinh, GioiTinh, CMND_CCCD, LopSV)

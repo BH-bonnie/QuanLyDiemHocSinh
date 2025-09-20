@@ -13,7 +13,7 @@ namespace DoAnCK.UI
 {
     public partial class uc_KQDKMH: UserControl
     {
-        string connStr = frmMain.ConnString;
+        string connStr = FormMain.ConnString;
         private DataTable getData(string query)
         {
             using (var conn = new SqlConnection(connStr))

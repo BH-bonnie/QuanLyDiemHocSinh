@@ -39,13 +39,13 @@
             this.btnKQHT = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.btnChiTiet = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.accordionControlElement7 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
-            this.btnTK = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.btnQLMH = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.btnCT = new DevExpress.XtraBars.Navigation.AccordionControlElement();
+            this.btnTK = new DevExpress.XtraBars.Navigation.AccordionControlElement();
+            this.btnLichsu = new DevExpress.XtraBars.Navigation.AccordionControlElement();
+            this.btnDangXuat = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.fluentDesignFormControl1 = new DevExpress.XtraBars.FluentDesignSystem.FluentDesignFormControl();
             this.fluentFormDefaultManager1 = new DevExpress.XtraBars.FluentDesignSystem.FluentFormDefaultManager(this.components);
-            this.btnDangXuat = new DevExpress.XtraBars.Navigation.AccordionControlElement();
-            this.btnLichsu = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             ((System.ComponentModel.ISupportInitialize)(this.accordionControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fluentDesignFormControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fluentFormDefaultManager1)).BeginInit();
@@ -165,14 +165,6 @@
             this.accordionControlElement7.Name = "accordionControlElement7";
             this.accordionControlElement7.Text = "HỆ THỐNG";
             // 
-            // btnTK
-            // 
-            this.btnTK.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 9.5F);
-            this.btnTK.Appearance.Default.Options.UseFont = true;
-            this.btnTK.Name = "btnTK";
-            this.btnTK.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
-            this.btnTK.Text = "Quản lý tài khoản";
-            // 
             // btnQLMH
             // 
             this.btnQLMH.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 9.5F);
@@ -191,6 +183,31 @@
             this.btnCT.Text = "Thiết lập trọng số";
             this.btnCT.Click += new System.EventHandler(this.btnCT_Click);
             // 
+            // btnTK
+            // 
+            this.btnTK.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.btnTK.Appearance.Default.Options.UseFont = true;
+            this.btnTK.Name = "btnTK";
+            this.btnTK.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
+            this.btnTK.Text = "Quản lý tài khoản";
+            // 
+            // btnLichsu
+            // 
+            this.btnLichsu.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.btnLichsu.Appearance.Default.Options.UseFont = true;
+            this.btnLichsu.Name = "btnLichsu";
+            this.btnLichsu.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
+            this.btnLichsu.Text = "Lịch sử đăng nhập";
+            // 
+            // btnDangXuat
+            // 
+            this.btnDangXuat.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.btnDangXuat.Appearance.Default.Options.UseFont = true;
+            this.btnDangXuat.Name = "btnDangXuat";
+            this.btnDangXuat.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
+            this.btnDangXuat.Text = "Đăng xuất";
+            this.btnDangXuat.Click += new System.EventHandler(this.btnDangXuat_Click);
+            // 
             // fluentDesignFormControl1
             // 
             this.fluentDesignFormControl1.FluentDesignForm = this;
@@ -204,22 +221,6 @@
             // fluentFormDefaultManager1
             // 
             this.fluentFormDefaultManager1.Form = this;
-            // 
-            // btnDangXuat
-            // 
-            this.btnDangXuat.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 9.5F);
-            this.btnDangXuat.Appearance.Default.Options.UseFont = true;
-            this.btnDangXuat.Name = "btnDangXuat";
-            this.btnDangXuat.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
-            this.btnDangXuat.Text = "Đăng xuất";
-            // 
-            // btnLichsu
-            // 
-            this.btnLichsu.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 9.5F);
-            this.btnLichsu.Appearance.Default.Options.UseFont = true;
-            this.btnLichsu.Name = "btnLichsu";
-            this.btnLichsu.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
-            this.btnLichsu.Text = "Lịch sử đăng nhập";
             // 
             // frmAdmin
             // 

@@ -54,7 +54,7 @@
             this.gcDanhSachSV.Location = new System.Drawing.Point(0, 0);
             this.gcDanhSachSV.MainView = this.gvDanhSachSV;
             this.gcDanhSachSV.Name = "gcDanhSachSV";
-            this.gcDanhSachSV.Size = new System.Drawing.Size(856, 433);
+            this.gcDanhSachSV.Size = new System.Drawing.Size(856, 439);
             this.gcDanhSachSV.TabIndex = 11;
             this.gcDanhSachSV.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gvDanhSachSV});
@@ -144,7 +144,7 @@
             this.splitContainerControl1.Panel2.Controls.Add(this.gcDanhSachSV);
             this.splitContainerControl1.Panel2.Text = "Panel2";
             this.splitContainerControl1.Size = new System.Drawing.Size(856, 516);
-            this.splitContainerControl1.SplitterPosition = 71;
+            this.splitContainerControl1.SplitterPosition = 65;
             this.splitContainerControl1.TabIndex = 12;
             // 
             // label1

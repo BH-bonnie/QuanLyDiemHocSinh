@@ -14,7 +14,7 @@ namespace DoAnCK.UI
 {
     public partial class uc_XemDiem: UserControl
     {
-        string connStr = frmMain.ConnString;
+        string connStr = FormMain.ConnString;
 
         public uc_XemDiem()
         {

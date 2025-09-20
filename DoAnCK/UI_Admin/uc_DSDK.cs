@@ -61,15 +61,12 @@ namespace DoAnCK.UI_Admin
             if (cbbNamHoc.SelectedItem == null)
                 return;
 
-            // Lấy DataRowView từ SelectedItem
             DataRowView drv = cbbNamHoc.SelectedItem as DataRowView;
             if (drv == null)
                 return;
 
-            // Lấy MaHocKyNamHoc
             int maHocKyNamHoc = Convert.ToInt32(drv["MaHocKyNamHoc"]);
 
-            // Gọi câu SQL lấy lớp học phần theo năm học
             string query = $"SELECT * FROM dbo.fn_DangKyMonHocTheoNamHoc({maHocKyNamHoc})";
             DataTable dt = frmAdmin.getData(query);
 

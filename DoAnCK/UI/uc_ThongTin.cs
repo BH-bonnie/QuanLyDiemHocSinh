@@ -23,7 +23,6 @@ namespace DoAnCK.UI
         }
 
 
-        string connStr = frmMain.ConnString;
      
     }
 }

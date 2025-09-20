@@ -14,23 +14,32 @@ namespace DoAnCK.UI_Admin
 {
     public partial class uc_KQHT: UserControl
     {
-        string connStr = frmAdmin.ConnString;
+        string connStr;
         private int maHocKyNamHoc;
+        private bool isAdding = false;
+        private int editingRowHandle = -1;
         private DataTable dt;
         private bool isLoading = false;
         public uc_KQHT()
         {
             InitializeComponent();
+            string connStr = frmAdmin.ConnString;
+
         }
 
         private void uc_KQHT_Load(object sender, EventArgs e)
         {
-
+            btnLuu.Enabled = false;
+            btnHuy.Enabled = false;
+            btnSua.Enabled = true;
+            isAdding = false;
+            gvDanhSachSV.OptionsBehavior.Editable = false;
             LoadMaHKNH();
 
             isLoading = false;
 
             LoadBangDiem();
+
 
             
 
@@ -88,12 +97,11 @@ namespace DoAnCK.UI_Admin
 
         
 
-        private void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {// Kết thúc chỉnh sửa trên GridView
+void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
             gvDanhSachSV.CloseEditor();
             gvDanhSachSV.UpdateCurrentRow();
 
-            // Lấy các thay đổi trong DataTable
             DataTable dtChanges = ((DataTable)gcDanhSachSV.DataSource)?.GetChanges();
             if (dtChanges == null || dtChanges.Rows.Count == 0)
             {
@@ -101,54 +109,45 @@ namespace DoAnCK.UI_Admin
                 return;
             }
 
-            using (SqlConnection conn = new SqlConnection(frmAdmin.ConnString))
-            using (SqlCommand cmd = new SqlCommand("sp_CapNhatDiemHocPhan", conn))
+            try
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                conn.Open();
-                SqlTransaction tran = conn.BeginTransaction();
-                cmd.Transaction = tran;
-
-                try
+                foreach (DataRow row in dtChanges.Rows)
                 {
-                    foreach (DataRow row in dtChanges.Rows)
+                    string maSV = row["MaSV"].ToString();
+                    string maMH = row["MaMH"].ToString();
+                    decimal? diemGK = row["DiemGK"] != DBNull.Value ? Convert.ToDecimal(row["DiemGK"]) : (decimal?)null;
+                    decimal? diemCK = row["DiemCK"] != DBNull.Value ? Convert.ToDecimal(row["DiemCK"]) : (decimal?)null;
+
+                    // Kiểm tra điểm hợp lệ
+                    if ((diemGK.HasValue && (diemGK < 0 || diemGK > 10)) ||
+                        (diemCK.HasValue && (diemCK < 0 || diemCK > 10)))
                     {
-                        // Lấy dữ liệu từ Grid
-                        string maSV = row["MaSV"].ToString();
-                        string maMH = row["MaMH"].ToString();
-                        decimal? diemGK = row["DiemGK"] != DBNull.Value ? Convert.ToDecimal(row["DiemGK"]) : (decimal?)null;
-                        decimal? diemCK = row["DiemCK"] != DBNull.Value ? Convert.ToDecimal(row["DiemCK"]) : (decimal?)null;
-
-                        // Optional: Kiểm tra dữ liệu hợp lệ (0-10)
-                        if ((diemGK.HasValue && (diemGK < 0 || diemGK > 10)) ||
-                            (diemCK.HasValue && (diemCK < 0 || diemCK > 10)))
-                        {
-                            MessageBox.Show($"Điểm của sinh viên {maSV} không hợp lệ (0-10).", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            tran.Rollback();
-                            return;
-                        }
-
-                        // Truyền tham số
-                        cmd.Parameters.Clear();
-                        cmd.Parameters.AddWithValue("@MaSV", maSV);
-                        cmd.Parameters.AddWithValue("@MaLHP", maMH);
-                        cmd.Parameters.AddWithValue("@MaHocKyNamHoc", maHocKyNamHoc);
-                        cmd.Parameters.AddWithValue("@DiemGK", (object)diemGK ?? DBNull.Value);
-                        cmd.Parameters.AddWithValue("@DiemCK", (object)diemCK ?? DBNull.Value);
-
-                        cmd.ExecuteNonQuery();
+                        MessageBox.Show($"Điểm của sinh viên {maSV} không hợp lệ (0-10).", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
                     }
 
-                    tran.Commit();
-                    MessageBox.Show("Cập nhật điểm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // Xây dựng câu lệnh EXEC stored procedure
+                    string diemGKValue = diemGK.HasValue ? diemGK.Value.ToString() : "NULL";
+                    string diemCKValue = diemCK.HasValue ? diemCK.Value.ToString() : "NULL";
 
+                    string query = $@"EXEC sp_CapNhatDiemHocPhan 
+                                    @MaSV = '{maSV}', 
+                                    @MaMH = '{maMH}', 
+                                    @MaHocKyNamHoc = {maHocKyNamHoc}, 
+                                    @DiemGK = {diemGKValue}, 
+                                    @DiemCK = {diemCKValue}";
+
+                    frmAdmin.executeQuery(query);
                 }
-                catch (Exception ex)
-                {
-                    tran.Rollback();
-                    MessageBox.Show("Lỗi khi lưu điểm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+
+                dt.AcceptChanges();
+                MessageBox.Show("Cập nhật điểm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                LoadBangDiem();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi lưu điểm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -159,6 +158,56 @@ namespace DoAnCK.UI_Admin
             LoadBangDiem();
         }
 
- 
+        private void btnSua_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            btnLuu.Enabled = true;
+            btnHuy.Enabled = true;
+            btnSua.Enabled = false;
+            btnXoa.Enabled = false;
+            gvDanhSachSV.OptionsBehavior.Editable = true;
+            editingRowHandle = gvDanhSachSV.FocusedRowHandle;
+        }
+
+        private void btnHuy_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            {
+                int rowHandle = gvDanhSachSV.FocusedRowHandle;
+
+                if (isAdding)
+                {
+                    if (gvDanhSachSV.IsNewItemRow(rowHandle) || rowHandle == DevExpress.XtraGrid.GridControl.NewItemRowHandle)
+                    {
+                        gvDanhSachSV.DeleteRow(rowHandle);
+                    }
+                    else
+                    {
+                        for (int i = gvDanhSachSV.RowCount - 1; i >= 0; i--)
+                        {
+                            DataRow row = gvDanhSachSV.GetDataRow(i);
+                            if (row != null && row.RowState == DataRowState.Added)
+                            {
+                                gvDanhSachSV.DeleteRow(i);
+                                break;
+                            }
+                        }
+                    }
+
+                    dt.RejectChanges();
+                }
+                else
+                {
+                    gvDanhSachSV.CancelUpdateCurrentRow();
+                    dt.RejectChanges();
+                }
+
+                btnLuu.Enabled = false;
+                btnSua.Enabled = true;
+                btnXoa.Enabled = true;
+                btnHuy.Enabled = false;
+                gvDanhSachSV.OptionsBehavior.Editable = false;
+                isAdding = false;
+                editingRowHandle = -1;
+            }
+        }
     }
 }

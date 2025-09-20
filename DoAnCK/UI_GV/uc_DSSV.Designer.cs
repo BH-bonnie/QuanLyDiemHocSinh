@@ -262,6 +262,7 @@
             this.barListItem.Name = "barListItem";
             this.barListItem.ListItemClick += new DevExpress.XtraBars.ListItemClickEventHandler(this.barListItem_ListItemClick);
             this.barListItem.GetItemData += new System.EventHandler(this.barListItem_GetItemData);
+            this.barListItem.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barListItem_ItemClick);
             // 
             // barDockControlTop
             // 

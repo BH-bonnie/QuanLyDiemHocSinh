@@ -96,10 +96,7 @@ GO
 
 
 
---- Nếu hàm đã tồn tại thì xóa trước
-IF OBJECT_ID('dbo.fn_SinhVienTheoLopHocPhan', 'IF') IS NOT NULL
-    DROP FUNCTION dbo.fn_SinhVienTheoLopHocPhan;
-GO
+
 
 -- Tạo hàm trả về danh sách sinh viên theo lớp học phần và MaHocKyNamHoc
 -- Nếu đã tồn tại thì xóa hàm
@@ -119,10 +116,12 @@ BEGIN
            CAST(YEAR(@Ngay) AS VARCHAR(4));
 END;
 GO
-
+IF OBJECT_ID('dbo.fn_SinhVienTheoLopHocPhan', 'IF') IS NOT NULL
+    DROP FUNCTION dbo.fn_SinhVienTheoLopHocPhan;
+GO
 -- Hàm trả về danh sách sinh viên theo lớp học phần
 CREATE FUNCTION fn_SinhVienTheoLopHocPhan (
-    @MaLHP VARCHAR(10),
+    @MaLHP VARCHAR(20),
     @MaHocKyNamHoc INT
 )
 RETURNS TABLE
@@ -148,8 +147,8 @@ GO
 
 CREATE PROCEDURE dbo.sp_ChuyenLopTheoGV
     @MaSV VARCHAR(10),
-    @MaLHPHienTai VARCHAR(10),
-    @MaLHPMoi VARCHAR(10),
+    @MaLHPHienTai VARCHAR(20),
+    @MaLHPMoi VARCHAR(20),
     @MaGV VARCHAR(10)
 AS
 BEGIN
@@ -158,7 +157,7 @@ BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
 
-        DECLARE @MaMH VARCHAR(10);
+        DECLARE @MaMH VARCHAR(20);
         DECLARE @MaHocKyNamHoc INT;
 
         -- Lấy thông tin lớp hiện tại
@@ -238,7 +237,7 @@ GO
 
 CREATE FUNCTION fn_SinhVienVaDiemTheoLopHocPhan
 (
-    @MaLHP VARCHAR(10),
+    @MaLHP VARCHAR(20),
     @MaHocKyNamHoc INT
 )
 RETURNS TABLE
@@ -279,7 +278,7 @@ GO
 
 CREATE PROCEDURE dbo.sp_CapNhatDiemHocPhan
     @MaSV VARCHAR(10),
-    @MaMH VARCHAR(10),
+    @MaMH VARCHAR(20),
     @MaHocKyNamHoc INT,
     @DiemGK DECIMAL(4,2),
     @DiemCK DECIMAL(4,2)
@@ -320,7 +319,7 @@ IF OBJECT_ID('dbo.sp_ThongKeDiemLopHocPhan', 'P') IS NOT NULL
 GO
 
 CREATE PROCEDURE dbo.sp_ThongKeDiemLopHocPhan
-    @MaLHP VARCHAR(10),
+    @MaLHP VARCHAR(20),
     @MaHocKyNamHoc INT
 AS
 BEGIN
@@ -339,7 +338,7 @@ IF OBJECT_ID('dbo.sp_ThongKeDiemTheoKhoangNho', 'P') IS NOT NULL
 GO
 
 CREATE PROCEDURE dbo.sp_ThongKeDiemTheoKhoangNho
-    @MaLHP VARCHAR(10),
+    @MaLHP VARCHAR(20),
     @MaHocKyNamHoc INT
 AS
 BEGIN
@@ -502,6 +501,7 @@ RETURN
     ) AS cthp
 );
 
+go
 IF OBJECT_ID('dbo.vw_ThongTinChiTietSV', 'V') IS NOT NULL
     DROP VIEW dbo.vw_ThongTinChiTietSV;
 GO
@@ -561,11 +561,11 @@ BEGIN
 
     -- In thông báo cho tất cả bản ghi vừa thêm
     SELECT 
-        '📌 Người dùng: ' + ISNULL(TenDangNhap, 'NULL') + 
+        'Người dùng: ' + ISNULL(TenDangNhap, 'NULL') + 
         ' | Kết quả: ' + ISNULL(KetQua, 'NULL') AS ThongBao
     FROM inserted;
 END; 
-
+Go
 
 IF OBJECT_ID('dbo.sp_DangNhap', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_DangNhap;
@@ -625,7 +625,7 @@ BEGIN
         SET @KetQua = N'Lỗi trong quá trình đăng nhập: ' + ERROR_MESSAGE();
     END CATCH
 END
-
+go
 IF OBJECT_ID('dbo.sp_GetLopHocPhanByGV', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_GetLopHocPhanByGV;
 GO
@@ -653,14 +653,20 @@ GO
 -- Thủ tục xóa đăng ký môn học
 CREATE PROCEDURE sp_XoaDangKyMonHoc
     @MaSV VARCHAR(10),
-    @MaLHP VARCHAR(10)
+    @MaLHP VARCHAR(20),
+    @MaHocKyNamHoc INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
     DELETE FROM DangKyMonHoc
-    WHERE MaSV = @MaSV AND MaLHP = @MaLHP;
+    WHERE MaSV = @MaSV 
+      AND MaLHP = @MaLHP 
+      AND MaHocKyNamHoc = @MaHocKyNamHoc;
 END;
+GO
+
+
 IF OBJECT_ID('sp_LayLopHocPhanKhac', 'P') IS NOT NULL
     DROP PROCEDURE sp_LayLopHocPhanKhac;
 GO
@@ -668,7 +674,7 @@ GO
 CREATE PROCEDURE sp_LayLopHocPhanKhac
     @MaHocKyNamHoc INT,
     @MaGV VARCHAR(10),
-    @MaLHPHienTai VARCHAR(10)
+    @MaLHPHienTai VARCHAR(20)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -681,14 +687,15 @@ BEGIN
       AND MaLHP <> @MaLHPHienTai
     ORDER BY MaLHP;
 END;
+go
 IF OBJECT_ID('sp_ChuyenLopHocPhan', 'P') IS NOT NULL
     DROP PROCEDURE sp_ChuyenLopHocPhan;
 GO
 
 CREATE PROCEDURE sp_ChuyenLopHocPhan
     @MaSV VARCHAR(10),
-    @MaLHPNguon VARCHAR(10),
-    @MaLHPDich VARCHAR(10)
+    @MaLHPNguon VARCHAR(20),
+    @MaLHPDich VARCHAR(20)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -698,6 +705,7 @@ BEGIN
     WHERE MaSV = @MaSV
       AND MaLHP = @MaLHPNguon;
 END;
+go
 IF OBJECT_ID('dbo.fn_GetThongTinGV', 'IF') IS NOT NULL
     DROP FUNCTION dbo.fn_GetThongTinGV;
 GO
@@ -730,4 +738,255 @@ BEGIN
         DienThoai = @DienThoai
     WHERE MaGV = @MaGV;
 END;
+GO
+IF OBJECT_ID('dbo.sp_TinhTBVaTinChiDat', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_TinhTBVaTinChiDat;
+GO
+
+CREATE PROCEDURE dbo.sp_TinhTBVaTinChiDat
+    @MaSV VARCHAR(10)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        AVG(dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK)) AS DiemTB_He10,
+        AVG(dbo.fn_QuyDoiDiemHe4(dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK))) AS DiemTB_He4,
+        SUM(MH.SoTinChi) AS TinChiDat
+    FROM ChiTietHocPhan CTHP
+    INNER JOIN MonHoc MH ON CTHP.MaMH = MH.MaMH
+    WHERE CTHP.MaSV = @MaSV
+      AND dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK) >=5;
+END
+GO
+IF OBJECT_ID('dbo.sp_ThemCongThucTinhDiem', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_ThemCongThucTinhDiem;
+GO
+
+CREATE PROCEDURE sp_ThemCongThucTinhDiem
+    @TiLeGK DECIMAL(3,2),
+    @TiLeCK DECIMAL(3,2)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO CongThucTinhDiem(TiLeGK, TiLeCK) 
+    VALUES(@TiLeGK, @TiLeCK);
+END;
+GO
+IF OBJECT_ID('dbo.sp_XoaGiangVien', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_XoaGiangVien;
+GO
+
+IF OBJECT_ID('dbo.sp_XoaGiangVien', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_XoaGiangVien;
+GO
+
+CREATE PROCEDURE dbo.sp_XoaGiangVien
+    @MaGV VARCHAR(10)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+        DELETE FROM GiangVien WHERE MaGV = @MaGV;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+
+        THROW;
+    END CATCH
+END
+GO
+IF OBJECT_ID('dbo.sp_ThemGiangVien', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_ThemGiangVien;
+GO
+CREATE PROCEDURE dbo.sp_ThemGiangVien
+    @MaGV VARCHAR(10),
+    @HoTenGV NVARCHAR(100),
+    @HocVi NVARCHAR(50) = NULL,
+    @Khoa NVARCHAR(50) = NULL,
+    @Email NVARCHAR(100) = NULL,
+    @DienThoai NVARCHAR(15) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        IF EXISTS (SELECT 1 FROM GiangVien WHERE MaGV = @MaGV)
+        BEGIN
+            RAISERROR('Mã giảng viên ''%s'' đã tồn tại!', 16, 1, @MaGV);
+            RETURN;
+        END
+
+        INSERT INTO GiangVien (MaGV, HoTenGV, HocVi, Khoa, Email, DienThoai)
+        VALUES (@MaGV, @HoTenGV, @HocVi, @Khoa, @Email, @DienThoai);
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+
+        THROW;
+    END CATCH
+END
+GO
+IF OBJECT_ID('dbo.sp_CapNhatGiangVien', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_CapNhatGiangVien;
+GO
+CREATE PROCEDURE dbo.sp_CapNhatGiangVien
+    @MaGV VARCHAR(10),
+    @HoTenGV NVARCHAR(100),
+    @HocVi NVARCHAR(50) = NULL,
+    @Khoa NVARCHAR(50) = NULL,
+    @Email NVARCHAR(100) = NULL,
+    @DienThoai NVARCHAR(15) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        UPDATE GiangVien 
+        SET HoTenGV = @HoTenGV,
+            HocVi = @HocVi,
+            Khoa = @Khoa,
+            Email = @Email,
+            DienThoai = @DienThoai
+        WHERE MaGV = @MaGV;
+
+        IF @@ROWCOUNT = 0
+        BEGIN
+            RAISERROR('Không tìm thấy giảng viên có mã ''%s''', 16, 1, @MaGV);
+            RETURN;
+        END
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+
+        THROW;
+    END CATCH
+END
+GO
+
+IF OBJECT_ID('dbo.sp_XoaSinhVien', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_XoaSinhVien;
+GO
+
+	CREATE PROCEDURE dbo.sp_XoaSinhVien
+		@MaSV VARCHAR(10)
+	AS
+	BEGIN
+		SET NOCOUNT ON;
+
+		BEGIN TRY
+			BEGIN TRANSACTION;
+
+			DELETE FROM SinhVien
+			WHERE MaSV = @MaSV;
+
+			COMMIT TRANSACTION;
+		END TRY
+		BEGIN CATCH
+			IF @@TRANCOUNT > 0
+				ROLLBACK TRANSACTION;
+
+			THROW;
+		END CATCH
+	END;
+	GO
+	IF OBJECT_ID('dbo.sp_ThemSinhVien', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_ThemSinhVien;
+GO
+IF OBJECT_ID('dbo.sp_ThemSinhVien', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_ThemSinhVien;
+GO
+
+CREATE PROCEDURE dbo.sp_ThemSinhVien
+    @MaSV VARCHAR(10),
+    @HoTen NVARCHAR(100),
+    @LopSV VARCHAR(20),
+    @NgaySinh DATE = NULL,
+    @NoiSinh NVARCHAR(100) = NULL,
+    @GioiTinh NVARCHAR(10) = NULL,
+    @CMND_CCCD VARCHAR(20) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    BEGIN TRY
+        BEGIN TRANSACTION
+
+        IF EXISTS (SELECT 1 FROM SinhVien WHERE MaSV = @MaSV)
+        BEGIN
+            RAISERROR('Mã sinh viên ''%s'' đã tồn tại!', 16, 1, @MaSV)
+            RETURN
+        END
+
+        INSERT INTO SinhVien (MaSV, HoTen, LopSV, NgaySinh, NoiSinh, GioiTinh, CMND_CCCD)
+        VALUES (@MaSV, @HoTen, @LopSV, @NgaySinh, @NoiSinh, @GioiTinh, @CMND_CCCD)
+
+        COMMIT TRANSACTION
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION
+        THROW
+    END CATCH
+END
+GO
+
+IF OBJECT_ID('dbo.sp_CapNhatSinhVien', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_CapNhatSinhVien;
+GO
+
+CREATE PROCEDURE dbo.sp_CapNhatSinhVien
+    @MaSV VARCHAR(10),
+    @HoTen NVARCHAR(100),
+    @LopSV VARCHAR(20),
+    @NgaySinh DATE = NULL,
+    @NoiSinh NVARCHAR(100) = NULL,
+    @GioiTinh NVARCHAR(10) = NULL,
+    @CMND_CCCD VARCHAR(20) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        UPDATE SinhVien
+        SET HoTen = @HoTen,
+            LopSV = @LopSV,
+            NgaySinh = @NgaySinh,
+            NoiSinh = @NoiSinh,
+            GioiTinh = @GioiTinh,
+            CMND_CCCD = @CMND_CCCD
+        WHERE MaSV = @MaSV;
+
+        IF @@ROWCOUNT = 0
+        BEGIN
+            RAISERROR('Không tìm thấy sinh viên có mã ''%s''', 16, 1, @MaSV);
+            RETURN;
+        END
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
 GO

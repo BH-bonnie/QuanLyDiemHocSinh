@@ -14,24 +14,31 @@ namespace DoAnCK.UI_GV
 {
     public partial class frmThongKe : Form
     {
-        private string currentMaLHP;
+        private string currentMaLHP ;
         private int currentMaHocKyNamHoc;
+        public string CurrentMaLHP
+        {
+            get { return currentMaLHP; }
+            set { currentMaLHP = value; }
+        }
 
+        public int CurrentMaHocKyNamHoc
+        {
+            get { return currentMaHocKyNamHoc; }
+            set { currentMaHocKyNamHoc = value; }
+        }
         public void HienThiBieuDoThongKe(string maLHP, int maHocKyNamHoc)
         {
-            // Lấy dữ liệu thống kê từ stored procedure
-            DataTable dtThongKe = null;
-            using (SqlConnection conn = new SqlConnection(frmGiangVien.ConnString))
-            using (SqlCommand cmd = new SqlCommand("sp_ThongKeDiemLopHocPhan", conn))
+            // Kiểm tra tham số đầu vào
+            if (string.IsNullOrEmpty(maLHP) || maHocKyNamHoc <= 0)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@MaLHP", maLHP);
-                cmd.Parameters.AddWithValue("@MaHocKyNamHoc", maHocKyNamHoc);
-
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                dtThongKe = new DataTable();
-                da.Fill(dtThongKe);
+                MessageBox.Show("Chưa có dữ liệu để hiển thị biểu đồ.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
+
+            // Lấy dữ liệu thống kê từ stored procedure bằng getData
+            string query = $"EXEC sp_ThongKeDiemLopHocPhan @MaLHP = '{maLHP}', @MaHocKyNamHoc = {maHocKyNamHoc}";
+            DataTable dtThongKe = frmGiangVien.getData(query);
 
             if (dtThongKe != null && dtThongKe.Rows.Count > 0)
             {
@@ -64,8 +71,6 @@ namespace DoAnCK.UI_GV
                 chartThongKe.Dock = DockStyle.Fill;
                 chartThongKe.BackColor = Color.White;
                 chartThongKe.BorderOptions.Visibility = DevExpress.Utils.DefaultBoolean.False;
-
-
             }
             else
             {
@@ -75,19 +80,16 @@ namespace DoAnCK.UI_GV
 
         public void HienThiBieuDoPhoDiem(string maLHP, int maHocKyNamHoc)
         {
-            // Lấy dữ liệu phổ điểm từ stored procedure
-            DataTable dtPhoDiem = null;
-            using (SqlConnection conn = new SqlConnection(frmGiangVien.ConnString))
-            using (SqlCommand cmd = new SqlCommand("sp_ThongKeDiemTheoKhoangNho", conn))
+            // Kiểm tra tham số đầu vào
+            if (string.IsNullOrEmpty(maLHP) || maHocKyNamHoc <= 0)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@MaLHP", maLHP);
-                cmd.Parameters.AddWithValue("@MaHocKyNamHoc", maHocKyNamHoc);
-
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                dtPhoDiem = new DataTable();
-                da.Fill(dtPhoDiem);
+                MessageBox.Show("Chưa có dữ liệu để hiển thị biểu đồ.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
+
+            // Lấy dữ liệu phổ điểm từ stored procedure bằng getData
+            string query = $"EXEC sp_ThongKeDiemTheoKhoangNho @MaLHP = '{maLHP}', @MaHocKyNamHoc = {maHocKyNamHoc}";
+            DataTable dtPhoDiem = frmGiangVien.getData(query);
 
             if (dtPhoDiem != null && dtPhoDiem.Rows.Count > 0)
             {
@@ -155,6 +157,7 @@ namespace DoAnCK.UI_GV
                     diagram.AxisY.Title.Text = "Số sinh viên";
                     diagram.AxisY.Title.Font = new Font("Segoe UI", 12, FontStyle.Bold);
                     diagram.AxisY.WholeRange.SetMinMaxValues(0, Convert.ToInt32(row["TongSoSinhVien"]) + 1);
+
                 }
 
                 chartThongKe.Dock = DockStyle.Fill;
@@ -171,22 +174,31 @@ namespace DoAnCK.UI_GV
         {
             InitializeComponent();
 
-            // Đăng ký sự kiện cho ComboBox
-            comboBoxEdit1.SelectedIndexChanged += ComboBoxEdit1_SelectedIndexChanged;
 
-            // Đặt giá trị mặc định (không trigger event lúc đầu)
-            comboBoxEdit1.SelectedIndex = 0; // Chọn "Thống kê đạt rớt" mặc định
+            comboBoxEdit.SelectedIndex = 0; 
         }
 
-        private void ComboBoxEdit1_SelectedIndexChanged(object sender, EventArgs e)
+       
+
+        public void SetData(string maLHP, int maHocKyNamHoc)
         {
+            currentMaLHP = maLHP;
+            currentMaHocKyNamHoc = maHocKyNamHoc;
+
+            // Hiển thị chart theo lựa chọn hiện tại
+            comboBoxEdit_SelectedIndexChanged(null, null);
+        }
+
+        private void comboBoxEdit_SelectedIndexChanged(object sender, EventArgs e)
+        {
+           
             // Kiểm tra nếu đã có dữ liệu để hiển thị
             if (!string.IsNullOrEmpty(currentMaLHP) && currentMaHocKyNamHoc > 0)
             {
-                switch (comboBoxEdit1.SelectedIndex)
+                switch (comboBoxEdit.SelectedIndex)
                 {
                     case 0: // "Thống kê đạt rớt"
-                        HienThiBieuDoThongKe(currentMaLHP, currentMaHocKyNamHoc);
+                             HienThiBieuDoThongKe(currentMaLHP, currentMaHocKyNamHoc);
                         break;
                     case 1: // "Thống kê phổ điểm"
                         HienThiBieuDoPhoDiem(currentMaLHP, currentMaHocKyNamHoc);
@@ -195,14 +207,9 @@ namespace DoAnCK.UI_GV
             }
         }
 
-        // Phương thức để thiết lập dữ liệu và hiển thị chart ban đầu
-        public void SetData(string maLHP, int maHocKyNamHoc)
+        private void frmThongKe_Load(object sender, EventArgs e)
         {
-            currentMaLHP = maLHP;
-            currentMaHocKyNamHoc = maHocKyNamHoc;
 
-            // Hiển thị chart theo lựa chọn hiện tại
-            ComboBoxEdit1_SelectedIndexChanged(null, null);
         }
     }
 }

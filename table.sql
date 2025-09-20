@@ -4,6 +4,10 @@
 	-- ==========================
 	-- XÓA BẢNG CŨ (theo thứ tự con -> cha)
 	-- ==========================
+	
+	IF OBJECT_ID('dbo.TaiKhoan', 'U') IS NOT NULL DROP TABLE dbo.TaiKhoan;
+		IF OBJECT_ID('dbo.LogDangNhap', 'U') IS NOT NULL DROP TABLE dbo.LogDangNhap;
+
 	IF OBJECT_ID('dbo.ChiTietHocPhan', 'U') IS NOT NULL DROP TABLE dbo.ChiTietHocPhan;
 	IF OBJECT_ID('dbo.DangKyMonHoc', 'U') IS NOT NULL DROP TABLE dbo.DangKyMonHoc;
 	IF OBJECT_ID('dbo.LopHocPhan', 'U') IS NOT NULL DROP TABLE dbo.LopHocPhan;
@@ -15,8 +19,15 @@
 		IF OBJECT_ID('dbo.HocKyNamHoc', 'U') IS NOT NULL DROP TABLE dbo.HocKyNamHoc;
 				IF OBJECT_ID('dbo.DiemRenLuyen', 'U') IS NOT NULL DROP TABLE dbo.DiemRenLuyen;
 	IF OBJECT_ID('dbo.Lop', 'U') IS NOT NULL DROP TABLE dbo.Lop;
+		IF OBJECT_ID('dbo.Khoa', 'U') IS NOT NULL DROP TABLE dbo.Khoa;
 
 
+
+	CREATE TABLE Khoa (
+    MaKhoa VARCHAR(10) PRIMARY KEY,       
+    TenKhoa NVARCHAR(100) NOT NULL
+  
+);
 
 
 
@@ -24,7 +35,10 @@
 
 	CREATE TABLE Lop (
 		LopSV      VARCHAR(20) PRIMARY KEY,
-		TenLop     NVARCHAR(100) NOT NULL
+		TenLop     NVARCHAR(100) NOT NULL,
+		MaKhoa VARCHAR(10) NOT NULL,         
+		CONSTRAINT FK_Lop_Khoa FOREIGN KEY (MaKhoa) REFERENCES Khoa(MaKhoa)
+
 
 	);
 
@@ -40,7 +54,6 @@
 
 	CREATE TABLE DiemRenLuyen (
     MaSV VARCHAR(10) PRIMARY KEY,
-    MaHocKyNamHoc INT NOT NULL,
     Diem DECIMAL(5,2) CHECK (Diem >= 0 AND Diem <= 100)
 );
 
@@ -49,7 +62,7 @@
 	-- Bảng MonHoc
 	-- ==========================
 	CREATE TABLE MonHoc (
-		MaMH      VARCHAR(10) PRIMARY KEY,
+		MaMH      VARCHAR(20) PRIMARY KEY,
 		TenMH     NVARCHAR(100) NOT NULL,
 		SoTinChi  INT NOT NULL CHECK (SoTinChi > 0)
 	);
@@ -79,11 +92,11 @@ CREATE TABLE HocKyNamHoc (
 -- Bảng LopHocPhan
 -- ==========================
 CREATE TABLE LopHocPhan (
-    MaLHP    VARCHAR(10) NOT NULL,
-    MaMH     VARCHAR(10) NOT NULL,
+    MaLHP    VARCHAR(20) NOT NULL,
+    MaMH     VARCHAR(20) NOT NULL,
     MaGV     VARCHAR(10) NOT NULL,
     MaHocKyNamHoc INT NOT NULL,
-    PRIMARY KEY (MaLHP)
+    PRIMARY KEY (MaLHP,MaHocKyNamHoc)
 );
 
 
@@ -92,10 +105,10 @@ CREATE TABLE LopHocPhan (
 -- ==========================
 CREATE TABLE DangKyMonHoc (
     MaSV     VARCHAR(10) NOT NULL,
-    MaLHP    VARCHAR(10) NOT NULL,
+    MaLHP    VARCHAR(20) NOT NULL,
 	MaHocKyNamHoc INT NOT NULL,
     PRIMARY KEY (MaSV, MaLHP),
-    FOREIGN KEY (MaLHP) REFERENCES LopHocPhan(MaLHP)
+    FOREIGN KEY (MaLHP,MaHocKyNamHoc) REFERENCES LopHocPhan(MaLHP,MaHocKyNamHoc)
 );
 
 
@@ -104,7 +117,7 @@ CREATE TABLE DangKyMonHoc (
 -- ==========================
 CREATE TABLE ChiTietHocPhan ( 
     MaSV      VARCHAR(10) NOT NULL,
-    MaMH      VARCHAR(10) NOT NULL,
+    MaMH      VARCHAR(20) NOT NULL,
     MaHocKyNamHoc INT NOT NULL,
     DiemGK    DECIMAL(4,2) CHECK (DiemGK BETWEEN 0 AND 10),
     DiemCK    DECIMAL(4,2) CHECK (DiemCK BETWEEN 0 AND 10),
@@ -137,9 +150,7 @@ CREATE TABLE CongThucTinhDiem
 );
 */
 
-USE QL_SinhVien;
-	GO
-			IF OBJECT_ID('dbo.TaiKhoan', 'U') IS NOT NULL DROP TABLE dbo.TaiKhoan;
+
 
 	CREATE TABLE TaiKhoan (
     MaTK INT IDENTITY(1,1) PRIMARY KEY,

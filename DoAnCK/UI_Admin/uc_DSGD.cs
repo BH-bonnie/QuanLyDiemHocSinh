@@ -14,11 +14,13 @@ namespace DoAnCK.UI_Admin
 {
     public partial class uc_DSGD: UserControl
     {
-        string connStr = frmAdmin.ConnString;
+        string connStr;
         private DataTable dt;
         public uc_DSGD()
         {
             InitializeComponent();
+            string connStr = frmAdmin.ConnString;
+
         }
 
         private void uc_QLLHP_Load(object sender, EventArgs e)
@@ -57,19 +59,15 @@ namespace DoAnCK.UI_Admin
             if (cbbNamHoc.SelectedItem == null)
                 return;
 
-            // Lấy DataRowView từ SelectedItem
             DataRowView drv = cbbNamHoc.SelectedItem as DataRowView;
             if (drv == null)
                 return;
 
-            // Lấy MaHocKyNamHoc
             int maHocKyNamHoc = Convert.ToInt32(drv["MaHocKyNamHoc"]);
 
-            // Gọi câu SQL lấy lớp học phần theo năm học
             string query = $"SELECT * FROM dbo.fn_LopHocPhanTheoNamHoc({maHocKyNamHoc})";
             DataTable dt = frmAdmin.getData(query);
 
-            // Bind vào GridControl
             gcDanhSachSV.DataSource = dt;
 
         }

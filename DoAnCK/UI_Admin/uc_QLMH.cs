@@ -60,7 +60,6 @@ namespace DoAnCK.UI_Admin
             }
             foreach (DataRow row in changes.Rows)
             {
-                // Ví dụ kiểm tra cột "SoTinChi"
                 if (row.Table.Columns.Contains("SoTinChi"))
                 {
                     var value = row["SoTinChi"];

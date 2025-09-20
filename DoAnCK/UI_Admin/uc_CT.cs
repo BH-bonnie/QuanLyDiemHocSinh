@@ -24,24 +24,28 @@ namespace DoAnCK.UI_Admin
 
         private void uc_CT_Load(object sender, EventArgs e)
         {
-            string sql = "SELECT TOP 1 Ma, TiLeGK, TiLeCK FROM CongThucTinhDiem ORDER BY Ma DESC";
-            using (SqlConnection conn = new SqlConnection(connStr))
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
+            try
             {
-                conn.Open();
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                string sql = "SELECT TOP 1 Ma, TiLeGK, TiLeCK FROM CongThucTinhDiem ORDER BY Ma DESC";
+                DataTable dt = frmAdmin.getData(sql);
+
+                if (dt != null && dt.Rows.Count > 0)
                 {
-                    if (reader.Read())
-                    {
-                        txtTiLeGK.Text = reader["TiLeGK"].ToString();
-                        txtTiLeCK.Text = reader["TiLeCK"].ToString();
-                    }
-                    else
-                    {
-                        txtTiLeGK.Text = "";
-                        txtTiLeCK.Text = "";
-                    }
+                    DataRow row = dt.Rows[0];
+                    txtTiLeGK.Text = row["TiLeGK"].ToString();
+                    txtTiLeCK.Text = row["TiLeCK"].ToString();
                 }
+                else
+                {
+                    txtTiLeGK.Text = "";
+                    txtTiLeCK.Text = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtTiLeGK.Text = "";
+                txtTiLeCK.Text = "";
             }
         }
         
@@ -52,27 +56,21 @@ namespace DoAnCK.UI_Admin
         private void btnLuu_Click(object sender, EventArgs e)
        
         {
-            // Kiểm tra dữ liệu hợp lệ
             if (decimal.TryParse(txtTiLeGK.Text, out decimal tGK) &&
-                decimal.TryParse(txtTiLeCK.Text, out decimal tCK) &&
-                tGK >= 0 && tGK <= 1 && tCK >= 0 && tCK <= 1)
+        decimal.TryParse(txtTiLeCK.Text, out decimal tCK) &&
+        tGK >= 0 && tGK <= 1 && tCK >= 0 && tCK <= 1)
             {
-                
-                using (SqlConnection conn = new SqlConnection(connStr))
+                try
                 {
-                    string sql = "INSERT INTO CongThucTinhDiem(TiLeGK, TiLeCK) VALUES(@TiLeGK, @TiLeCK)";
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@TiLeGK", tGK);
-                        cmd.Parameters.AddWithValue("@TiLeCK", tCK);
+                    string query = $"EXEC sp_ThemCongThucTinhDiem @TiLeGK = {tGK}, @TiLeCK = {tCK}";
+                    frmAdmin.executeQuery(query);
 
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                        conn.Close();
-                    }
+                    MessageBox.Show("Lưu thành công!");
                 }
-
-                MessageBox.Show("Lưu thành công!");
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi lưu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {
@@ -85,10 +83,8 @@ namespace DoAnCK.UI_Admin
 
 
           
-            // Kiểm tra giá trị nhập có phải số thập phân không
             if (decimal.TryParse(txtTiLeGK.Text, out decimal tGK))
             {
-                // Kiểm tra điều kiện >0 và <1
                 if (tGK > 0 && tGK < 1)
                 {
                     decimal tCK = 1 - tGK;
@@ -96,17 +92,20 @@ namespace DoAnCK.UI_Admin
                 }
                 else
                 {
-                    // Nếu không thỏa điều kiện, xóa TextBox2 hoặc thông báo
                     txtTiLeCK.Text = "";
                 }
             }
             else
             {
-                // Nếu không phải số
                 txtTiLeCK.Text = "";
             }
         }
 
+        private void btnHuy_Click(object sender, EventArgs e)
+        {
+            uc_CT_Load(this, EventArgs.Empty);
+
+        }
     }
 
 }

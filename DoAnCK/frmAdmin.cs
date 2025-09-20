@@ -194,5 +194,23 @@ namespace DoAnCK {
                 ucChitiet.BringToFront();
             }
         }
+
+        private void btnDangXuat_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show(
+                "Bạn có chắc chắn muốn đăng xuất không?",
+                "Xác nhận đăng xuất",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (result == DialogResult.Yes)
+            {
+                this.Close();
+
+                FormMain formMain = new FormMain();
+                formMain.Show();
+            }
+        }
     }
 }

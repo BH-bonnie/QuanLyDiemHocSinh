@@ -119,7 +119,7 @@ namespace DoAnCK.UI_GV
 
             if (result == DialogResult.Yes)
             {
-                string query = $"EXEC sp_XoaDangKyMonHoc @MaSV = '{maSV}', @MaLHP = '{maLHP}'";
+                string query = $"EXEC sp_XoaDangKyMonHoc @MaSV = '{maSV}', @MaLHP = '{maLHP}', @MaHocKyNamHoc = {maHocKyNamHoc}";
                 try
                 {
                     frmGiangVien.executeQuery(query);
@@ -159,16 +159,9 @@ namespace DoAnCK.UI_GV
                     barListItem.Strings.Add(row["MaLHP"].ToString());
                 }
             }
-            else
-            {
-                if (!isLoading)
-                {
-                    MessageBox.Show("Không có lớp học phần khác để chuyển trong cùng môn và giảng viên.", "Thông báo");
-                }
-            }
+          
         }
-
-
+        
         private void barListItem_ListItemClick(object sender, ListItemClickEventArgs e)
         {
             if (gvDanhSach.FocusedRowHandle >= 0 && cbbMa.SelectedValue != null)
@@ -194,7 +187,7 @@ namespace DoAnCK.UI_GV
 
             if (result == DialogResult.Yes)
             {
-                string query = $"EXEC sp_ChuyenLopHocPhan @MaSV = '{maSV}', @MaLHPNguon = '{maLHPNguon}', @MaLHPDich = '{maLHPDich}'";
+                string query = $"EXEC sp_ChuyenLopHocPhan @MaSV = '{maSV}', @MaLHPNguon = '{maLHPNguon}', @MaLHPDich = '{maLHPDich}', @MaHocKyNamHoc = {maHocKyNamHoc}";
                 try
                 {
                     frmGiangVien.executeQuery(query);
@@ -208,7 +201,13 @@ namespace DoAnCK.UI_GV
             }
         }
 
-      
+        private void barListItem_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (barListItem.Strings.Count == 0)
+            {
+                MessageBox.Show("Không có lớp học phần khác để chuyển trong cùng môn và giảng viên.", "Thông báo");
+            }
+        }
     }
 
 }

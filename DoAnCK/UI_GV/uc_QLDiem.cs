@@ -158,16 +158,13 @@ namespace DoAnCK.UI_GV
 
         private void btnThongKe_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            if (cbbMa.SelectedValue == null)
-            {
-                MessageBox.Show("Vui lòng chọn lớp học phần.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+           
 
             string maLHP = cbbMa.SelectedValue.ToString();
 
             frmThongKe frm = new frmThongKe();
-            frm.HienThiBieuDoThongKe(maLHP, maHocKyNamHoc);
+            frm.SetData(maLHP, maHocKyNamHoc);
+
             frm.ShowDialog();
         }
     }
