@@ -32,9 +32,9 @@ namespace DoAnCK.UI_Admin
                 {
                     gcDanhSachSV.DataSource = dt;
                     btnLuu.Enabled = false;
+                    btnHuy.Enabled = false;
 
                     gvDanhSachSV.OptionsBehavior.Editable = false;
-
 
                 }
             }
@@ -42,22 +42,18 @@ namespace DoAnCK.UI_Admin
 
       
 
-        private void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+    private void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-
             gvDanhSachSV.CloseEditor();
             gvDanhSachSV.UpdateCurrentRow();
-            btnLuu.Enabled = false;
-            gvDanhSachSV.OptionsBehavior.Editable = false;
-            btnSua.Enabled = true;
 
             var changes = dt.GetChanges();
-            if (changes == null)
+            if (changes == null || changes.Rows.Count == 0)
             {
                 MessageBox.Show("Không có thay đổi nào để lưu!");
-               
                 return;
             }
+
             foreach (DataRow row in changes.Rows)
             {
                 if (row.Table.Columns.Contains("SoTinChi"))
@@ -72,7 +68,7 @@ namespace DoAnCK.UI_Admin
                 }
             }
 
-                using (SqlConnection conn = new SqlConnection(connStr))
+            using (SqlConnection conn = new SqlConnection(connStr))
             {
                 SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM MonHoc", conn);
                 SqlCommandBuilder builder = new SqlCommandBuilder(da);
@@ -82,9 +78,11 @@ namespace DoAnCK.UI_Admin
 
             dt.AcceptChanges();
             MessageBox.Show("Đã lưu thay đổi vào CSDL!");
-           
 
-
+            gvDanhSachSV.OptionsBehavior.Editable = false;
+            btnLuu.Enabled = false;
+            btnSua.Enabled = true;
+            btnHuy.Enabled = false;
         }
 
         private void btnSua_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -92,7 +90,20 @@ namespace DoAnCK.UI_Admin
             gvDanhSachSV.OptionsBehavior.Editable = true;
             btnLuu.Enabled = true;
             btnSua.Enabled = false;
+            btnHuy.Enabled = true;
 
+
+        }
+
+        private void btnHuy_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            dt.RejectChanges();
+            gcDanhSachSV.DataSource = dt;
+
+            gvDanhSachSV.OptionsBehavior.Editable = false;
+            btnLuu.Enabled = false;
+            btnHuy.Enabled = false;
+            btnSua.Enabled = true;
         }
     }
 }

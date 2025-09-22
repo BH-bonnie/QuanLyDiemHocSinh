@@ -12,7 +12,7 @@ namespace DoAnCK.UI_Dangnhap
 {
     public partial class uc_Chonquyen : UserControl
     {
-        public event EventHandler<string> OnChonQuyen; 
+        public event EventHandler<int> OnChonQuyen; 
 
         public uc_Chonquyen()
         {
@@ -22,12 +22,12 @@ namespace DoAnCK.UI_Dangnhap
 
         private void btn_GV_Click(object sender, EventArgs e)
         {
-            OnChonQuyen?.Invoke(this, "GV");
+            OnChonQuyen?.Invoke(this, 2);
         }
 
         private void btnAdmin_Click(object sender, EventArgs e)
         {
-            OnChonQuyen?.Invoke(this, "Admin");
+            OnChonQuyen?.Invoke(this, 1);
         }
     }
 }

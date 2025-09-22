@@ -90,9 +90,12 @@ namespace DoAnCK.UI_GV
         {
             try
             {
-                string query = $@"EXEC sp_UpdateGiangVienContact 
+                string query = $@"EXEC sp_CapNhatGiangVien 
                                     @MaGV = '{MaGV}',
-                                    @Email = '{txtEmail.Text}',
+                                    @HoTenGV ='{txtHoten.Text}',
+                                    @HocVi = '{txtHocvi.Text}', 
+                                    @Khoa = '{txtKhoa.Text}', 
+                                    @Email = '{txtEmail.Text}',     
                                     @DienThoai = '{txtSDT.Text}'";
 
                 frmGiangVien.executeQuery(query);

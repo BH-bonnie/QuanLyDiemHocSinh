@@ -36,21 +36,33 @@ namespace DoAnCK.UI_Admin
             isAdding = false;
             gvDanhSachSV.OptionsBehavior.Editable = false;
             btnThem.Enabled = true;
-            using (var conn = new SqlConnection(connStr))
+            
+            dtSinhVien = frmAdmin.getData("SELECT * FROM v_SinhVien_Detail;");
+            if (dtSinhVien != null)
             {
-                conn.Open();
-                dtSinhVien = frmAdmin.getData("SELECT * FROM v_SinhVien_Detail;");
-                if (dtSinhVien != null)
-                {
-                    gcDanhSachSV.DataSource = dtSinhVien;
-                    // Cho phép chọn nhiều dòng
-                    gvDanhSachSV.OptionsSelection.MultiSelect = true;
-                    gvDanhSachSV.OptionsSelection.MultiSelectMode = GridMultiSelectMode.RowSelect;
-                }
+                gcDanhSachSV.DataSource = dtSinhVien;
+                gvDanhSachSV.OptionsSelection.MultiSelect = true;
+                gvDanhSachSV.OptionsSelection.MultiSelectMode = GridMultiSelectMode.RowSelect;
+                loadGioiTinh();
+                LoadLop();
             }
-        }
 
-      
+        }
+        
+        private void loadGioiTinh()
+
+        {
+            ckGioiTinh.Caption = "Nữ";
+            ckGioiTinh.ValueChecked = "Nữ";
+            ckGioiTinh.ValueUnchecked = "Nam";
+        }
+        private void LoadLop()
+
+        {
+            lkLop.DataSource = frmAdmin.getData("SELECT  L.LopSV, K.TenKhoa FROM Lop L JOIN Khoa K ON L.MaKhoa = K.MaKhoa; ");
+            lkLop.DisplayMember = "LopSV";
+            lkLop.ValueMember = "LopSV";
+        }
 
         private void btnThem_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -94,14 +106,13 @@ namespace DoAnCK.UI_Admin
                         string gioiTinh = row["GioiTinh"]?.ToString() ?? "";
                         string cmnd = row["CMND_CCCD"]?.ToString() ?? "";
 
-                        // Kiểm tra dữ liệu bắt buộc
                         if (string.IsNullOrWhiteSpace(maSV) || string.IsNullOrWhiteSpace(hoTen) || string.IsNullOrWhiteSpace(lopSV))
                         {
                             MessageBox.Show("Mã sinh viên, Họ tên, Lớp SV không được để trống!");
                             return;
                         }
 
-                        // Gọi stored procedure để thêm sinh viên
+
                         string query = $@"EXEC sp_ThemSinhVien 
                                             @MaSV = '{maSV}', 
                                             @HoTen = N'{hoTen}', 
@@ -124,7 +135,6 @@ namespace DoAnCK.UI_Admin
                         string gioiTinh = row["GioiTinh"]?.ToString() ?? "";
                         string cmnd = row["CMND_CCCD"]?.ToString() ?? "";
 
-                        // Kiểm tra dữ liệu bắt buộc
                         if (string.IsNullOrWhiteSpace(maSV) || string.IsNullOrWhiteSpace(hoTen) || string.IsNullOrWhiteSpace(lopSV))
                         {
                             MessageBox.Show("Mã sinh viên, Họ tên, Lớp SV không được để trống!");
@@ -140,10 +150,12 @@ namespace DoAnCK.UI_Admin
                                             @GioiTinh = {(string.IsNullOrWhiteSpace(gioiTinh) ? "NULL" : $"N'{gioiTinh}'")}, 
                                             @CMND_CCCD = {(string.IsNullOrWhiteSpace(cmnd) ? "NULL" : $"'{cmnd}'")}";
 
-                        frmAdmin.executeQuery(query);
+
+                      
+                            frmAdmin.executeQuery(query);
+                        
                     }
                 }
-
                 dtSinhVien.AcceptChanges();
                 MessageBox.Show("Đã lưu thay đổi vào CSDL!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -159,7 +171,7 @@ namespace DoAnCK.UI_Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi lưu thông tin sinh viên: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void btnXoa_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -241,7 +253,7 @@ namespace DoAnCK.UI_Admin
             {
                 if (row.RowState != DataRowState.Added)
                 {
-                    e.Cancel = true; // khóa dòng cũ
+                    e.Cancel = true; 
                 }
             }
             else
@@ -251,6 +263,7 @@ namespace DoAnCK.UI_Admin
             }
 
         }
+
     
 
 
@@ -272,7 +285,6 @@ namespace DoAnCK.UI_Admin
 
             if (isAdding)
             {
-                // Nếu đang thêm mới, xóa dòng mới thêm
                 if (gvDanhSachSV.IsNewItemRow(rowHandle) || rowHandle == DevExpress.XtraGrid.GridControl.NewItemRowHandle)
                 {
                     gvDanhSachSV.DeleteRow(rowHandle);
@@ -311,6 +323,8 @@ namespace DoAnCK.UI_Admin
             isAdding = false;
             editingRowHandle = -1;
         }
+
+        
     }
 }
 

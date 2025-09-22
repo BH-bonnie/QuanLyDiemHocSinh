@@ -15,6 +15,7 @@ namespace DoAnCK
     public partial class FormMain : Form
     {
         public static string ConnString { get; private set; }
+        public static int CurrentRoleID { get; private set; }
 
         uc_Dangnhap ucDangnhap;
         uc_Chonquyen ucChonquyen;
@@ -22,20 +23,35 @@ namespace DoAnCK
         public FormMain()
         {
             InitializeComponent();
-            ConnString = @"Data Source=.;Initial Catalog=QL_SinhVien;Integrated Security=True";
+            ConnString = @"Server=.;Database=QL_SinhVien;Integrated Security=true;Encrypt=false;TrustServerCertificate=true;Connection Timeout=30;";
+            CurrentRoleID = 0; 
+        }
 
+        // Phương thức để cập nhật ConnString với username và password sau khi đăng nhập thành công
+        public static void UpdateConnString(string username, string password)
+        {
+            ConnString = $@"Server=.;Database=QL_SinhVien;User ID={username};Password={password};Encrypt=false;TrustServerCertificate=true;Connection Timeout=30;";
+        }
+
+        public static void SetCurrentRole(int roleID)
+        {
+            CurrentRoleID = roleID;
+        }
+
+        public static void ResetConnection()
+        {
+            ConnString = @"Server=.;Database=QL_SinhVien;Integrated Security=true;Encrypt=false;TrustServerCertificate=true;Connection Timeout=30;";
+            CurrentRoleID = 0;
         }
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-          
-
             if (ucChonquyen == null)
             {
                 ucChonquyen = new uc_Chonquyen();
                 ucChonquyen.Dock = DockStyle.Fill;
                 ucChonquyen.AutoSize = true;
-                ucChonquyen.OnChonQuyen += UcChonquyen_OnChonQuyen; 
+                ucChonquyen.OnChonQuyen += UcChonquyen_OnChonQuyen;
 
                 panelMain.Controls.Add(ucChonquyen);
                 ucChonquyen.BringToFront();
@@ -46,14 +62,18 @@ namespace DoAnCK
             }
         }
 
-        private void UcChonquyen_OnChonQuyen(object sender, string role)
+        private void UcChonquyen_OnChonQuyen(object sender, int role)
         {
+            // Lưu quyền được chọn vào ConnString context
+            SetCurrentRole(role);
+
             if (ucDangnhap != null)
             {
                 panelMain.Controls.Remove(ucDangnhap);
                 ucDangnhap.Dispose();
             }
 
+            // Tạo màn hình đăng nhập với quyền đã chọn
             ucDangnhap = new uc_Dangnhap(role);
             ucDangnhap.Dock = DockStyle.Fill;
             ucDangnhap.AutoSize = true;
@@ -64,6 +84,7 @@ namespace DoAnCK
 
         private void UcDangnhap_OnExit(object sender, EventArgs e)
         {
+            ResetConnection();
             ucChonquyen.BringToFront();
         }
     }

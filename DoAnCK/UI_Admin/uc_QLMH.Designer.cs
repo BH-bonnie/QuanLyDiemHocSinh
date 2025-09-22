@@ -33,16 +33,17 @@
             this.bar2 = new DevExpress.XtraBars.Bar();
             this.btnSua = new DevExpress.XtraBars.BarButtonItem();
             this.btnLuu = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
+            this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.gcDanhSachSV = new DevExpress.XtraGrid.GridControl();
             this.gvDanhSachSV = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.MaMH = new DevExpress.XtraGrid.Columns.GridColumn();
             this.TenMH = new DevExpress.XtraGrid.Columns.GridColumn();
             this.SoTinChi = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.btnHuy = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSachSV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSachSV)).BeginInit();
@@ -60,9 +61,10 @@
             this.barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
             this.btnLuu,
             this.btnSua,
-            this.barButtonItem1});
+            this.barButtonItem1,
+            this.btnHuy});
             this.barManager1.MainMenu = this.bar2;
-            this.barManager1.MaxItemId = 8;
+            this.barManager1.MaxItemId = 9;
             // 
             // bar2
             // 
@@ -72,7 +74,8 @@
             this.bar2.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
             this.bar2.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.btnSua, true),
-            new DevExpress.XtraBars.LinkPersistInfo(this.btnLuu)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.btnLuu),
+            new DevExpress.XtraBars.LinkPersistInfo(this.btnHuy)});
             this.bar2.OptionsBar.MultiLine = true;
             this.bar2.OptionsBar.UseWholeRow = true;
             this.bar2.Text = "Main menu";
@@ -92,13 +95,6 @@
             this.btnLuu.Name = "btnLuu";
             this.btnLuu.Size = new System.Drawing.Size(50, 30);
             this.btnLuu.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnLuu_ItemClick);
-            // 
-            // barButtonItem1
-            // 
-            this.barButtonItem1.Caption = "Xuất";
-            this.barButtonItem1.Id = 7;
-            this.barButtonItem1.Name = "barButtonItem1";
-            this.barButtonItem1.Size = new System.Drawing.Size(50, 30);
             // 
             // barDockControlTop
             // 
@@ -131,6 +127,13 @@
             this.barDockControlRight.Location = new System.Drawing.Point(856, 37);
             this.barDockControlRight.Manager = this.barManager1;
             this.barDockControlRight.Size = new System.Drawing.Size(0, 479);
+            // 
+            // barButtonItem1
+            // 
+            this.barButtonItem1.Caption = "Xuất";
+            this.barButtonItem1.Id = 7;
+            this.barButtonItem1.Name = "barButtonItem1";
+            this.barButtonItem1.Size = new System.Drawing.Size(50, 30);
             // 
             // gcDanhSachSV
             // 
@@ -186,6 +189,13 @@
             this.SoTinChi.VisibleIndex = 2;
             this.SoTinChi.Width = 128;
             // 
+            // btnHuy
+            // 
+            this.btnHuy.Caption = "Huỷ";
+            this.btnHuy.Id = 8;
+            this.btnHuy.Name = "btnHuy";
+            this.btnHuy.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnHuy_ItemClick);
+            // 
             // uc_QLMH
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -222,5 +232,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn SoTinChi;
         private DevExpress.XtraBars.BarButtonItem btnSua;
         private DevExpress.XtraBars.BarButtonItem barButtonItem1;
+        private DevExpress.XtraBars.BarButtonItem btnHuy;
     }
 }

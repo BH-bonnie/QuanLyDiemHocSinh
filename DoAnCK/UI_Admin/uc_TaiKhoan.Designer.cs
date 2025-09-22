@@ -31,6 +31,16 @@
             this.components = new System.ComponentModel.Container();
             this.gcDanhSach = new DevExpress.XtraGrid.GridControl();
             this.gvDanhSach = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.MaTK = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.TenDangNhap = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.MatKhau = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.TrangThai = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.ckTrangThai = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
+            this.ThoiGian = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.Roleid = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.lkRoleid = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
+            this.MaGV = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.lkMaGV = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
             this.bar2 = new DevExpress.XtraBars.Bar();
             this.bar1 = new DevExpress.XtraBars.Bar();
             this.bar3 = new DevExpress.XtraBars.Bar();
@@ -49,6 +59,9 @@
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSach)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSach)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ckTrangThai)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lkRoleid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lkMaGV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -58,6 +71,10 @@
             this.gcDanhSach.Location = new System.Drawing.Point(0, 37);
             this.gcDanhSach.MainView = this.gvDanhSach;
             this.gcDanhSach.Name = "gcDanhSach";
+            this.gcDanhSach.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
+            this.lkRoleid,
+            this.lkMaGV,
+            this.ckTrangThai});
             this.gcDanhSach.Size = new System.Drawing.Size(829, 430);
             this.gcDanhSach.TabIndex = 0;
             this.gcDanhSach.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -65,8 +82,114 @@
             // 
             // gvDanhSach
             // 
+            this.gvDanhSach.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.MaTK,
+            this.TenDangNhap,
+            this.MatKhau,
+            this.TrangThai,
+            this.ThoiGian,
+            this.Roleid,
+            this.MaGV});
             this.gvDanhSach.GridControl = this.gcDanhSach;
             this.gvDanhSach.Name = "gvDanhSach";
+            this.gvDanhSach.ShowingEditor += new System.ComponentModel.CancelEventHandler(this.gvDanhSach_ShowingEditor);
+            // 
+            // MaTK
+            // 
+            this.MaTK.Caption = "Mã";
+            this.MaTK.FieldName = "MaTK";
+            this.MaTK.MinWidth = 25;
+            this.MaTK.Name = "MaTK";
+            this.MaTK.Width = 94;
+            // 
+            // TenDangNhap
+            // 
+            this.TenDangNhap.Caption = "Tên đăng nhập ";
+            this.TenDangNhap.FieldName = "TenDangNhap";
+            this.TenDangNhap.MinWidth = 25;
+            this.TenDangNhap.Name = "TenDangNhap";
+            this.TenDangNhap.Visible = true;
+            this.TenDangNhap.VisibleIndex = 0;
+            this.TenDangNhap.Width = 94;
+            // 
+            // MatKhau
+            // 
+            this.MatKhau.Caption = "Mật khẩu";
+            this.MatKhau.FieldName = "MatKhau";
+            this.MatKhau.MinWidth = 25;
+            this.MatKhau.Name = "MatKhau";
+            this.MatKhau.Visible = true;
+            this.MatKhau.VisibleIndex = 1;
+            this.MatKhau.Width = 94;
+            // 
+            // TrangThai
+            // 
+            this.TrangThai.Caption = "Trạng thái ";
+            this.TrangThai.FieldName = "TrangThai";
+            this.TrangThai.MinWidth = 25;
+            this.TrangThai.Name = "TrangThai";
+            this.TrangThai.UnboundExpression = "True";
+            this.TrangThai.Visible = true;
+            this.TrangThai.VisibleIndex = 2;
+            this.TrangThai.Width = 94;
+            // 
+            // ckTrangThai
+            // 
+            this.ckTrangThai.AutoHeight = false;
+            this.ckTrangThai.Name = "ckTrangThai";
+            // 
+            // ThoiGian
+            // 
+            this.ThoiGian.Caption = "Ngày tạo ";
+            this.ThoiGian.FieldName = "ThoiGian";
+            this.ThoiGian.MinWidth = 25;
+            this.ThoiGian.Name = "ThoiGian";
+            this.ThoiGian.OptionsColumn.AllowEdit = false;
+            this.ThoiGian.Visible = true;
+            this.ThoiGian.VisibleIndex = 3;
+            this.ThoiGian.Width = 94;
+            // 
+            // Roleid
+            // 
+            this.Roleid.Caption = "Role";
+            this.Roleid.ColumnEdit = this.lkRoleid;
+            this.Roleid.FieldName = "Roleid";
+            this.Roleid.MinWidth = 25;
+            this.Roleid.Name = "Roleid";
+            this.Roleid.Visible = true;
+            this.Roleid.VisibleIndex = 4;
+            this.Roleid.Width = 94;
+            // 
+            // lkRoleid
+            // 
+            this.lkRoleid.AutoHeight = false;
+            this.lkRoleid.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.lkRoleid.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] {
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("Roleid", "Roleid"),
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("Rolename", "Rolename")});
+            this.lkRoleid.Name = "lkRoleid";
+            // 
+            // MaGV
+            // 
+            this.MaGV.Caption = "MaGV";
+            this.MaGV.ColumnEdit = this.lkMaGV;
+            this.MaGV.FieldName = "MaGV";
+            this.MaGV.MinWidth = 25;
+            this.MaGV.Name = "MaGV";
+            this.MaGV.Visible = true;
+            this.MaGV.VisibleIndex = 5;
+            this.MaGV.Width = 94;
+            // 
+            // lkMaGV
+            // 
+            this.lkMaGV.AutoHeight = false;
+            this.lkMaGV.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.lkMaGV.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] {
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("MaGV", "MaGV"),
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("HoTenGV", "Họ tên")});
+            this.lkMaGV.Name = "lkMaGV";
             // 
             // bar2
             // 
@@ -235,8 +358,12 @@
             this.Controls.Add(this.barDockControlTop);
             this.Name = "uc_TaiKhoan";
             this.Size = new System.Drawing.Size(829, 467);
+            this.Load += new System.EventHandler(this.uc_TaiKhoan_Load);
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSach)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSach)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ckTrangThai)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lkRoleid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lkMaGV)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -263,5 +390,15 @@
         private DevExpress.XtraBars.BarDockControl barDockControlBottom;
         private DevExpress.XtraBars.BarDockControl barDockControlLeft;
         private DevExpress.XtraBars.BarDockControl barDockControlRight;
+        private DevExpress.XtraGrid.Columns.GridColumn TenDangNhap;
+        private DevExpress.XtraGrid.Columns.GridColumn MatKhau;
+        private DevExpress.XtraGrid.Columns.GridColumn TrangThai;
+        private DevExpress.XtraGrid.Columns.GridColumn ThoiGian;
+        private DevExpress.XtraGrid.Columns.GridColumn Roleid;
+        private DevExpress.XtraGrid.Columns.GridColumn MaGV;
+        private DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit lkRoleid;
+        private DevExpress.XtraGrid.Columns.GridColumn MaTK;
+        private DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit lkMaGV;
+        private DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit ckTrangThai;
     }
 }

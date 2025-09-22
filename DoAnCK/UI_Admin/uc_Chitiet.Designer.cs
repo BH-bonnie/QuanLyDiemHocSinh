@@ -187,7 +187,7 @@
             this.splitContainerControl2.Panel2.Controls.Add(this.gcDanhSach);
             this.splitContainerControl2.Panel2.Text = "Panel2";
             this.splitContainerControl2.Size = new System.Drawing.Size(622, 516);
-            this.splitContainerControl2.SplitterPosition = 151;
+            this.splitContainerControl2.SplitterPosition = 155;
             this.splitContainerControl2.TabIndex = 0;
             // 
             // lblTen
@@ -386,7 +386,7 @@
             this.gcDanhSach.Location = new System.Drawing.Point(0, 0);
             this.gcDanhSach.MainView = this.gvDanhSach;
             this.gcDanhSach.Name = "gcDanhSach";
-            this.gcDanhSach.Size = new System.Drawing.Size(622, 353);
+            this.gcDanhSach.Size = new System.Drawing.Size(622, 349);
             this.gcDanhSach.TabIndex = 0;
             this.gcDanhSach.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gvDanhSach});

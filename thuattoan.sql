@@ -561,65 +561,81 @@ BEGIN
 END; 
 Go
 
+
+
 IF OBJECT_ID('dbo.sp_DangNhap', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_DangNhap;
 GO
 
-CREATE PROCEDURE sp_DangNhap
+CREATE PROCEDURE dbo.sp_DangNhap
     @TenDangNhap NVARCHAR(50),
     @MatKhau NVARCHAR(255),
-    @Role NVARCHAR(20),
-    @Quyen NVARCHAR(20) OUTPUT,
-    @TrangThai BIT OUTPUT,
+    @RoleIDtam INT,                -- 1 = Admin, 2 = GiangVien (quyền người dùng chọn)
+    @RoleID INT OUTPUT,            -- quyền thực của tài khoản (1 = Admin, 2 = GiangVien)
+    @TrangThai BIT OUTPUT, 
     @MaGV VARCHAR(10) OUTPUT,
     @KetQua NVARCHAR(100) OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    BEGIN TRY
-        -- Lấy thông tin tài khoản
-        SELECT @Quyen = Quyen, @TrangThai = TrangThai, @MaGV = MaGV
-        FROM TaiKhoan
-        WHERE TenDangNhap = @TenDangNhap
-          AND MatKhau = @MatKhau;
+    DECLARE @RoleThuc NVARCHAR(20); -- role thực từ database
 
-        IF @Quyen IS NULL
+    BEGIN TRY
+        -- Lấy thông tin tài khoản theo TenDangNhap
+        SELECT 
+            @RoleThuc = r.RoleName,
+            @TrangThai = tk.TrangThai,
+            @MaGV = tk.MaGV,
+            @RoleID = r.Roleid
+        FROM TaiKhoan tk
+        LEFT JOIN Roles r ON tk.Roleid = r.Roleid
+        WHERE tk.TenDangNhap = @TenDangNhap
+          AND tk.MatKhau = @MatKhau;
+
+        -- Kiểm tra tài khoản tồn tại
+        IF @RoleThuc IS NULL
         BEGIN
             SET @KetQua = N'Tên đăng nhập hoặc mật khẩu không chính xác!';
-			INSERT INTO LogDangNhap(TenDangNhap, KetQua) 
-			 VALUES (@TenDangNhap, @KetQua);
+            INSERT INTO LogDangNhap(TenDangNhap, KetQua) VALUES (@TenDangNhap, @KetQua);
             RETURN;
-			
         END
 
+        -- Kiểm tra trạng thái tài khoản
         IF @TrangThai = 0
         BEGIN
             SET @KetQua = N'Tài khoản đã bị khóa!';
-			INSERT INTO LogDangNhap(TenDangNhap, KetQua) 
-			VALUES (@TenDangNhap, @KetQua);
+            INSERT INTO LogDangNhap(TenDangNhap, KetQua) VALUES (@TenDangNhap, @KetQua);
             RETURN;
         END
 
-        IF (@Role = 'Admin' AND @Quyen = 'Admin') OR (@Role = 'GV' AND @Quyen = 'GiangVien')
+        -- Kiểm tra quyền đăng nhập
+        IF (@RoleIDtam = 1 AND @RoleThuc = N'Admin') OR (@RoleIDtam = 2 AND @RoleThuc = N'GiangVien')
         BEGIN
-            SET @KetQua = N'Đăng nhập thành công với quyền ' + @Quyen;
-			INSERT INTO LogDangNhap(TenDangNhap, KetQua) 
-			VALUES (@TenDangNhap, @KetQua);
+            SET @KetQua = N'Đăng nhập thành công với quyền ' + @RoleThuc;
+            INSERT INTO LogDangNhap(TenDangNhap, KetQua) VALUES (@TenDangNhap, @KetQua);
         END
         ELSE
         BEGIN
-            SET @KetQua = N'Tài khoản này không có quyền ' + @Role + N'!';
-			INSERT INTO LogDangNhap(TenDangNhap, KetQua) 
-			VALUES (@TenDangNhap, @KetQua);
+            SET @KetQua = N'Tài khoản không có quyền phù hợp!';
+            INSERT INTO LogDangNhap(TenDangNhap, KetQua) VALUES (@TenDangNhap, @KetQua);
+            -- Reset thông tin đầu ra nếu không phù hợp quyền
+            SET @RoleID = NULL;
+            SET @TrangThai = NULL;
+            SET @MaGV = NULL;
         END
-		
+
     END TRY
     BEGIN CATCH
         SET @KetQua = N'Lỗi trong quá trình đăng nhập: ' + ERROR_MESSAGE();
+        SET @RoleID = NULL;
+        SET @TrangThai = NULL;
+        SET @MaGV = NULL;
     END CATCH
 END
-go
+GO
+
+
 IF OBJECT_ID('dbo.sp_GetLopHocPhanByGV', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_GetLopHocPhanByGV;
 GO
@@ -1041,5 +1057,5 @@ BEGIN
     ORDER BY DiemTB DESC;
 END
 GO
-
+------------------------------------------------------------------------------------------------------------------------------------------
 

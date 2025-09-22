@@ -17,6 +17,10 @@ namespace DoAnCK.UI_GV
     {
         private string MaGV;
         private string connStr;
+        private bool isAdding = false;
+        private int editingRowHandle = -1;
+        private bool isLoading = false;
+
         private DataTable dt;
         public uc_QLDiem()
         {
@@ -32,7 +36,6 @@ namespace DoAnCK.UI_GV
         }
 
         private int maHocKyNamHoc;
-        private bool isLoading = false;
 
         private void cbbMa_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -43,6 +46,10 @@ namespace DoAnCK.UI_GV
         private void uc_QLDiem_Load(object sender, EventArgs e)
         {
             isLoading = true;
+            btnLuu.Enabled = false;
+            btnHuy.Enabled = false;
+            btnSua.Enabled = true;
+            gvDanhSach.OptionsBehavior.Editable = false;
 
             string queryMaHK = "SELECT TOP 1 MaHocKyNamHoc FROM HocKyNamHoc ORDER BY MaHocKyNamHoc DESC";
             DataTable dtHK = frmGiangVien.getData(queryMaHK);
@@ -100,7 +107,6 @@ namespace DoAnCK.UI_GV
             gvDanhSach.CloseEditor();
             gvDanhSach.UpdateCurrentRow();
 
-            // Lấy các thay đổi trong DataTable
             DataTable dtChanges = ((DataTable)gcDanhSach.DataSource)?.GetChanges();
             if (dtChanges == null || dtChanges.Rows.Count == 0)
             {
@@ -110,7 +116,6 @@ namespace DoAnCK.UI_GV
 
             string maLHP = cbbMa.SelectedValue.ToString();
 
-            // Lấy MaMH từ MaLHP một lần duy nhất
             string queryMaMH = $"SELECT MaMH FROM LopHocPhan WHERE MaLHP = '{maLHP}'";
             DataTable dtMaMH = frmGiangVien.getData(queryMaMH);
 
@@ -130,7 +135,6 @@ namespace DoAnCK.UI_GV
                     decimal? diemGK = row["DiemGK"] != DBNull.Value ? Convert.ToDecimal(row["DiemGK"]) : (decimal?)null;
                     decimal? diemCK = row["DiemCK"] != DBNull.Value ? Convert.ToDecimal(row["DiemCK"]) : (decimal?)null;
 
-                    // Kiểm tra dữ liệu hợp lệ
                     if ((diemGK.HasValue && (diemGK < 0 || diemGK > 10)) ||
                         (diemCK.HasValue && (diemCK < 0 || diemCK > 10)))
                     {
@@ -138,7 +142,6 @@ namespace DoAnCK.UI_GV
                         return;
                     }
 
-                    // Gọi stored procedure bằng executeQuery
                     string diemGKValue = diemGK.HasValue ? diemGK.Value.ToString("F2") : "NULL";
                     string diemCKValue = diemCK.HasValue ? diemCK.Value.ToString("F2") : "NULL";
 
@@ -154,6 +157,12 @@ namespace DoAnCK.UI_GV
             {
                 MessageBox.Show("Lỗi khi lưu điểm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            btnSua.Enabled = true;
+            btnLuu.Enabled = false;
+            btnHuy.Enabled = false;
+            gvDanhSach.OptionsBehavior.Editable = false;
+            isAdding = false;
+            editingRowHandle = -1;
         }
 
         private void btnThongKe_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -166,6 +175,54 @@ namespace DoAnCK.UI_GV
             frm.SetData(maLHP, maHocKyNamHoc);
 
             frm.ShowDialog();
+        }
+
+        private void btnSua_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            btnLuu.Enabled = true;
+            btnHuy.Enabled = true;
+            btnSua.Enabled = false;
+            gvDanhSach.OptionsBehavior.Editable = true;
+            editingRowHandle = gvDanhSach.FocusedRowHandle;
+        }
+
+        private void btnHuy_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            int rowHandle = gvDanhSach.FocusedRowHandle;
+
+            if (isAdding)
+            {
+                if (gvDanhSach.IsNewItemRow(rowHandle) || rowHandle == DevExpress.XtraGrid.GridControl.NewItemRowHandle)
+                {
+                    gvDanhSach.DeleteRow(rowHandle);
+                }
+                else
+                {
+                    for (int i = gvDanhSach.RowCount - 1; i >= 0; i--)
+                    {
+                        DataRow row = gvDanhSach.GetDataRow(i);
+                        if (row != null && row.RowState == DataRowState.Added)
+                        {
+                            gvDanhSach.DeleteRow(i);
+                            break;
+                        }
+                    }
+                }
+                dt.RejectChanges();
+            }
+            else
+            {
+                gvDanhSach.CancelUpdateCurrentRow();
+                dt.RejectChanges();
+            }
+
+            btnLuu.Enabled = false;
+            btnSua.Enabled = true;
+            btnHuy.Enabled = false;
+            gvDanhSach.OptionsBehavior.Editable = false;
+            isAdding = false;
+            editingRowHandle = -1;
+
         }
     }
 }

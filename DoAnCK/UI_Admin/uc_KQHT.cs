@@ -29,13 +29,13 @@ namespace DoAnCK.UI_Admin
             gvDanhSachSV.OptionsBehavior.Editable = false;
            
 
-            LoadMaHKNH(); // load ComboBox năm học
-            LoadBangDiem(); // load dữ liệu sinh viên
+            LoadMaHKNH(); 
+            LoadBangDiem(); 
         }
 
         private void LoadMaHKNH()
         {
-            isLoading = true; // bắt đầu load dữ liệu
+            isLoading = true; 
             string queryNamHoc = @"SELECT MaHocKyNamHoc, HocKy, NamHoc FROM HocKyNamHoc ORDER BY MaHocKyNamHoc DESC";
             DataTable dtNamHoc = frmAdmin.getData(queryNamHoc);
 
@@ -50,7 +50,7 @@ namespace DoAnCK.UI_Admin
                 cbbNamHoc.DataSource = dtNamHoc;
                 cbbNamHoc.DisplayMember = "HK_NamHoc";
                 cbbNamHoc.ValueMember = "MaHocKyNamHoc";
-                cbbNamHoc.SelectedIndex = 0; // chọn mặc định
+                cbbNamHoc.SelectedIndex = 0; 
 
                 maHocKyNamHoc = Convert.ToInt32(cbbNamHoc.SelectedValue);
             }
@@ -58,7 +58,7 @@ namespace DoAnCK.UI_Admin
             {
                 MessageBox.Show("Không tìm thấy học kỳ/năm học hiện tại.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            isLoading = false; // kết thúc load dữ liệu
+            isLoading = false; 
         }
 
         private void LoadBangDiem()
@@ -96,7 +96,6 @@ namespace DoAnCK.UI_Admin
             btnLuu.Enabled = true;
             btnHuy.Enabled = true;
             btnSua.Enabled = false;
-            btnXoa.Enabled = false;
             gvDanhSachSV.OptionsBehavior.Editable = true;
             editingRowHandle = gvDanhSachSV.FocusedRowHandle;
         }
@@ -133,7 +132,6 @@ namespace DoAnCK.UI_Admin
 
             btnLuu.Enabled = false;
             btnSua.Enabled = true;
-            btnXoa.Enabled = true;
             btnHuy.Enabled = false;
             gvDanhSachSV.OptionsBehavior.Editable = false;
             isAdding = false;
@@ -161,6 +159,8 @@ namespace DoAnCK.UI_Admin
                     decimal? diemGK = row["DiemGK"] != DBNull.Value ? Convert.ToDecimal(row["DiemGK"]) : (decimal?)null;
                     decimal? diemCK = row["DiemCK"] != DBNull.Value ? Convert.ToDecimal(row["DiemCK"]) : (decimal?)null;
 
+
+
                     if ((diemGK.HasValue && (diemGK < 0 || diemGK > 10)) ||
                         (diemCK.HasValue && (diemCK < 0 || diemCK > 10)))
                     {
@@ -168,7 +168,8 @@ namespace DoAnCK.UI_Admin
                         return;
                     }
 
-                    string diemGKValue = diemGK.HasValue ? diemGK.Value.ToString() : "NULL";
+
+                     string diemGKValue = diemGK.HasValue ? diemGK.Value.ToString() : "NULL";
                     string diemCKValue = diemCK.HasValue ? diemCK.Value.ToString() : "NULL";
 
                     string query = $@"EXEC sp_CapNhatDiemHocPhan 
@@ -189,6 +190,12 @@ namespace DoAnCK.UI_Admin
             {
                 MessageBox.Show("Lỗi khi lưu điểm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            btnLuu.Enabled = false;
+            btnSua.Enabled = true;
+            btnHuy.Enabled = false;
+            gvDanhSachSV.OptionsBehavior.Editable = false;
+            isAdding = false;
+            editingRowHandle = -1;
         }
 
         private void btnThongKe_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)

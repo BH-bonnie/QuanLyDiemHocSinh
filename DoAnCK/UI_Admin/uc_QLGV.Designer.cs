@@ -56,9 +56,11 @@
             this.Email = new DevExpress.XtraGrid.Columns.GridColumn();
             this.DienThoai = new DevExpress.XtraGrid.Columns.GridColumn();
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
+            this.lkKhoa = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSachSV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSachSV)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lkKhoa)).BeginInit();
             this.SuspendLayout();
             // 
             // bar2
@@ -244,6 +246,8 @@
             this.gcDanhSachSV.MainView = this.gvDanhSachSV;
             this.gcDanhSachSV.MenuManager = this.barManager1;
             this.gcDanhSachSV.Name = "gcDanhSachSV";
+            this.gcDanhSachSV.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
+            this.lkKhoa});
             this.gcDanhSachSV.Size = new System.Drawing.Size(856, 479);
             this.gcDanhSachSV.TabIndex = 10;
             this.gcDanhSachSV.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -296,6 +300,7 @@
             // Khoa
             // 
             this.Khoa.Caption = "Khoa";
+            this.Khoa.ColumnEdit = this.lkKhoa;
             this.Khoa.FieldName = "Khoa";
             this.Khoa.MinWidth = 25;
             this.Khoa.Name = "Khoa";
@@ -329,6 +334,16 @@
             this.barButtonItem1.Id = 6;
             this.barButtonItem1.Name = "barButtonItem1";
             // 
+            // lkKhoa
+            // 
+            this.lkKhoa.AutoHeight = false;
+            this.lkKhoa.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.lkKhoa.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] {
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("MaKhoa", "Mã khoa"),
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("TenKhoa", "Tên khoa")});
+            this.lkKhoa.Name = "lkKhoa";
+            // 
             // uc_QLGV
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -344,6 +359,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSachSV)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSachSV)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lkKhoa)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -377,5 +393,6 @@
         private DevExpress.XtraBars.BarButtonItem barButtonItem1;
         private DevExpress.XtraBars.BarButtonItem btnSua;
         private DevExpress.XtraBars.BarButtonItem btnHuy;
+        private DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit lkKhoa;
     }
 }

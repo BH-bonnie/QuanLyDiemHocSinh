@@ -47,12 +47,16 @@
             this.NgaySinh = new DevExpress.XtraGrid.Columns.GridColumn();
             this.NoiSinh = new DevExpress.XtraGrid.Columns.GridColumn();
             this.GioiTinh = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.ckGioiTinh = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
             this.CMND_CCCD = new DevExpress.XtraGrid.Columns.GridColumn();
             this.LopSV = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.lkLop = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
             this.bar1 = new DevExpress.XtraBars.Bar();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSachSV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSachSV)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ckGioiTinh)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lkLop)).BeginInit();
             this.SuspendLayout();
             // 
             // barManager1
@@ -168,6 +172,9 @@
             this.gcDanhSachSV.MainView = this.gvDanhSachSV;
             this.gcDanhSachSV.MenuManager = this.barManager1;
             this.gcDanhSachSV.Name = "gcDanhSachSV";
+            this.gcDanhSachSV.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
+            this.ckGioiTinh,
+            this.lkLop});
             this.gcDanhSachSV.Size = new System.Drawing.Size(941, 528);
             this.gcDanhSachSV.TabIndex = 9;
             this.gcDanhSachSV.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -230,13 +237,19 @@
             // 
             // GioiTinh
             // 
-            this.GioiTinh.Caption = "Giới tính";
+            this.GioiTinh.Caption = "Nữ";
+            this.GioiTinh.ColumnEdit = this.ckGioiTinh;
             this.GioiTinh.FieldName = "GioiTinh";
             this.GioiTinh.MinWidth = 25;
             this.GioiTinh.Name = "GioiTinh";
             this.GioiTinh.Visible = true;
             this.GioiTinh.VisibleIndex = 4;
             this.GioiTinh.Width = 66;
+            // 
+            // ckGioiTinh
+            // 
+            this.ckGioiTinh.AutoHeight = false;
+            this.ckGioiTinh.Name = "ckGioiTinh";
             // 
             // CMND_CCCD
             // 
@@ -251,12 +264,23 @@
             // LopSV
             // 
             this.LopSV.Caption = "Lớp ";
+            this.LopSV.ColumnEdit = this.lkLop;
             this.LopSV.FieldName = "LopSV";
             this.LopSV.MinWidth = 25;
             this.LopSV.Name = "LopSV";
             this.LopSV.Visible = true;
             this.LopSV.VisibleIndex = 6;
             this.LopSV.Width = 95;
+            // 
+            // lkLop
+            // 
+            this.lkLop.AutoHeight = false;
+            this.lkLop.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.lkLop.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] {
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("TenKhoa", "Khoa", 40, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default),
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("LopSV", "Lớp")});
+            this.lkLop.Name = "lkLop";
             // 
             // bar1
             // 
@@ -287,6 +311,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSachSV)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSachSV)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ckGioiTinh)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lkLop)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -315,5 +341,7 @@
         private DevExpress.XtraGrid.Columns.GridColumn LopSV;
         private DevExpress.XtraBars.BarButtonItem btnSua;
         private DevExpress.XtraBars.BarButtonItem btnHuy;
+        private DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit ckGioiTinh;
+        private DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit lkLop;
     }
 }

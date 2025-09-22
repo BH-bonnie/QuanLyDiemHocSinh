@@ -38,13 +38,20 @@ namespace DoAnCK.UI_Admin
                 if (dtGiangVien != null)
                 {
                     gcDanhSachSV.DataSource = dtGiangVien;
-                    // Cho phép chọn nhiều dòng
                     gvDanhSachSV.OptionsSelection.MultiSelect = true;
                     gvDanhSachSV.OptionsSelection.MultiSelectMode = GridMultiSelectMode.RowSelect;
 
 
                 }
+                loadKhoa();
             }
+        }
+        private void loadKhoa()
+
+        {
+            lkKhoa.DataSource = frmAdmin.getData("Select * From Khoa");
+            lkKhoa.DisplayMember = "TenKhoa";
+            lkKhoa.ValueMember = "MaKhoa";
         }
 
         private void btnThem_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -83,11 +90,9 @@ namespace DoAnCK.UI_Admin
                         {
                             string maGV = gvDanhSachSV.GetRowCellValue(selectedRows[i], "MaGV").ToString();
 
-                            // Sử dụng stored procedure thay vì DELETE trực tiếp
                             string query = $"EXEC sp_XoaGiangVien @MaGV = '{maGV}'";
                             frmAdmin.executeQuery(query);
 
-                            // Xóa trên GridView
                             gvDanhSachSV.DeleteRow(selectedRows[i]);
                         }
 
@@ -142,7 +147,6 @@ namespace DoAnCK.UI_Admin
                         string email = row["Email"]?.ToString() ?? "";
                         string dienThoai = row["DienThoai"]?.ToString() ?? "";
 
-                        // Kiểm tra dữ liệu bắt buộc
                         if (string.IsNullOrWhiteSpace(maGV) || string.IsNullOrWhiteSpace(hoTenGV))
                         {
                             MessageBox.Show("Mã giảng viên và Họ tên giảng viên không được để trống!");
@@ -207,7 +211,7 @@ namespace DoAnCK.UI_Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi lưu thông tin giảng viên: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(" " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

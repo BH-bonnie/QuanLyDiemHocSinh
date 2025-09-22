@@ -216,11 +216,11 @@ namespace DoAnCK {
 
         private void btnTK_Click(object sender, EventArgs e)
         {
-            if(ucTK == null)
+            if (ucTK == null)
             {
                 ucTK = new uc_TaiKhoan();
                 ucTK.Dock = DockStyle.Fill;
-                ucTK.AutoSize = true; // tự động mở rộng theo nội dung
+                ucTK.AutoSize = true;
                 mainContainer.Controls.Add(ucTK);
                 ucTK.BringToFront();
             }
