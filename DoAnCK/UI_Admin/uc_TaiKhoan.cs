@@ -137,17 +137,19 @@ namespace DoAnCK.UI_Admin
                     }
                     else
                     {
-                        // SỬA LẠI: Kiểm tra null trước khi gọi ToString()
                         object maTKValue = gvDanhSach.GetRowCellValue(selectedRows[i], "MaTK");
                         if (maTKValue == null || maTKValue == DBNull.Value)
                         {
                             MessageBox.Show($"Không tìm thấy MaTK cho dòng {selectedRows[i]}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            continue; // Bỏ qua dòng này và tiếp tục
+                            continue; 
                         }
 
-                        string maTK = maTKValue.ToString();
-                        frmAdmin.executeQuery($"EXEC sp_XoaTaiKhoan @MaTK = '{maTK}'");
+                        int maTK = Convert.ToInt32(maTKValue);
+                        MessageBox.Show($"MaTK = {maTK}");
+
+                        frmAdmin.executeQuery($"EXEC sp_XoaTaiKhoanForce  @MaTK = {maTK}");
                         gvDanhSach.DeleteRow(selectedRows[i]);
+
                     }
                 }
 
@@ -210,7 +212,7 @@ namespace DoAnCK.UI_Admin
                     }
                     else if (row.RowState == DataRowState.Modified)
                     {
-                        string maTK = row["MaTK"].ToString();
+                        int maTK = Convert.ToInt32(row["MaTK"]);
                         string tenDangNhap = row["TenDangNhap"]?.ToString() ?? ""; 
                         string matKhau = row["MatKhau"]?.ToString() ?? "";
                         string roleId = row["Roleid"]?.ToString() ?? "";

@@ -54,6 +54,8 @@ GRANT EXECUTE ON dbo.sp_ThongKeDiemTheoKhoangNho TO GiangVienRole;
 GRANT EXECUTE ON dbo.sp_GetLopHocPhanByGV TO GiangVienRole;
 GRANT EXECUTE ON dbo.sp_LayLopHocPhanKhac TO GiangVienRole;
 GRANT EXECUTE ON dbo.sp_ChuyenLopHocPhan TO GiangVienRole;
+GRANT EXECUTE ON dbo.sp_CapNhatGiangVien TO GiangVienRole;
+
 
 
 -- Quyền SELECT trên view
@@ -107,15 +109,7 @@ LEFT JOIN GiangVien gv ON tk.MaGV = gv.MaGV;
 GO
 Select * from Roles
 Select * From vw_ThongTinTaiKhoan
--- =========================
--- XÓA TÀI KHOẢN
--- =========================
--- =========================
--- THÊM TÀI KHOẢN
--- =========================
-IF OBJECT_ID('dbo.sp_ThemTaiKhoan', 'P') IS NOT NULL
-    DROP PROCEDURE dbo.sp_ThemTaiKhoan;
-GO
+
 
 IF OBJECT_ID('dbo.sp_ThemTaiKhoan', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_ThemTaiKhoan;
@@ -151,7 +145,6 @@ BEGIN
             IF NOT EXISTS (SELECT * FROM sys.server_principals WHERE name = ''' + @TenDangNhap + ''')
             CREATE LOGIN [' + @TenDangNhap + '] WITH PASSWORD = ''' + REPLACE(@MatKhau,'''','''''') + ''';
         ';
-        PRINT @sql; -- In lệnh SQL để kiểm tra
         EXEC(@sql);
 
         -- Tạo USER cho cả Admin và GiangVien
@@ -159,26 +152,22 @@ BEGIN
             IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = ''' + @TenDangNhap + ''')
             CREATE USER [' + @TenDangNhap + '] FOR LOGIN [' + @TenDangNhap + '];
         ';
-        PRINT @sql; -- In lệnh SQL để kiểm tra
         EXEC(@sql);
 
         IF @Roleid = 1  -- Admin
         BEGIN
             -- Gán sysadmin
             SET @sql = 'ALTER SERVER ROLE [sysadmin] ADD MEMBER [' + @TenDangNhap + '];';
-            PRINT @sql; -- In lệnh SQL để kiểm tra
             EXEC(@sql);
 
             -- Thêm vào AdminRole
             SET @sql = 'ALTER ROLE [AdminRole] ADD MEMBER [' + @TenDangNhap + '];';
-            PRINT @sql; -- In lệnh SQL để kiểm tra
             EXEC(@sql);
         END
         ELSE IF @Roleid = 2  -- GiangVien
         BEGIN
             -- Thêm vào GiangVienRole
             SET @sql = 'ALTER ROLE [GiangVienRole] ADD MEMBER [' + @TenDangNhap + '];';
-            PRINT @sql; -- In lệnh SQL để kiểm tra
             EXEC(@sql);
         END
 
@@ -186,36 +175,64 @@ BEGIN
     END TRY
     BEGIN CATCH
         IF @@TRANCOUNT > 0
-            ROLLBACK TRANSACTION;
-        SELECT 
-            ERROR_NUMBER() AS ErrorNumber,
-            ERROR_MESSAGE() AS ErrorMessage;
+			 ROLLBACK TRANSACTION
+         DECLARE @ErrMsg NVARCHAR(4000) = ERROR_MESSAGE();
+         RAISERROR(@ErrMsg, 16, 1);        
     END CATCH
 END
 GO
 -- =========================
 -- XÓA TÀI KHOẢN
 -- =========================
-IF OBJECT_ID('dbo.sp_XoaTaiKhoan', 'P') IS NOT NULL
-    DROP PROCEDURE dbo.sp_XoaTaiKhoan;
+
+IF OBJECT_ID('dbo.sp_XoaTaiKhoanForce', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_XoaTaiKhoanForce;
 GO
 
-CREATE PROCEDURE dbo.sp_XoaTaiKhoan
+CREATE PROCEDURE dbo.sp_XoaTaiKhoanForce
     @MaTK INT
 AS
 BEGIN
     SET NOCOUNT ON;
+
     DECLARE @TenDangNhap NVARCHAR(50);
+    DECLARE @spid INT;
+    DECLARE @sql NVARCHAR(MAX);
+
+    -- Lấy tên login trước
+    SELECT @TenDangNhap = TenDangNhap FROM TaiKhoan WHERE MaTK = @MaTK;
+    IF @TenDangNhap IS NULL
+    BEGIN
+        RAISERROR('Không tìm thấy tài khoản có MaTK = %d', 16, 1, @MaTK);
+        RETURN;
+    END
+
+    -- =====================
+    -- Kill tất cả session của login (bên ngoài transaction)
+    -- =====================
+    DECLARE cur_sessions CURSOR FOR
+        SELECT session_id
+        FROM sys.dm_exec_sessions
+        WHERE login_name = @TenDangNhap;
+
+    OPEN cur_sessions;
+    FETCH NEXT FROM cur_sessions INTO @spid;
+
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        SET @sql = 'KILL ' + CAST(@spid AS NVARCHAR(10));
+        EXEC(@sql);
+        FETCH NEXT FROM cur_sessions INTO @spid;
+    END
+
+    CLOSE cur_sessions;
+    DEALLOCATE cur_sessions;
+
+    -- =====================
+    -- Xóa user/login/TaiKhoan trong transaction
+    -- =====================
     BEGIN TRY
         BEGIN TRANSACTION;
-
-        -- Kiểm tra sự tồn tại của MaTK
-        SELECT @TenDangNhap = TenDangNhap FROM TaiKhoan WHERE MaTK = @MaTK;
-        IF @TenDangNhap IS NULL
-        BEGIN
-            RAISERROR('Không tìm thấy tài khoản có MaTK = %d', 16, 1, @MaTK);
-            RETURN;
-        END
 
         -- Xóa khỏi tất cả role database
         DECLARE @sqlRemove NVARCHAR(MAX) = '';
@@ -227,27 +244,24 @@ BEGIN
 
         IF @sqlRemove <> ''
         BEGIN
-            PRINT @sqlRemove; -- In lệnh SQL để kiểm tra
             EXEC(@sqlRemove);
         END
 
         -- Xóa user database
         IF EXISTS (SELECT * FROM sys.database_principals WHERE name = @TenDangNhap)
         BEGIN
-            DECLARE @sqlDropUser NVARCHAR(MAX) = 'DROP USER [' + @TenDangNhap + ']';
-            PRINT @sqlDropUser; -- In lệnh SQL để kiểm tra
-            EXEC(@sqlDropUser);
+            SET @sql = 'DROP USER [' + @TenDangNhap + ']';
+            EXEC(@sql);
         END
 
         -- Xóa login server
         IF EXISTS (SELECT * FROM sys.server_principals WHERE name = @TenDangNhap)
         BEGIN
-            DECLARE @sqlDropLogin NVARCHAR(MAX) = 'DROP LOGIN [' + @TenDangNhap + ']';
-            PRINT @sqlDropLogin; -- In lệnh SQL để kiểm tra
-            EXEC(@sqlDropLogin);
+            SET @sql = 'DROP LOGIN [' + @TenDangNhap + ']';
+            EXEC(@sql);
         END
 
-        -- Xóa bản ghi trong TaiKhoan
+        -- Xóa record trong bảng TaiKhoan
         DELETE FROM TaiKhoan WHERE MaTK = @MaTK;
 
         COMMIT TRANSACTION;
@@ -255,12 +269,14 @@ BEGIN
     BEGIN CATCH
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION;
-        SELECT 
-            ERROR_NUMBER() AS ErrorNumber,
-            ERROR_MESSAGE() AS ErrorMessage;
+
+        DECLARE @ErrMsg NVARCHAR(4000) = ERROR_MESSAGE();
+        RAISERROR(@ErrMsg, 16, 1);
     END CATCH
 END
 GO
+
+
 IF OBJECT_ID('dbo.sp_CapNhatTaiKhoan', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_CapNhatTaiKhoan;
 GO
@@ -407,3 +423,4 @@ BEGIN
     END CATCH
 END
 GO
+
