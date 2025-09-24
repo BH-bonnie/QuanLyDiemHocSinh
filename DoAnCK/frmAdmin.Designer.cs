@@ -45,6 +45,7 @@
             this.btnLichsu = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.btnDangXuat = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.fluentDesignFormControl1 = new DevExpress.XtraBars.FluentDesignSystem.FluentDesignFormControl();
+            this.lblTieude = new DevExpress.XtraBars.BarHeaderItem();
             this.fluentFormDefaultManager1 = new DevExpress.XtraBars.FluentDesignSystem.FluentFormDefaultManager(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.accordionControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fluentDesignFormControl1)).BeginInit();
@@ -54,9 +55,9 @@
             // mainContainer
             // 
             this.mainContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainContainer.Location = new System.Drawing.Point(294, 39);
+            this.mainContainer.Location = new System.Drawing.Point(294, 53);
             this.mainContainer.Name = "mainContainer";
-            this.mainContainer.Size = new System.Drawing.Size(781, 516);
+            this.mainContainer.Size = new System.Drawing.Size(781, 502);
             this.mainContainer.TabIndex = 0;
             // 
             // accordionControl1
@@ -65,10 +66,10 @@
             this.accordionControl1.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] {
             this.accordionControlElement1,
             this.accordionControlElement7});
-            this.accordionControl1.Location = new System.Drawing.Point(0, 39);
+            this.accordionControl1.Location = new System.Drawing.Point(0, 53);
             this.accordionControl1.Name = "accordionControl1";
             this.accordionControl1.ScrollBarMode = DevExpress.XtraBars.Navigation.ScrollBarMode.Touch;
-            this.accordionControl1.Size = new System.Drawing.Size(294, 516);
+            this.accordionControl1.Size = new System.Drawing.Size(294, 502);
             this.accordionControl1.TabIndex = 1;
             this.accordionControl1.ViewType = DevExpress.XtraBars.Navigation.AccordionControlViewType.HamburgerMenu;
             // 
@@ -199,6 +200,7 @@
             this.btnLichsu.Name = "btnLichsu";
             this.btnLichsu.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
             this.btnLichsu.Text = "Lịch sử đăng nhập";
+            this.btnLichsu.Click += new System.EventHandler(this.btnLichsu_Click);
             // 
             // btnDangXuat
             // 
@@ -212,16 +214,30 @@
             // fluentDesignFormControl1
             // 
             this.fluentDesignFormControl1.FluentDesignForm = this;
+            this.fluentDesignFormControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
+            this.lblTieude});
             this.fluentDesignFormControl1.Location = new System.Drawing.Point(0, 0);
             this.fluentDesignFormControl1.Manager = this.fluentFormDefaultManager1;
             this.fluentDesignFormControl1.Name = "fluentDesignFormControl1";
-            this.fluentDesignFormControl1.Size = new System.Drawing.Size(1075, 39);
+            this.fluentDesignFormControl1.Size = new System.Drawing.Size(1075, 53);
             this.fluentDesignFormControl1.TabIndex = 2;
             this.fluentDesignFormControl1.TabStop = false;
+            this.fluentDesignFormControl1.TitleItemLinks.Add(this.lblTieude);
+            // 
+            // lblTieude
+            // 
+            this.lblTieude.Appearance.FontSizeDelta = 12;
+            this.lblTieude.Appearance.Options.UseFont = true;
+            this.lblTieude.Caption = "Tieude";
+            this.lblTieude.Id = 0;
+            this.lblTieude.Name = "lblTieude";
             // 
             // fluentFormDefaultManager1
             // 
             this.fluentFormDefaultManager1.Form = this;
+            this.fluentFormDefaultManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
+            this.lblTieude});
+            this.fluentFormDefaultManager1.MaxItemId = 1;
             // 
             // frmAdmin
             // 
@@ -262,5 +278,6 @@
         private DevExpress.XtraBars.Navigation.AccordionControlElement btnChiTiet;
         private DevExpress.XtraBars.Navigation.AccordionControlElement btnDangXuat;
         private DevExpress.XtraBars.Navigation.AccordionControlElement btnLichsu;
+        private DevExpress.XtraBars.BarHeaderItem lblTieude;
     }
 }

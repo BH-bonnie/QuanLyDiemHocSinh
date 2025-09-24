@@ -174,7 +174,6 @@
             this.Controls.Add(this.splitContainerControl1);
             this.Name = "uc_DSDK";
             this.Size = new System.Drawing.Size(856, 516);
-            this.Load += new System.EventHandler(this.uc_DSDK_Load);
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSachSV)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSachSV)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1.Panel1)).EndInit();

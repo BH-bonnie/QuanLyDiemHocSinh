@@ -17,15 +17,73 @@ RETURN
         LHP.MaMH,
 		MH.TenMH,
         LHP.MaLHP,
-        LHP.MaGV,
+        GV.MaGV,
         GV.HoTenGV,
 		GV.Email
     FROM LopHocPhan LHP
     INNER JOIN MonHoc MH ON LHP.MaMH = MH.MaMH
     INNER JOIN GiangVien GV ON LHP.MaGV = GV.MaGV
     INNER JOIN HocKyNamHoc HKNH ON LHP.MaHocKyNamHoc = HKNH.MaHocKyNamHoc
-    WHERE LHP.MaHocKyNamHoc = @MaHocKyNamHoc
+    WHERE LHP.MaHocKyNamHoc = @MaHocKyNamHoc AND GV.TrangThai = 0                
+              
+
 );
+GO
+IF OBJECT_ID('dbo.v_SinhVien_Detail', 'V') IS NOT NULL
+    DROP VIEW dbo.v_SinhVien_Detail;
+GO
+
+CREATE VIEW dbo.v_SinhVien_Detail
+AS
+SELECT 
+    SV.MaSV, 
+    SV.HoTen, 
+    SV.NgaySinh, 
+    SV.NoiSinh, 
+    SV.GioiTinh,
+    SV.CMND_CCCD, 
+    SV.LopSV,
+    SV.TrangThai	
+FROM SinhVien SV;
+GO
+IF OBJECT_ID('dbo.trg_UpdateDiem_KhiSVNgungHoatDong', 'TR') IS NOT NULL
+    DROP TRIGGER dbo.trg_UpdateDiem_KhiSVNgungHoatDong;
+GO
+
+CREATE TRIGGER dbo.trg_UpdateDiem_KhiSVNgungHoatDong
+ON SinhVien
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE CTHP
+    SET 
+        DiemGK = ISNULL(CTHP.DiemGK, 0),
+        DiemCK = ISNULL(CTHP.DiemCK, 0),
+        DiemTB = 0
+    FROM ChiTietHocPhan CTHP
+    INNER JOIN inserted i ON CTHP.MaSV = i.MaSV
+    WHERE i.TrangThai = 1;
+END;
+GO
+
+IF OBJECT_ID('dbo.v_GiangVien_Detail', 'V') IS NOT NULL
+    DROP VIEW dbo.v_GiangVien_Detail;
+GO
+
+CREATE VIEW dbo.v_GiangVien_Detail
+AS
+SELECT 
+    GV.MaGV,
+    GV.HoTenGV,
+    GV.HocVi,
+    GV.Khoa,
+    GV.Email,
+    GV.DienThoai,
+	GV.TrangThai	
+
+FROM GiangVien GV;
 GO
 
 IF OBJECT_ID('dbo.v_MonHoc', 'V') IS NOT NULL
@@ -41,7 +99,6 @@ SELECT
     SoTinChi    -- Số tín chỉ
 FROM MonHoc;
 GO
--- Nếu đã có function cũ, drop trước
 IF OBJECT_ID('dbo.fn_DangKyMonHocTheoNamHoc', 'IF') IS NOT NULL
     DROP FUNCTION dbo.fn_DangKyMonHocTheoNamHoc;
 GO
@@ -64,17 +121,15 @@ RETURN
     INNER JOIN SinhVien SV ON DKMH.MaSV = SV.MaSV
     INNER JOIN LopHocPhan LHP ON DKMH.MaLHP = LHP.MaLHP
     INNER JOIN MonHoc MH ON LHP.MaMH = MH.MaMH
-    WHERE DKMH.MaHocKyNamHoc = @MaHocKyNamHoc
+    WHERE DKMH.MaHocKyNamHoc = @MaHocKyNamHoc AND SV.TrangThai = 0          
 );
 GO
 
 
--- Nếu hàm đã tồn tại thì xóa trước
 IF OBJECT_ID('dbo.fn_DanhSachMonHoc_GiangVien', 'IF') IS NOT NULL
     DROP FUNCTION dbo.fn_DanhSachMonHoc_GiangVien;
 GO
 
--- Tạo hàm trả về danh sách môn học giảng viên dạy theo năm học
 CREATE FUNCTION fn_DanhSachMonHoc_GiangVien (
     @MaGV VARCHAR(10),
     @MaHocKyNamHoc INT
@@ -86,11 +141,12 @@ RETURN
     SELECT 
         MH.MaMH,
         MH.TenMH,
-        LHP.MaLHP	
+        LHP.MaLHP
     FROM LopHocPhan LHP
     INNER JOIN MonHoc MH ON LHP.MaMH = MH.MaMH
-    WHERE LHP.MaGV = @MaGV
-      AND LHP.MaHocKyNamHoc = @MaHocKyNamHoc
+    INNER JOIN GiangVien GV ON LHP.MaGV = GV.MaGV
+    WHERE GV.MaGV = @MaGV
+      AND LHP.MaHocKyNamHoc = @MaHocKyNamHoc  AND GV.TrangThai = 1  
 );
 GO
 
@@ -98,13 +154,11 @@ GO
 
 
 
--- Tạo hàm trả về danh sách sinh viên theo lớp học phần và MaHocKyNamHoc
--- Nếu đã tồn tại thì xóa hàm
+
 IF OBJECT_ID('dbo.fn_FormattedDate', 'FN') IS NOT NULL
     DROP FUNCTION dbo.fn_FormattedDate;
 GO
 
--- Hàm chuyển đổi ngày sang dd/MM/yyyy
 CREATE FUNCTION dbo.fn_FormattedDate (@Ngay DATE)
 RETURNS NVARCHAR(10)
 AS
@@ -116,10 +170,10 @@ BEGIN
            CAST(YEAR(@Ngay) AS VARCHAR(4));
 END;
 GO
+
 IF OBJECT_ID('dbo.fn_SinhVienTheoLopHocPhan', 'IF') IS NOT NULL
     DROP FUNCTION dbo.fn_SinhVienTheoLopHocPhan;
 GO
--- Hàm trả về danh sách sinh viên theo lớp học phần
 CREATE FUNCTION fn_SinhVienTheoLopHocPhan (
     @MaLHP VARCHAR(20),
     @MaHocKyNamHoc INT
@@ -141,15 +195,14 @@ RETURN
 );
 GO
 
-IF OBJECT_ID('dbo.sp_ChuyenLopTheoGV', 'P') IS NOT NULL
+/*IF OBJECT_ID('dbo.sp_ChuyenLopTheoGV', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_ChuyenLopTheoGV;
 GO
 
 CREATE PROCEDURE dbo.sp_ChuyenLopTheoGV
     @MaSV VARCHAR(10),
     @MaLHPHienTai VARCHAR(20),
-    @MaLHPMoi VARCHAR(20),
-    @MaGV VARCHAR(10)
+    @MaLHPMoi VARCHAR(20)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -171,17 +224,8 @@ BEGIN
         DELETE FROM DangKyMonHoc
         WHERE MaSV = @MaSV AND MaLHP = @MaLHPHienTai;
 
-        -- Thêm sinh viên vào lớp mới (nếu chưa có)
-        IF NOT EXISTS (
-            SELECT 1
-            FROM DangKyMonHoc
-            WHERE MaSV = @MaSV
-              AND MaLHP = @MaLHPMoi
-        )
-        BEGIN
-            INSERT INTO DangKyMonHoc (MaSV, MaLHP, MaHocKyNamHoc)
-            VALUES (@MaSV, @MaLHPMoi, @MaHocKyNamHoc);
-        END
+        INSERT INTO DangKyMonHoc (MaSV, MaLHP, MaHocKyNamHoc)
+        VALUES (@MaSV, @MaLHPMoi, @MaHocKyNamHoc);
 
         COMMIT TRANSACTION;
     END TRY
@@ -190,8 +234,51 @@ BEGIN
         THROW;
     END CATCH
 END;
-GO
+GO*/
 
+IF OBJECT_ID('trg_TinhDiemTB', 'TR') IS NOT NULL
+    DROP TRIGGER trg_TinhDiemTB;
+GO
+CREATE TRIGGER trg_TinhDiemTB
+ON ChiTietHocPhan
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE CTHP
+    SET CTHP.DiemTB = dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK)
+    FROM ChiTietHocPhan CTHP
+    INNER JOIN inserted i
+        ON CTHP.MaSV = i.MaSV
+       AND CTHP.MaMH = i.MaMH
+       AND CTHP.MaHocKyNamHoc = i.MaHocKyNamHoc
+    WHERE i.DiemGK IS NOT NULL
+      AND i.DiemCK IS NOT NULL;
+END;
+GO
+IF OBJECT_ID('dbo.fn_TrangThaiDiemTB', 'FN') IS NOT NULL
+    DROP FUNCTION dbo.fn_TrangThaiDiemTB;
+GO
+CREATE FUNCTION fn_TrangThaiDiemTB
+(
+    @DiemTB FLOAT
+)
+RETURNS NVARCHAR(20)
+AS
+BEGIN
+    DECLARE @TrangThai NVARCHAR(20);
+
+    IF @DiemTB IS NULL
+        SET @TrangThai = NULL;
+    ELSE IF @DiemTB >= 5
+        SET @TrangThai = N'Đạt';
+    ELSE
+        SET @TrangThai = N'Không đạt';
+
+    RETURN @TrangThai;
+END;
+GO
 
 
 
@@ -199,30 +286,25 @@ IF OBJECT_ID('trg_AfterInsert_DangKyMonHoc', 'TR') IS NOT NULL
     DROP TRIGGER trg_AfterInsert_DangKyMonHoc;
 GO
 
-
 CREATE TRIGGER trg_AfterInsert_DangKyMonHoc
 ON DangKyMonHoc
 AFTER INSERT
 AS
 BEGIN
-    INSERT INTO ChiTietHocPhan (MaSV, MaMH, DiemGK, DiemCK, MaHocKyNamHoc)
+    INSERT INTO ChiTietHocPhan (MaSV, MaMH, DiemGK, DiemCK,DiemTB, MaHocKyNamHoc)
     SELECT 
         i.MaSV,
         LHP.MaMH,
         NULL,
         NULL,
+		NuLL,
         i.MaHocKyNamHoc
     FROM inserted i
     JOIN LopHocPhan LHP
       ON i.MaLHP = LHP.MaLHP 
      AND i.MaHocKyNamHoc = LHP.MaHocKyNamHoc;
 END;
-
-
-
-
-
-
+Go
 
 
 IF OBJECT_ID('dbo.fn_SinhVienVaDiemTheoLopHocPhan', 'IF') IS NOT NULL
@@ -245,12 +327,8 @@ RETURN
         SV.GioiTinh,
         CTHP.DiemGK,
         CTHP.DiemCK,
-        dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK) AS DiemTB,
-        CASE 
-            WHEN CTHP.DiemGK IS NULL OR CTHP.DiemCK IS NULL THEN NULL
-            WHEN dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK) >= 5 THEN N'Đạt'
-            ELSE N'Không đạt'
-        END AS TrangThai
+        CTHP.DiemTB,
+        dbo.fn_TrangThaiDiemTB(CTHP.DiemTB) AS TrangThai
     FROM DangKyMonHoc DKMH
     INNER JOIN SinhVien SV ON DKMH.MaSV = SV.MaSV
     INNER JOIN LopHocPhan LHP ON DKMH.MaLHP = LHP.MaLHP
@@ -262,7 +340,6 @@ RETURN
       AND LHP.MaHocKyNamHoc = @MaHocKyNamHoc
 );
 GO
-
 
 
 
@@ -283,16 +360,12 @@ BEGIN
     BEGIN TRY
         BEGIN TRAN;
 
-        UPDATE CTHP
-        SET CTHP.DiemGK = @DiemGK,
-            CTHP.DiemCK = @DiemCK
-        FROM ChiTietHocPhan CTHP
-        INNER JOIN LopHocPhan LHP
-            ON CTHP.MaMH = LHP.MaMH
-           AND CTHP.MaHocKyNamHoc = LHP.MaHocKyNamHoc
-        WHERE CTHP.MaSV = @MaSV
-          AND CTHP.MaMH = @MaMH
-          AND CTHP.MaHocKyNamHoc = @MaHocKyNamHoc;
+		UPDATE ChiTietHocPhan
+		SET DiemGK = @DiemGK,
+			DiemCK = @DiemCK
+		WHERE MaSV = @MaSV
+		  AND MaMH = @MaMH
+		  AND MaHocKyNamHoc = @MaHocKyNamHoc;
 
         COMMIT TRAN;
     END TRY
@@ -300,7 +373,6 @@ BEGIN
         IF @@TRANCOUNT > 0
             ROLLBACK TRAN;
 
-        -- Có thể log lỗi ra hoặc trả về mã lỗi
         THROW;
     END CATCH
 END
@@ -431,27 +503,23 @@ BEGIN
     DECLARE @TiLeGK DECIMAL(4,2);
     DECLARE @TiLeCK DECIMAL(4,2);
 
-    -- Lấy tỉ lệ GK, CK từ bảng công thức
     SELECT TOP 1 
            @TiLeGK = TiLeGK, 
            @TiLeCK = TiLeCK
     FROM CongThucTinhDiem
 	ORDER BY Ma DESC;
 
-    -- Nếu không có tỉ lệ, mặc định 0.5 / 0.5
     IF @TiLeGK IS NULL OR @TiLeCK IS NULL
     BEGIN
         SET @TiLeGK = 0.5;
         SET @TiLeCK = 0.5;
     END
 
-    -- Nếu một trong hai điểm là NULL, trả về NULL
     IF @DiemGK IS NULL OR @DiemCK IS NULL
     BEGIN
         RETURN NULL;
     END
 
-    -- Nếu điểm CK < 3 thì kết quả = 0
     IF @DiemCK < 3
     BEGIN
         SET @DiemGK=0;
@@ -476,22 +544,21 @@ RETURN
         mh.MaMH,
         mh.TenMH,
         mh.SoTinChi,
-        dbo.fn_TinhDiemTrungBinh(cthp.DiemGK, cthp.DiemCK) AS DiemHe10,
-        dbo.fn_QuyDoiDiemHe4(dbo.fn_TinhDiemTrungBinh(cthp.DiemGK, cthp.DiemCK)) AS DiemHe4,
-        dbo.fn_QuyDoiDiemChu(dbo.fn_TinhDiemTrungBinh(cthp.DiemGK, cthp.DiemCK)) AS DiemChu,
-        CASE 
-            WHEN dbo.fn_TinhDiemTrungBinh(cthp.DiemGK, cthp.DiemCK) IS NULL THEN N''
-            WHEN dbo.fn_TinhDiemTrungBinh(cthp.DiemGK, cthp.DiemCK) >= 5.0 THEN N'Đậu'
-            ELSE N'Rớt'
-        END AS TrangThai
-    FROM MonHoc mh
+        cthp.DiemTB AS DiemHe10,
+        dbo.fn_QuyDoiDiemHe4(cthp.DiemTB) AS DiemHe4,
+        dbo.fn_QuyDoiDiemChu(cthp.DiemTB) AS DiemChu,
+        dbo.fn_TrangThaiDiemTB(CTHP.DiemTB) AS TrangThai
+      FROM 
+    (SELECT DISTINCT MaMH FROM ChiTietHocPhan WHERE MaSV = @MaSV)  Mondahoc
+    INNER JOIN MonHoc mh
+        ON Mondahoc.MaMH = mh.MaMH
     OUTER APPLY
     (
         SELECT TOP 1 *
         FROM ChiTietHocPhan cthp
         WHERE cthp.MaSV = @MaSV
           AND cthp.MaMH = mh.MaMH
-        ORDER BY dbo.fn_TinhDiemTrungBinh(cthp.DiemGK, cthp.DiemCK) DESC
+        ORDER BY cthp.DiemTB DESC
     ) AS cthp
 );
 
@@ -508,7 +575,7 @@ SELECT
     sv.NgaySinh,
     sv.NoiSinh,
     sv.GioiTinh,
-    ISNULL(drl.Diem, 0) AS DiemRenLuyen -- nếu chưa có điểm rèn luyện thì trả về 0
+    ISNULL(drl.Diem, 0) AS DiemRenLuyen 
 FROM SinhVien sv
 LEFT JOIN DiemRenLuyen drl ON sv.MaSV = drl.MaSV;
 GO
@@ -530,18 +597,16 @@ RETURN
         MH.TenMH,
         CTHP.DiemGK,
         CTHP.DiemCK,
-        dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK) AS DiemTB,
-        CASE 
-			WHEN CTHP.DiemGK IS NULL OR CTHP.DiemCK IS NULL THEN NULL
-            WHEN dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK) >= 5 THEN N'Đạt'
-            ELSE N'Không đạt'
-        END AS KetQua
+        CTHP. DiemTB,
+        dbo.fn_TrangThaiDiemTB(CTHP.DiemTB) AS KetQua
     FROM ChiTietHocPhan CTHP
     INNER JOIN SinhVien SV ON CTHP.MaSV = SV.MaSV
     INNER JOIN MonHoc MH ON CTHP.MaMH = MH.MaMH
-    WHERE CTHP.MaHocKyNamHoc = @MaHocKyNamHoc
+    WHERE CTHP.MaHocKyNamHoc = @MaHocKyNamHoc 
 );
 GO
+
+
 IF OBJECT_ID('dbo.trg_LogDangNhap', 'TR') IS NOT NULL
     DROP TRIGGER dbo.trg_LogDangNhap;
 GO
@@ -617,7 +682,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            SET @KetQua = N'Tài khoản không có quyền phù hợp!';
+            SET @KetQua = N'Tài khoản không có quyền này!';
             INSERT INTO LogDangNhap(TenDangNhap, KetQua) VALUES (@TenDangNhap, @KetQua);
             -- Reset thông tin đầu ra nếu không phù hợp quyền
             SET @RoleID = NULL;
@@ -655,12 +720,10 @@ BEGIN
 END;
 GO
 
--- Xóa thủ tục cũ nếu có
 IF OBJECT_ID('sp_XoaDangKyMonHoc', 'P') IS NOT NULL
     DROP PROCEDURE sp_XoaDangKyMonHoc;
 GO
 
--- Thủ tục xóa đăng ký môn học
 CREATE PROCEDURE sp_XoaDangKyMonHoc
     @MaSV VARCHAR(10),
     @MaLHP VARCHAR(20),
@@ -734,26 +797,11 @@ RETURN
 );
 GO
 
-IF OBJECT_ID('dbo.sp_UpdateGiangVienContact', 'P') IS NOT NULL
-    DROP PROCEDURE dbo.sp_UpdateGiangVienContact;
-GO
 
-CREATE PROCEDURE dbo.sp_UpdateGiangVienContact
-    @MaGV VARCHAR(10),
-    @Email VARCHAR(100),
-    @DienThoai VARCHAR(15)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    UPDATE GiangVien
-    SET Email = @Email,
-        DienThoai = @DienThoai
-    WHERE MaGV = @MaGV;
-END;
-GO
 IF OBJECT_ID('dbo.sp_TinhTBVaTinChiDat', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_TinhTBVaTinChiDat;
+
+
 GO
 
 CREATE PROCEDURE dbo.sp_TinhTBVaTinChiDat
@@ -763,13 +811,13 @@ BEGIN
     SET NOCOUNT ON;
 
     SELECT
-        AVG(dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK)) AS DiemTB_He10,
-        AVG(dbo.fn_QuyDoiDiemHe4(dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK))) AS DiemTB_He4,
+        AVG(CTHP.DiemTB) AS DiemTB_He10,
+        AVG(dbo.fn_QuyDoiDiemHe4(CTHP.DiemTB)) AS DiemTB_He4,
         SUM(MH.SoTinChi) AS TinChiDat
     FROM ChiTietHocPhan CTHP
     INNER JOIN MonHoc MH ON CTHP.MaMH = MH.MaMH
     WHERE CTHP.MaSV = @MaSV
-      AND dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK) >=5;
+      AND dbo.fn_TrangThaiDiemTB(DiemTB)  ='Đạt';
 END
 GO
 IF OBJECT_ID('dbo.sp_ThemCongThucTinhDiem', 'P') IS NOT NULL
@@ -791,10 +839,6 @@ IF OBJECT_ID('dbo.sp_XoaGiangVien', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_XoaGiangVien;
 GO
 
-IF OBJECT_ID('dbo.sp_XoaGiangVien', 'P') IS NOT NULL
-    DROP PROCEDURE dbo.sp_XoaGiangVien;
-GO
-
 CREATE PROCEDURE dbo.sp_XoaGiangVien
     @MaGV VARCHAR(10)
 AS
@@ -803,6 +847,14 @@ BEGIN
 
     BEGIN TRY
         BEGIN TRANSACTION;
+		  DELETE DKMH
+        FROM DangKyMonHoc DKMH
+        INNER JOIN LopHocPhan LHP ON DKMH.MaLHP = LHP.MaLHP
+        WHERE LHP.MaGV = @MaGV;
+		DELETE FROM LopHocPhan WHERE MaGV = @MaGV;
+
+
+        DELETE FROM TaiKhoan WHERE MaGV = @MaGV;
         DELETE FROM GiangVien WHERE MaGV = @MaGV;
 
         COMMIT TRANSACTION;
@@ -815,6 +867,8 @@ BEGIN
     END CATCH
 END
 GO
+
+
 IF OBJECT_ID('dbo.sp_ThemGiangVien', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_ThemGiangVien;
 GO
@@ -847,7 +901,8 @@ BEGIN
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION;
 
-        THROW;
+         DECLARE @ErrMsg NVARCHAR(4000) = ERROR_MESSAGE();
+         RAISERROR(@ErrMsg, 16, 1);
     END CATCH
 END
 GO
@@ -860,7 +915,9 @@ CREATE PROCEDURE dbo.sp_CapNhatGiangVien
     @HocVi NVARCHAR(50) = NULL,
     @Khoa NVARCHAR(50) = NULL,
     @Email NVARCHAR(100) = NULL,
-    @DienThoai NVARCHAR(15) = NULL
+    @DienThoai NVARCHAR(15) = NULL,
+	@TrangThai BIT 
+
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -873,7 +930,9 @@ BEGIN
             HocVi = @HocVi,
             Khoa = @Khoa,
             Email = @Email,
-            DienThoai = @DienThoai
+            DienThoai = @DienThoai,
+			TrangThai = @TrangThai
+
         WHERE MaGV = @MaGV;
 
         IF @@ROWCOUNT = 0
@@ -897,7 +956,7 @@ IF OBJECT_ID('dbo.sp_XoaSinhVien', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_XoaSinhVien;
 GO
 
-	CREATE PROCEDURE dbo.sp_XoaSinhVien
+CREATE PROCEDURE dbo.sp_XoaSinhVien
 		@MaSV VARCHAR(10)
 	AS
 	BEGIN
@@ -919,7 +978,9 @@ GO
 		END CATCH
 	END;
 	GO
-	IF OBJECT_ID('dbo.sp_ThemSinhVien', 'P') IS NOT NULL
+
+
+IF OBJECT_ID('dbo.sp_ThemSinhVien', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_ThemSinhVien;
 GO
 IF OBJECT_ID('dbo.sp_ThemSinhVien', 'P') IS NOT NULL
@@ -934,6 +995,7 @@ CREATE PROCEDURE dbo.sp_ThemSinhVien
     @NoiSinh NVARCHAR(100) = NULL,
     @GioiTinh NVARCHAR(10) = NULL,
     @CMND_CCCD VARCHAR(20) = NULL
+
 AS
 BEGIN
     SET NOCOUNT ON
@@ -955,7 +1017,9 @@ BEGIN
     BEGIN CATCH
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION
-        THROW
+	      DECLARE @ErrMsg NVARCHAR(4000) = ERROR_MESSAGE();
+ RAISERROR(@ErrMsg, 16, 1);
+
     END CATCH
 END
 GO
@@ -971,7 +1035,10 @@ CREATE PROCEDURE dbo.sp_CapNhatSinhVien
     @NgaySinh DATE = NULL,
     @NoiSinh NVARCHAR(100) = NULL,
     @GioiTinh NVARCHAR(10) = NULL,
-    @CMND_CCCD VARCHAR(20) = NULL
+    @CMND_CCCD VARCHAR(20) = NULL,
+	@TrangThai BIT 
+
+
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -985,7 +1052,8 @@ BEGIN
             NgaySinh = @NgaySinh,
             NoiSinh = @NoiSinh,
             GioiTinh = @GioiTinh,
-            CMND_CCCD = @CMND_CCCD
+            CMND_CCCD = @CMND_CCCD,
+			TrangThai = @TrangThai
         WHERE MaSV = @MaSV;
 
         IF @@ROWCOUNT = 0
@@ -1003,10 +1071,6 @@ BEGIN
     END CATCH
 END
 GO
--- Xóa thủ tục cũ nếu có
-IF OBJECT_ID('sp_TrungBinhMonHoc', 'P') IS NOT NULL
-    DROP PROCEDURE sp_TrungBinhMonHoc;
-GO
 
 IF OBJECT_ID('sp_TrungBinhMonHoc', 'P') IS NOT NULL
     DROP PROCEDURE sp_TrungBinhMonHoc;
@@ -1022,33 +1086,13 @@ BEGIN
         MH.MaMH,
         MH.TenMH,
 		COUNT(*) AS SoSV_Tong,
-        -- Điểm trung bình chỉ tính sinh viên đã có điểm
-        ROUND(AVG(CASE 
-                    WHEN CTHP.DiemGK IS NOT NULL AND CTHP.DiemCK IS NOT NULL
-                    THEN dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK)
-                 END), 2) AS DiemTB,
+        ROUND(AVG(CTHP.DiemTB), 2) AS DiemTB,
+		SUM(CASE WHEN dbo.fn_TrangThaiDiemTB(CTHP.DiemTB) = 'Đạt' THEN 1 ELSE 0 END) AS SoSV_Dat,
 
-       
 
-        -- Số sinh viên đạt
-        SUM(CASE 
-                WHEN CTHP.DiemGK IS NOT NULL AND CTHP.DiemCK IS NOT NULL
-                     AND dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK) >= 5 
-                THEN 1 ELSE 0 
-            END) AS SoSV_Dat,
+       SUM(CASE WHEN dbo.fn_TrangThaiDiemTB(CTHP.DiemTB) = 'Không đạt' THEN 1 ELSE 0 END)  AS SoSV_Rot,
+        SUM(CASE  WHEN CTHP.DiemTB Is NULL THEN 1 ELSE 0 END) AS SoSV_Chuacham
 
-        -- Số sinh viên rớt
-        SUM(CASE 
-                WHEN CTHP.DiemGK IS NOT NULL AND CTHP.DiemCK IS NOT NULL
-                     AND dbo.fn_TinhDiemTrungBinh(CTHP.DiemGK, CTHP.DiemCK) < 5 
-                THEN 1 ELSE 0 
-            END) AS SoSV_Rot,
-			 -- Số sinh viên chưa chấm
-        SUM(CASE 
-                WHEN CTHP.DiemGK IS NULL OR CTHP.DiemCK IS NULL THEN 1 ELSE 0 
-            END) AS SoSV_Chuacham
-
-        -- Tổng số sinh viên đăng ký môn
        
     FROM ChiTietHocPhan CTHP
     INNER JOIN MonHoc MH ON CTHP.MaMH = MH.MaMH
@@ -1057,5 +1101,4 @@ BEGIN
     ORDER BY DiemTB DESC;
 END
 GO
-------------------------------------------------------------------------------------------------------------------------------------------
 

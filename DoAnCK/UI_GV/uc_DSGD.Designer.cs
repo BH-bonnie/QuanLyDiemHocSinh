@@ -151,7 +151,6 @@
             this.Controls.Add(this.splitContainerControl1);
             this.Name = "uc_DSGD";
             this.Size = new System.Drawing.Size(856, 516);
-            this.Load += new System.EventHandler(this.uc_DSGD_Load);
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSach)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSach)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1.Panel1)).EndInit();

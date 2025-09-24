@@ -51,6 +51,7 @@
             this.CMND_CCCD = new DevExpress.XtraGrid.Columns.GridColumn();
             this.LopSV = new DevExpress.XtraGrid.Columns.GridColumn();
             this.lkLop = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
+            this.TrangThai = new DevExpress.XtraGrid.Columns.GridColumn();
             this.bar1 = new DevExpress.XtraBars.Bar();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSachSV)).BeginInit();
@@ -139,43 +140,49 @@
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barManager1;
-            this.barDockControlTop.Size = new System.Drawing.Size(941, 37);
+            this.barDockControlTop.Margin = new System.Windows.Forms.Padding(2);
+            this.barDockControlTop.Size = new System.Drawing.Size(706, 30);
             // 
             // barDockControlBottom
             // 
             this.barDockControlBottom.CausesValidation = false;
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.barDockControlBottom.Location = new System.Drawing.Point(0, 565);
+            this.barDockControlBottom.Location = new System.Drawing.Point(0, 459);
             this.barDockControlBottom.Manager = this.barManager1;
-            this.barDockControlBottom.Size = new System.Drawing.Size(941, 0);
+            this.barDockControlBottom.Margin = new System.Windows.Forms.Padding(2);
+            this.barDockControlBottom.Size = new System.Drawing.Size(706, 0);
             // 
             // barDockControlLeft
             // 
             this.barDockControlLeft.CausesValidation = false;
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
-            this.barDockControlLeft.Location = new System.Drawing.Point(0, 37);
+            this.barDockControlLeft.Location = new System.Drawing.Point(0, 30);
             this.barDockControlLeft.Manager = this.barManager1;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 528);
+            this.barDockControlLeft.Margin = new System.Windows.Forms.Padding(2);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 429);
             // 
             // barDockControlRight
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(941, 37);
+            this.barDockControlRight.Location = new System.Drawing.Point(706, 30);
             this.barDockControlRight.Manager = this.barManager1;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 528);
+            this.barDockControlRight.Margin = new System.Windows.Forms.Padding(2);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 429);
             // 
             // gcDanhSachSV
             // 
             this.gcDanhSachSV.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gcDanhSachSV.Location = new System.Drawing.Point(0, 37);
+            this.gcDanhSachSV.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2);
+            this.gcDanhSachSV.Location = new System.Drawing.Point(0, 30);
             this.gcDanhSachSV.MainView = this.gvDanhSachSV;
+            this.gcDanhSachSV.Margin = new System.Windows.Forms.Padding(2);
             this.gcDanhSachSV.MenuManager = this.barManager1;
             this.gcDanhSachSV.Name = "gcDanhSachSV";
             this.gcDanhSachSV.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.ckGioiTinh,
             this.lkLop});
-            this.gcDanhSachSV.Size = new System.Drawing.Size(941, 528);
+            this.gcDanhSachSV.Size = new System.Drawing.Size(706, 429);
             this.gcDanhSachSV.TabIndex = 9;
             this.gcDanhSachSV.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gvDanhSachSV});
@@ -189,7 +196,9 @@
             this.NoiSinh,
             this.GioiTinh,
             this.CMND_CCCD,
-            this.LopSV});
+            this.LopSV,
+            this.TrangThai});
+            this.gvDanhSachSV.DetailHeight = 284;
             this.gvDanhSachSV.GridControl = this.gcDanhSachSV;
             this.gvDanhSachSV.Name = "gvDanhSachSV";
             this.gvDanhSachSV.OptionsView.ShowGroupPanel = false;
@@ -199,52 +208,52 @@
             // 
             this.MaSV.Caption = "MSSV";
             this.MaSV.FieldName = "MaSV";
-            this.MaSV.MinWidth = 25;
+            this.MaSV.MinWidth = 19;
             this.MaSV.Name = "MaSV";
             this.MaSV.Visible = true;
             this.MaSV.VisibleIndex = 0;
-            this.MaSV.Width = 93;
+            this.MaSV.Width = 70;
             // 
             // HoTen
             // 
             this.HoTen.Caption = "Họ tên";
             this.HoTen.FieldName = "HoTen";
-            this.HoTen.MinWidth = 25;
+            this.HoTen.MinWidth = 19;
             this.HoTen.Name = "HoTen";
             this.HoTen.Visible = true;
             this.HoTen.VisibleIndex = 1;
-            this.HoTen.Width = 332;
+            this.HoTen.Width = 249;
             // 
             // NgaySinh
             // 
             this.NgaySinh.Caption = "Ngày sinh";
             this.NgaySinh.FieldName = "NgaySinh";
-            this.NgaySinh.MinWidth = 25;
+            this.NgaySinh.MinWidth = 19;
             this.NgaySinh.Name = "NgaySinh";
             this.NgaySinh.Visible = true;
             this.NgaySinh.VisibleIndex = 2;
-            this.NgaySinh.Width = 84;
+            this.NgaySinh.Width = 63;
             // 
             // NoiSinh
             // 
             this.NoiSinh.Caption = "Nơi Sinh";
             this.NoiSinh.FieldName = "NoiSinh";
-            this.NoiSinh.MinWidth = 25;
+            this.NoiSinh.MinWidth = 19;
             this.NoiSinh.Name = "NoiSinh";
             this.NoiSinh.Visible = true;
             this.NoiSinh.VisibleIndex = 3;
-            this.NoiSinh.Width = 91;
+            this.NoiSinh.Width = 68;
             // 
             // GioiTinh
             // 
             this.GioiTinh.Caption = "Nữ";
             this.GioiTinh.ColumnEdit = this.ckGioiTinh;
             this.GioiTinh.FieldName = "GioiTinh";
-            this.GioiTinh.MinWidth = 25;
+            this.GioiTinh.MinWidth = 19;
             this.GioiTinh.Name = "GioiTinh";
             this.GioiTinh.Visible = true;
             this.GioiTinh.VisibleIndex = 4;
-            this.GioiTinh.Width = 66;
+            this.GioiTinh.Width = 49;
             // 
             // ckGioiTinh
             // 
@@ -255,22 +264,22 @@
             // 
             this.CMND_CCCD.Caption = "CMND/CCCD";
             this.CMND_CCCD.FieldName = "CMND_CCCD";
-            this.CMND_CCCD.MinWidth = 25;
+            this.CMND_CCCD.MinWidth = 19;
             this.CMND_CCCD.Name = "CMND_CCCD";
             this.CMND_CCCD.Visible = true;
             this.CMND_CCCD.VisibleIndex = 5;
-            this.CMND_CCCD.Width = 150;
+            this.CMND_CCCD.Width = 112;
             // 
             // LopSV
             // 
             this.LopSV.Caption = "Lớp ";
             this.LopSV.ColumnEdit = this.lkLop;
             this.LopSV.FieldName = "LopSV";
-            this.LopSV.MinWidth = 25;
+            this.LopSV.MinWidth = 19;
             this.LopSV.Name = "LopSV";
             this.LopSV.Visible = true;
             this.LopSV.VisibleIndex = 6;
-            this.LopSV.Width = 95;
+            this.LopSV.Width = 71;
             // 
             // lkLop
             // 
@@ -278,9 +287,18 @@
             this.lkLop.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.lkLop.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] {
-            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("TenKhoa", "Khoa", 40, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default),
-            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("LopSV", "Lớp")});
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("TenKhoa", "Khoa", 30, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default),
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("LopSV", "Lớp", 15, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default)});
             this.lkLop.Name = "lkLop";
+            // 
+            // TrangThai
+            // 
+            this.TrangThai.Caption = "Ngừng hoạt động";
+            this.TrangThai.FieldName = "TrangThai";
+            this.TrangThai.Name = "TrangThai";
+            this.TrangThai.Visible = true;
+            this.TrangThai.VisibleIndex = 7;
+            this.TrangThai.Width = 56;
             // 
             // bar1
             // 
@@ -298,16 +316,16 @@
             // 
             // uc_QLSV
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.gcDanhSachSV);
             this.Controls.Add(this.barDockControlLeft);
             this.Controls.Add(this.barDockControlRight);
             this.Controls.Add(this.barDockControlBottom);
             this.Controls.Add(this.barDockControlTop);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "uc_QLSV";
-            this.Size = new System.Drawing.Size(941, 565);
-            this.Load += new System.EventHandler(this.uc_QLSV_Load);
+            this.Size = new System.Drawing.Size(706, 459);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSachSV)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSachSV)).EndInit();
@@ -343,5 +361,6 @@
         private DevExpress.XtraBars.BarButtonItem btnHuy;
         private DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit ckGioiTinh;
         private DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit lkLop;
+        private DevExpress.XtraGrid.Columns.GridColumn TrangThai;
     }
 }

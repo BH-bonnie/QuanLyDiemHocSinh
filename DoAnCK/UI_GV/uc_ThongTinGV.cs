@@ -11,7 +11,7 @@ using DevExpress.XtraEditors;
 
 namespace DoAnCK.UI_GV
 {
-    public partial class uc_ThongTinGV : UserControl
+    public partial class uc_ThongTinGV : UserControl, IRefreshable
     {
         private string MaGV;
         private string connStr;
@@ -29,12 +29,12 @@ namespace DoAnCK.UI_GV
             connStr = connectionString;
             MaGV = maGV;
         }
-        private void uc_ThongTinGV_Load(object sender, EventArgs e)
+        public void RefreshData()
         {
             LoadThongTinGiangVien();
             btnLuu.Enabled = false;
             btnSua.Enabled = true;
-            btnHuy.Enabled = false;
+            btnHuy.Enabled = false; 
 
 
         }
@@ -96,7 +96,8 @@ namespace DoAnCK.UI_GV
                                     @HocVi = '{txtHocvi.Text}', 
                                     @Khoa = '{txtKhoa.Text}', 
                                     @Email = '{txtEmail.Text}',     
-                                    @DienThoai = '{txtSDT.Text}'";
+                                    @DienThoai = '{txtSDT.Text}',
+                                    @TrangThai = 1";
 
                 frmGiangVien.executeQuery(query);
 

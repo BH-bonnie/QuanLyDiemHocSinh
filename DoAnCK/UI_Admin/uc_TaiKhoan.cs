@@ -9,7 +9,7 @@ using DevExpress.XtraLayout.Customization;
 
 namespace DoAnCK.UI_Admin
 {
-    public partial class uc_TaiKhoan : UserControl
+    public partial class uc_TaiKhoan : UserControl, IRefreshable
     {
         string connStr = frmAdmin.ConnString;
         private DataTable dtTaiKhoan;
@@ -21,7 +21,7 @@ namespace DoAnCK.UI_Admin
             InitializeComponent();
         }
 
-        private void uc_TaiKhoan_Load(object sender, EventArgs e)
+        public void RefreshData()
         {
             btnLuu.Enabled = false;
             btnHuy.Enabled = false;
@@ -37,6 +37,10 @@ namespace DoAnCK.UI_Admin
             loadGV();
             loadRole();
             loadTrangThai();
+            gvDanhSach.RefreshData();
+
+
+        
         }
 
         private void LoadData()

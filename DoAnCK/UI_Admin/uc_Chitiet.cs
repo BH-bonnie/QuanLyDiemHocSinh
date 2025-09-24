@@ -12,7 +12,7 @@ using DevExpress.XtraEditors.Mask.Design;
 
 namespace DoAnCK.UI_Admin
 {
-    public partial class uc_Chitiet : UserControl
+    public partial class uc_Chitiet : UserControl, IRefreshable
     {
 
         public uc_Chitiet()
@@ -30,12 +30,15 @@ namespace DoAnCK.UI_Admin
             LoadTreeView();
         }
 
-        private void uc_Chitiet_Load(object sender, EventArgs e)
+        public void RefreshData()
         {
+
             isLoading = true;
             LoadLopSV();
             isLoading = false;
             LoadTreeView();
+            gvDanhSach.RefreshData();   
+
         }
 
         private void LoadLopSV()
@@ -131,7 +134,7 @@ namespace DoAnCK.UI_Admin
                 lblGioiTinh.Text = row["GioiTinh"].ToString();
             }
 
-            string query = $"SELECT * FROM dbo.fn_ChiTietDiemSV('{maSV}')";
+            string query = $"SELECT * FROM fn_ChiTietDiemSV('{maSV}')";
             DataTable dtChiTiet = frmAdmin.getData(query);
 
             if (isLoading || cbbMa.SelectedValue == null) return;

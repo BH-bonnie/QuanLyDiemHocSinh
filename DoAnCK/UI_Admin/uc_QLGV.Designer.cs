@@ -53,10 +53,11 @@
             this.HoTenGV = new DevExpress.XtraGrid.Columns.GridColumn();
             this.HocVi = new DevExpress.XtraGrid.Columns.GridColumn();
             this.Khoa = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.lkKhoa = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
             this.Email = new DevExpress.XtraGrid.Columns.GridColumn();
             this.DienThoai = new DevExpress.XtraGrid.Columns.GridColumn();
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
-            this.lkKhoa = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
+            this.TrangThai = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSachSV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSachSV)).BeginInit();
@@ -213,42 +214,48 @@
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barManager1;
-            this.barDockControlTop.Size = new System.Drawing.Size(856, 37);
+            this.barDockControlTop.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.barDockControlTop.Size = new System.Drawing.Size(642, 30);
             // 
             // barDockControlBottom
             // 
             this.barDockControlBottom.CausesValidation = false;
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.barDockControlBottom.Location = new System.Drawing.Point(0, 516);
+            this.barDockControlBottom.Location = new System.Drawing.Point(0, 419);
             this.barDockControlBottom.Manager = this.barManager1;
-            this.barDockControlBottom.Size = new System.Drawing.Size(856, 0);
+            this.barDockControlBottom.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.barDockControlBottom.Size = new System.Drawing.Size(642, 0);
             // 
             // barDockControlLeft
             // 
             this.barDockControlLeft.CausesValidation = false;
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
-            this.barDockControlLeft.Location = new System.Drawing.Point(0, 37);
+            this.barDockControlLeft.Location = new System.Drawing.Point(0, 30);
             this.barDockControlLeft.Manager = this.barManager1;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 479);
+            this.barDockControlLeft.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 389);
             // 
             // barDockControlRight
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(856, 37);
+            this.barDockControlRight.Location = new System.Drawing.Point(642, 30);
             this.barDockControlRight.Manager = this.barManager1;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 479);
+            this.barDockControlRight.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 389);
             // 
             // gcDanhSachSV
             // 
             this.gcDanhSachSV.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gcDanhSachSV.Location = new System.Drawing.Point(0, 37);
+            this.gcDanhSachSV.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gcDanhSachSV.Location = new System.Drawing.Point(0, 30);
             this.gcDanhSachSV.MainView = this.gvDanhSachSV;
+            this.gcDanhSachSV.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.gcDanhSachSV.MenuManager = this.barManager1;
             this.gcDanhSachSV.Name = "gcDanhSachSV";
             this.gcDanhSachSV.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.lkKhoa});
-            this.gcDanhSachSV.Size = new System.Drawing.Size(856, 479);
+            this.gcDanhSachSV.Size = new System.Drawing.Size(642, 389);
             this.gcDanhSachSV.TabIndex = 10;
             this.gcDanhSachSV.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gvDanhSachSV});
@@ -261,7 +268,9 @@
             this.HocVi,
             this.Khoa,
             this.Email,
-            this.DienThoai});
+            this.DienThoai,
+            this.TrangThai});
+            this.gvDanhSachSV.DetailHeight = 284;
             this.gvDanhSachSV.GridControl = this.gcDanhSachSV;
             this.gvDanhSachSV.Name = "gvDanhSachSV";
             this.gvDanhSachSV.OptionsView.ShowGroupPanel = false;
@@ -271,68 +280,41 @@
             // 
             this.MaGV.Caption = "MaGV";
             this.MaGV.FieldName = "MaGV";
-            this.MaGV.MinWidth = 25;
+            this.MaGV.MinWidth = 19;
             this.MaGV.Name = "MaGV";
             this.MaGV.Visible = true;
             this.MaGV.VisibleIndex = 0;
-            this.MaGV.Width = 85;
+            this.MaGV.Width = 64;
             // 
             // HoTenGV
             // 
             this.HoTenGV.Caption = "Họ tên";
             this.HoTenGV.FieldName = "HoTenGV";
-            this.HoTenGV.MinWidth = 25;
+            this.HoTenGV.MinWidth = 19;
             this.HoTenGV.Name = "HoTenGV";
             this.HoTenGV.Visible = true;
             this.HoTenGV.VisibleIndex = 1;
-            this.HoTenGV.Width = 269;
+            this.HoTenGV.Width = 202;
             // 
             // HocVi
             // 
             this.HocVi.Caption = "Học vị";
             this.HocVi.FieldName = "HocVi";
-            this.HocVi.MinWidth = 25;
+            this.HocVi.MinWidth = 19;
             this.HocVi.Name = "HocVi";
             this.HocVi.Visible = true;
             this.HocVi.VisibleIndex = 2;
-            this.HocVi.Width = 100;
             // 
             // Khoa
             // 
             this.Khoa.Caption = "Khoa";
             this.Khoa.ColumnEdit = this.lkKhoa;
             this.Khoa.FieldName = "Khoa";
-            this.Khoa.MinWidth = 25;
+            this.Khoa.MinWidth = 19;
             this.Khoa.Name = "Khoa";
             this.Khoa.Visible = true;
             this.Khoa.VisibleIndex = 3;
-            this.Khoa.Width = 183;
-            // 
-            // Email
-            // 
-            this.Email.Caption = "Email";
-            this.Email.FieldName = "Email";
-            this.Email.MinWidth = 25;
-            this.Email.Name = "Email";
-            this.Email.Visible = true;
-            this.Email.VisibleIndex = 4;
-            this.Email.Width = 183;
-            // 
-            // DienThoai
-            // 
-            this.DienThoai.Caption = "SDT";
-            this.DienThoai.FieldName = "DienThoai";
-            this.DienThoai.MinWidth = 25;
-            this.DienThoai.Name = "DienThoai";
-            this.DienThoai.Visible = true;
-            this.DienThoai.VisibleIndex = 5;
-            this.DienThoai.Width = 130;
-            // 
-            // barButtonItem1
-            // 
-            this.barButtonItem1.Caption = "Sửa";
-            this.barButtonItem1.Id = 6;
-            this.barButtonItem1.Name = "barButtonItem1";
+            this.Khoa.Width = 137;
             // 
             // lkKhoa
             // 
@@ -340,22 +322,57 @@
             this.lkKhoa.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.lkKhoa.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] {
-            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("MaKhoa", "Mã khoa"),
-            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("TenKhoa", "Tên khoa")});
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("MaKhoa", "Mã khoa", 15, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default),
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("TenKhoa", "Tên khoa", 15, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default)});
             this.lkKhoa.Name = "lkKhoa";
+            // 
+            // Email
+            // 
+            this.Email.Caption = "Email";
+            this.Email.FieldName = "Email";
+            this.Email.MinWidth = 19;
+            this.Email.Name = "Email";
+            this.Email.Visible = true;
+            this.Email.VisibleIndex = 4;
+            this.Email.Width = 137;
+            // 
+            // DienThoai
+            // 
+            this.DienThoai.Caption = "SDT";
+            this.DienThoai.FieldName = "DienThoai";
+            this.DienThoai.MinWidth = 19;
+            this.DienThoai.Name = "DienThoai";
+            this.DienThoai.Visible = true;
+            this.DienThoai.VisibleIndex = 5;
+            this.DienThoai.Width = 97;
+            // 
+            // barButtonItem1
+            // 
+            this.barButtonItem1.Caption = "Sửa";
+            this.barButtonItem1.Id = 6;
+            this.barButtonItem1.Name = "barButtonItem1";
+            // 
+            // TrangThai
+            // 
+            this.TrangThai.Caption = "Ngừng hoạt động";
+            this.TrangThai.FieldName = "TrangThai";
+            this.TrangThai.Name = "TrangThai";
+            this.TrangThai.Visible = true;
+            this.TrangThai.VisibleIndex = 6;
+            this.TrangThai.Width = 56;
             // 
             // uc_QLGV
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.gcDanhSachSV);
             this.Controls.Add(this.barDockControlLeft);
             this.Controls.Add(this.barDockControlRight);
             this.Controls.Add(this.barDockControlBottom);
             this.Controls.Add(this.barDockControlTop);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "uc_QLGV";
-            this.Size = new System.Drawing.Size(856, 516);
-            this.Load += new System.EventHandler(this.uc_QLGV_Load);
+            this.Size = new System.Drawing.Size(642, 419);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSachSV)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSachSV)).EndInit();
@@ -394,5 +411,6 @@
         private DevExpress.XtraBars.BarButtonItem btnSua;
         private DevExpress.XtraBars.BarButtonItem btnHuy;
         private DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit lkKhoa;
+        private DevExpress.XtraGrid.Columns.GridColumn TrangThai;
     }
 }

@@ -12,7 +12,7 @@ using System.Data.SqlClient;
 
 namespace DoAnCK.UI_Admin
 {
-    public partial class uc_QLMH: UserControl
+    public partial class uc_QLMH: UserControl, IRefreshable
     {
         string connStr = frmAdmin.ConnString;
         private DataTable dt;
@@ -22,11 +22,10 @@ namespace DoAnCK.UI_Admin
             InitializeComponent();
         }
 
-        private void uc_QLMH_Load(object sender, EventArgs e)
+        public void RefreshData()
         {
-            using (var conn = new SqlConnection(connStr))
-            {
-                conn.Open();
+
+            
                 dt = frmAdmin.getData("SELECT * FROM v_MonHoc;");
                 if (dt != null)
                 {
@@ -37,8 +36,13 @@ namespace DoAnCK.UI_Admin
                     gvDanhSachSV.OptionsBehavior.Editable = false;
 
                 }
-            }
+            gvDanhSachSV.RefreshData();
+
+
         }
+
+          
+        
 
       
 

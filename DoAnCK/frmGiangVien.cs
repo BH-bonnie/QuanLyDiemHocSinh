@@ -1,4 +1,5 @@
 ﻿using DevExpress.XtraBars;
+using DevExpress.XtraBars.Navigation;
 using DoAnCK.UI_GV;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace DoAnCK {
+  
     public partial class frmGiangVien : DevExpress.XtraBars.FluentDesignSystem.FluentDesignForm
     {
         public static string ConnString { get; private set; }
@@ -57,53 +59,54 @@ namespace DoAnCK {
                 }
             }
         }
+        private void ShowControl(UserControl uc, AccordionControlElement btn)
+        {
+            if (!mainContainer.Controls.Contains(uc))
+            {
+                uc.Dock = DockStyle.Fill;
+                uc.AutoSize = true;
+                mainContainer.Controls.Add(uc);
+            }
+
+            uc.BringToFront();
+            lblTieude.Caption = btn.Text;
+
+            if (uc is IRefreshable refreshable)
+            {
+                refreshable.RefreshData();
+            }
+        }
+
 
         private void btnDSGD_Click(object sender, EventArgs e)
         {
-            if (ucDSGD == null)
+           if(ucDSGD == null)
             {
-                ucDSGD =  new uc_DSGD(FormMain.ConnString, MaGV);
-                ucDSGD.Dock = DockStyle.Fill;
-                ucDSGD.AutoSize = true;
-                mainContainer.Controls.Add(ucDSGD);
-                ucDSGD.BringToFront();
+                ucDSGD = new uc_DSGD(FormMain.ConnString, MaGV);
+              
             }
-            else
-            {
-                ucDSGD.BringToFront();
-            }
+            ShowControl(ucDSGD, btnDSGD);
+
         }
 
         private void btnDSSV_Click(object sender, EventArgs e)
         {
-            if (ucDSSV == null)
+            if(ucDSSV == null)
             {
                 ucDSSV = new uc_DSSV(FormMain.ConnString, MaGV);
-                ucDSSV.Dock = DockStyle.Fill;
-                ucDSSV.AutoSize = true;
-                mainContainer.Controls.Add(ucDSSV);
-                ucDSSV.BringToFront();
             }
-            else
-            {
-                ucDSSV.BringToFront();
-            }
+            ShowControl(ucDSSV, btnDSSV);
+
         }
 
         private void btnQLD_Click(object sender, EventArgs e)
         {
-            if (ucQLD == null)
+           if(ucQLD == null)
             {
                 ucQLD = new uc_QLDiem(FormMain.ConnString, MaGV);
-                ucQLD.Dock = DockStyle.Fill;
-                ucQLD.AutoSize = true;
-                mainContainer.Controls.Add(ucQLD);
-                ucQLD.BringToFront();
             }
-            else
-            {
-                ucQLD.BringToFront();
-            }
+            ShowControl(ucQLD, btnQLD);
+
         }
 
         private void btnThongTin_Click(object sender, EventArgs e)
@@ -111,16 +114,8 @@ namespace DoAnCK {
             if (ucTTGV == null)
             {
                 ucTTGV = new uc_ThongTinGV(FormMain.ConnString, MaGV);
-                ucTTGV.Dock = DockStyle.Fill;
-                ucTTGV.AutoSize = true;
-                mainContainer.Controls.Add(ucTTGV);
-                ucTTGV.BringToFront();
             }
-            else
-            {
-                ucTTGV.BringToFront();
-            }
-            lblTieude.Caption = btnThongTin.Text;
+            ShowControl(ucTTGV, btnThongTin);
         }
 
         private void btnDangXuat_Click(object sender, EventArgs e)

@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 
 namespace DoAnCK.UI_GV
 {
-    public partial class uc_DSGD : UserControl
+    public partial class uc_DSGD : UserControl, IRefreshable
     {
         private string MaGV;
         private string connStr;
@@ -30,9 +30,8 @@ namespace DoAnCK.UI_GV
             connStr = connectionString;
             MaGV = maGV;
         }
-        private void uc_DSGD_Load(object sender, EventArgs e)
+        public void RefreshData()
         {
-
             string queryNamHoc = "SELECT MaHocKyNamHoc, HocKy, NamHoc FROM HocKyNamHoc ORDER BY MaHocKyNamHoc DESC";
             DataTable dtNamHoc = frmGiangVien.getData(queryNamHoc);
 
@@ -59,7 +58,12 @@ namespace DoAnCK.UI_GV
             }
             gvDanhSach.OptionsBehavior.Editable = false;
 
+            gvDanhSach.RefreshData();
+
+
         }
+       
+        
 
         private void cbbNamHoc_SelectedIndexChanged(object sender, EventArgs e)
         {

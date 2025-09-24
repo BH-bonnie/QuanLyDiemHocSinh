@@ -361,7 +361,6 @@
             this.Controls.Add(this.barDockControlTop);
             this.Name = "uc_QLDiem";
             this.Size = new System.Drawing.Size(856, 516);
-            this.Load += new System.EventHandler(this.uc_QLDiem_Load);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1.Panel1)).EndInit();
             this.splitContainerControl1.Panel1.ResumeLayout(false);

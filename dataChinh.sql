@@ -3,10 +3,10 @@
 ('09', N'Khoa Kinh tế'),
 ('12', N'Khoa Ngoại ngữ');
 
-INSERT INTO Lop(LopSV,TenLop,MaKhoa) VALUES
-('231101A', N'Công nghệ thông tin', '05'),
-('231101B', N'Công nghệ thông tin', '05'),
-('23131BE3', N'Ngôn ngữ Anh', '12');
+INSERT INTO Lop(LopSV,MaKhoa) VALUES
+('231101A', '05'),
+('231101B', '05'),
+('23131BE3', '12');
 INSERT INTO SINHVIEN(MaSV, HoTen, GioiTinh, NgaySinh, LopSV) VALUES
 ('23131177', N'Trần Duy Anh', 'Nam', '2005-11-25', '23131BE3'),
 ('23110178', N'Huỳnh Hoài Bảo', 'Nam', '2005-11-15', '231101B'),
@@ -579,16 +579,6 @@ INSERT INTO ChiTietHocPhan (MaSV, MaMH, MaHocKyNamHoc, DiemGK, DiemCK) VALUES
 ('23131372', 'PHYS130902', 3, 8.3, 4.1),
 ('23131372', 'INPR140285', 3, 7.1, 1.2);
 
-
-
-
-
-INSERT INTO TaiKhoan (TenDangNhap, MatKhau, Quyen, MaGV)
-VALUES
-(N'admin', N'123', N'Admin', NULL),        
-(N'gv001', N'123', N'GiangVien', '2002'),
-(N'gv002', N'123', N'GiangVien', '1990'),
-(N'gv003', N'123', N'GiangVien', '1993');
 
 
 

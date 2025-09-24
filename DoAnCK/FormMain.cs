@@ -12,6 +12,10 @@ using System.Windows.Forms;
 
 namespace DoAnCK
 {
+    public interface IRefreshable
+    {
+        void RefreshData();
+    }
     public partial class FormMain : Form
     {
         public static string ConnString { get; private set; }

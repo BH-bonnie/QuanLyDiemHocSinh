@@ -120,7 +120,6 @@
             this.Controls.Add(this.label1);
             this.Name = "uc_CT";
             this.Size = new System.Drawing.Size(856, 516);
-            this.Load += new System.EventHandler(this.uc_CT_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

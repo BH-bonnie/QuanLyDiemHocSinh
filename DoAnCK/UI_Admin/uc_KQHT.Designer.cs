@@ -354,7 +354,6 @@
             this.Controls.Add(this.barDockControlTop);
             this.Name = "uc_KQHT";
             this.Size = new System.Drawing.Size(856, 516);
-            this.Load += new System.EventHandler(this.uc_KQHT_Load);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSachSV)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSachSV)).EndInit();

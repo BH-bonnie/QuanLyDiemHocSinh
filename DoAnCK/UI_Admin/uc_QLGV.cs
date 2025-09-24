@@ -12,7 +12,7 @@ using System.Data.SqlClient;
 
 namespace DoAnCK.UI_Admin
 {
-    public partial class uc_QLGV : UserControl
+    public partial class uc_QLGV : UserControl, IRefreshable
     {
         string connStr = frmAdmin.ConnString;
         private DataTable dtGiangVien;
@@ -23,7 +23,7 @@ namespace DoAnCK.UI_Admin
             InitializeComponent();
         }
 
-        private void uc_QLGV_Load(object sender, EventArgs e)
+        public void RefreshData()
         {
             btnLuu.Enabled = false;
             btnHuy.Enabled = false;
@@ -31,10 +31,8 @@ namespace DoAnCK.UI_Admin
             isAdding = false;
             gvDanhSachSV.OptionsBehavior.Editable = false;
             btnThem.Enabled = true;
-            using (var conn = new SqlConnection(connStr))
-            {
-                conn.Open();
-                dtGiangVien = frmAdmin.getData("SELECT * FROM v_GiangVien_Detail;");
+          
+             dtGiangVien = frmAdmin.getData("SELECT * FROM v_GiangVien_Detail;");
                 if (dtGiangVien != null)
                 {
                     gcDanhSachSV.DataSource = dtGiangVien;
@@ -44,7 +42,10 @@ namespace DoAnCK.UI_Admin
 
                 }
                 loadKhoa();
-            }
+                gvDanhSachSV.RefreshData();  
+
+
+            
         }
         private void loadKhoa()
 
@@ -172,6 +173,8 @@ namespace DoAnCK.UI_Admin
                         string khoa = row["Khoa"]?.ToString() ?? "";
                         string email = row["Email"]?.ToString() ?? "";
                         string dienThoai = row["DienThoai"]?.ToString() ?? "";
+                        int trangThai = row["TrangThai"] != DBNull.Value ? Convert.ToInt32(row["TrangThai"]) : 0;
+
 
                         // Kiểm tra dữ liệu bắt buộc
                         if (string.IsNullOrWhiteSpace(maGV) || string.IsNullOrWhiteSpace(hoTenGV))
@@ -186,7 +189,9 @@ namespace DoAnCK.UI_Admin
                         @HocVi = {(string.IsNullOrWhiteSpace(hocVi) ? "NULL" : $"N'{hocVi}'")}, 
                         @Khoa = {(string.IsNullOrWhiteSpace(khoa) ? "NULL" : $"N'{khoa}'")}, 
                         @Email = {(string.IsNullOrWhiteSpace(email) ? "NULL" : $"N'{email}'")}, 
-                        @DienThoai = {(string.IsNullOrWhiteSpace(dienThoai) ? "NULL" : $"N'{dienThoai}'")}";
+                        @DienThoai = {(string.IsNullOrWhiteSpace(dienThoai) ? "NULL" : $"N'{dienThoai}'")},
+                        @TrangThai = { trangThai} ";
+
 
                         frmAdmin.executeQuery(query);
                     }
@@ -195,7 +200,7 @@ namespace DoAnCK.UI_Admin
                 }
 
                 dtGiangVien.AcceptChanges();
-                MessageBox.Show("Đã lưu thay đổi vào CSDL!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Đã lưu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 dtGiangVien = frmAdmin.getData("SELECT * FROM v_GiangVien_Detail;");
                 gcDanhSachSV.DataSource = dtGiangVien;

@@ -1,4 +1,6 @@
 ﻿using DevExpress.XtraBars;
+using DevExpress.XtraBars.Navigation;
+using DevExpress.XtraEditors;
 using DoAnCK.UI_Admin;
 using System;
 using System.Collections.Generic;
@@ -10,11 +12,15 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace DoAnCK {
-    public partial class frmAdmin : DevExpress.XtraBars.FluentDesignSystem.FluentDesignForm {
+namespace DoAnCK
+{
+ 
+    public partial class frmAdmin : DevExpress.XtraBars.FluentDesignSystem.FluentDesignForm
+    {
         public static string ConnString { get; private set; }
 
-        public frmAdmin() {
+        public frmAdmin()
+        {
 
             InitializeComponent();
             ConnString = FormMain.ConnString;
@@ -36,6 +42,7 @@ namespace DoAnCK {
         {
 
         }
+       
         public static DataTable getData(string query)
         {
             using (var conn = new SqlConnection(ConnString))
@@ -60,23 +67,34 @@ namespace DoAnCK {
                 }
             }
         }
+        private void ShowControl(UserControl uc, AccordionControlElement btn)
+        {
+            if (!mainContainer.Controls.Contains(uc))
+            {
+                uc.Dock = DockStyle.Fill;
+                uc.AutoSize = true;
+                mainContainer.Controls.Add(uc);
+            }
 
+            uc.BringToFront();
+            lblTieude.Caption = btn.Text;
+
+            if (uc is IRefreshable refreshable)
+            {
+                refreshable.RefreshData();
+            }
+        }
 
         private void btnQLSV_Click(object sender, EventArgs e)
         {
             if (ucQLSV == null)
             {
                 ucQLSV = new uc_QLSV();
-                ucQLSV.Dock = DockStyle.Fill;
-                ucQLSV.AutoSize = true; // tự động mở rộng theo nội dung
+            }
+            ShowControl(ucQLSV, btnQLSV);
 
-                mainContainer.Controls.Add(ucQLSV);
-                ucQLSV.BringToFront();
-            }
-            else
-            {
-                ucQLSV.BringToFront();
-            }
+
+
 
         }
 
@@ -85,15 +103,8 @@ namespace DoAnCK {
             if (ucQLGV == null)
             {
                 ucQLGV = new uc_QLGV();
-                ucQLGV.Dock = DockStyle.Fill;
-                ucQLGV.AutoSize = true; // tự động mở rộng theo nội dung
-                mainContainer.Controls.Add(ucQLGV);
-                ucQLGV.BringToFront();
             }
-            else
-            {
-                ucQLGV.BringToFront();
-            }
+            ShowControl(ucQLGV, btnQLGV);
 
         }
 
@@ -102,15 +113,11 @@ namespace DoAnCK {
             if (ucDSGD == null)
             {
                 ucDSGD = new uc_DSGD();
-                ucDSGD.Dock = DockStyle.Fill;
-                ucDSGD.AutoSize = true; // tự động mở rộng theo nội dung
-                mainContainer.Controls.Add(ucDSGD);
-                ucDSGD.BringToFront();
+
             }
-            else
-            {
-                ucDSGD.BringToFront();
-            }
+            ShowControl(ucDSGD, btnDSGD);
+
+
         }
 
         private void btnDSDK_Click(object sender, EventArgs e)
@@ -118,49 +125,33 @@ namespace DoAnCK {
             if (ucDSDK == null)
             {
                 ucDSDK = new uc_DSDK();
-                ucDSDK.Dock = DockStyle.Fill;
-                ucDSDK.AutoSize = true; // tự động mở rộng theo nội dung
-                mainContainer.Controls.Add(ucDSDK);
-                ucDSDK.BringToFront();
             }
-            else
-            {
-                ucDSDK.BringToFront();
-            }
+            ShowControl(ucDSDK, btnDSDK);
+
         }
 
         private void btnKQHT_Click(object sender, EventArgs e)
         {
-            if (ucKQHT == null)
+            if(ucKQHT == null)
             {
                 ucKQHT = new uc_KQHT();
-                ucKQHT.Dock = DockStyle.Fill;
-                ucKQHT.AutoSize = true; // tự động mở rộng theo nội dung
-                mainContainer.Controls.Add(ucKQHT);
-                ucKQHT.BringToFront();
             }
-            else
-            {
-                ucKQHT.BringToFront();
-            }
+            ShowControl(ucKQHT, btnKQHT);
+
+       
+
 
         }
 
         private void btnCT_Click(object sender, EventArgs e)
         {
-
             if (ucCT == null)
             {
                 ucCT = new uc_CT();
-                ucCT.Dock = DockStyle.Fill;
-                ucCT.AutoSize = true; // tự động mở rộng theo nội dung
-                mainContainer.Controls.Add(ucCT);
-                ucCT.BringToFront();
             }
-            else
-            {
-                ucCT.BringToFront();
-            }
+            ShowControl(ucCT, btnCT);
+
+
         }
 
         private void btnQLMH_Click(object sender, EventArgs e)
@@ -168,15 +159,8 @@ namespace DoAnCK {
             if (ucQLMH == null)
             {
                 ucQLMH = new uc_QLMH();
-                ucQLMH.Dock = DockStyle.Fill;
-                ucQLMH.AutoSize = true; // tự động mở rộng theo nội dung
-                mainContainer.Controls.Add(ucQLMH);
-                ucQLMH.BringToFront();
             }
-            else
-            {
-                ucQLMH.BringToFront();
-            }
+            ShowControl(ucQLMH, btnQLMH);
 
         }
 
@@ -185,17 +169,24 @@ namespace DoAnCK {
             if (ucChitiet == null)
             {
                 ucChitiet = new uc_Chitiet();
-                ucChitiet.Dock = DockStyle.Fill;
-                ucChitiet.AutoSize = true; // tự động mở rộng theo nội dung
-                mainContainer.Controls.Add(ucChitiet);
-                ucChitiet.BringToFront();
             }
-            else
-            {
-                ucChitiet.BringToFront();
-            }
-        }
+            ShowControl(ucChitiet, btnChiTiet);
 
+        }
+        private void btnTK_Click(object sender, EventArgs e)
+        {
+            if (ucTK == null)
+            {
+                ucTK = new uc_TaiKhoan();
+            }
+            ShowControl(ucTK, btnTK);
+
+
+        }
+        private void btnLichsu_Click(object sender, EventArgs e)
+        {
+
+        }
         private void btnDangXuat_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show(
@@ -214,20 +205,8 @@ namespace DoAnCK {
             }
         }
 
-        private void btnTK_Click(object sender, EventArgs e)
-        {
-            if (ucTK == null)
-            {
-                ucTK = new uc_TaiKhoan();
-                ucTK.Dock = DockStyle.Fill;
-                ucTK.AutoSize = true;
-                mainContainer.Controls.Add(ucTK);
-                ucTK.BringToFront();
-            }
-            else
-            {
-                ucTK.BringToFront();
-            }
-        }
+       
     }
 }
+
+

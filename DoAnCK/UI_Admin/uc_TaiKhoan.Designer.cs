@@ -35,12 +35,12 @@
             this.TenDangNhap = new DevExpress.XtraGrid.Columns.GridColumn();
             this.MatKhau = new DevExpress.XtraGrid.Columns.GridColumn();
             this.TrangThai = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.ckTrangThai = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
             this.ThoiGian = new DevExpress.XtraGrid.Columns.GridColumn();
             this.Roleid = new DevExpress.XtraGrid.Columns.GridColumn();
             this.lkRoleid = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
             this.MaGV = new DevExpress.XtraGrid.Columns.GridColumn();
             this.lkMaGV = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
+            this.ckTrangThai = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
             this.bar2 = new DevExpress.XtraBars.Bar();
             this.bar1 = new DevExpress.XtraBars.Bar();
             this.bar3 = new DevExpress.XtraBars.Bar();
@@ -59,23 +59,25 @@
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSach)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSach)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ckTrangThai)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lkRoleid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lkMaGV)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ckTrangThai)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             this.SuspendLayout();
             // 
             // gcDanhSach
             // 
             this.gcDanhSach.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gcDanhSach.Location = new System.Drawing.Point(0, 37);
+            this.gcDanhSach.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gcDanhSach.Location = new System.Drawing.Point(0, 30);
             this.gcDanhSach.MainView = this.gvDanhSach;
+            this.gcDanhSach.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.gcDanhSach.Name = "gcDanhSach";
             this.gcDanhSach.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.lkRoleid,
             this.lkMaGV,
             this.ckTrangThai});
-            this.gcDanhSach.Size = new System.Drawing.Size(829, 430);
+            this.gcDanhSach.Size = new System.Drawing.Size(622, 349);
             this.gcDanhSach.TabIndex = 0;
             this.gcDanhSach.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gvDanhSach});
@@ -90,6 +92,7 @@
             this.ThoiGian,
             this.Roleid,
             this.MaGV});
+            this.gvDanhSach.DetailHeight = 284;
             this.gvDanhSach.GridControl = this.gcDanhSach;
             this.gvDanhSach.Name = "gvDanhSach";
             this.gvDanhSach.ShowingEditor += new System.ComponentModel.CancelEventHandler(this.gvDanhSach_ShowingEditor);
@@ -98,67 +101,62 @@
             // 
             this.MaTK.Caption = "Mã";
             this.MaTK.FieldName = "MaTK";
-            this.MaTK.MinWidth = 25;
+            this.MaTK.MinWidth = 19;
             this.MaTK.Name = "MaTK";
-            this.MaTK.Width = 94;
+            this.MaTK.Width = 70;
             // 
             // TenDangNhap
             // 
             this.TenDangNhap.Caption = "Tên đăng nhập ";
             this.TenDangNhap.FieldName = "TenDangNhap";
-            this.TenDangNhap.MinWidth = 25;
+            this.TenDangNhap.MinWidth = 19;
             this.TenDangNhap.Name = "TenDangNhap";
             this.TenDangNhap.Visible = true;
             this.TenDangNhap.VisibleIndex = 0;
-            this.TenDangNhap.Width = 94;
+            this.TenDangNhap.Width = 70;
             // 
             // MatKhau
             // 
             this.MatKhau.Caption = "Mật khẩu";
             this.MatKhau.FieldName = "MatKhau";
-            this.MatKhau.MinWidth = 25;
+            this.MatKhau.MinWidth = 19;
             this.MatKhau.Name = "MatKhau";
             this.MatKhau.Visible = true;
             this.MatKhau.VisibleIndex = 1;
-            this.MatKhau.Width = 94;
+            this.MatKhau.Width = 70;
             // 
             // TrangThai
             // 
             this.TrangThai.Caption = "Trạng thái ";
             this.TrangThai.FieldName = "TrangThai";
-            this.TrangThai.MinWidth = 25;
+            this.TrangThai.MinWidth = 19;
             this.TrangThai.Name = "TrangThai";
             this.TrangThai.UnboundExpression = "True";
             this.TrangThai.Visible = true;
             this.TrangThai.VisibleIndex = 2;
-            this.TrangThai.Width = 94;
-            // 
-            // ckTrangThai
-            // 
-            this.ckTrangThai.AutoHeight = false;
-            this.ckTrangThai.Name = "ckTrangThai";
+            this.TrangThai.Width = 70;
             // 
             // ThoiGian
             // 
             this.ThoiGian.Caption = "Ngày tạo ";
             this.ThoiGian.FieldName = "ThoiGian";
-            this.ThoiGian.MinWidth = 25;
+            this.ThoiGian.MinWidth = 19;
             this.ThoiGian.Name = "ThoiGian";
             this.ThoiGian.OptionsColumn.AllowEdit = false;
             this.ThoiGian.Visible = true;
             this.ThoiGian.VisibleIndex = 3;
-            this.ThoiGian.Width = 94;
+            this.ThoiGian.Width = 70;
             // 
             // Roleid
             // 
             this.Roleid.Caption = "Role";
             this.Roleid.ColumnEdit = this.lkRoleid;
             this.Roleid.FieldName = "Roleid";
-            this.Roleid.MinWidth = 25;
+            this.Roleid.MinWidth = 19;
             this.Roleid.Name = "Roleid";
             this.Roleid.Visible = true;
             this.Roleid.VisibleIndex = 4;
-            this.Roleid.Width = 94;
+            this.Roleid.Width = 70;
             // 
             // lkRoleid
             // 
@@ -166,8 +164,8 @@
             this.lkRoleid.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.lkRoleid.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] {
-            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("Roleid", "Roleid"),
-            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("Rolename", "Rolename")});
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("Roleid", "Roleid", 15, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default),
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("Rolename", "Rolename", 15, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default)});
             this.lkRoleid.Name = "lkRoleid";
             // 
             // MaGV
@@ -175,11 +173,11 @@
             this.MaGV.Caption = "MaGV";
             this.MaGV.ColumnEdit = this.lkMaGV;
             this.MaGV.FieldName = "MaGV";
-            this.MaGV.MinWidth = 25;
+            this.MaGV.MinWidth = 19;
             this.MaGV.Name = "MaGV";
             this.MaGV.Visible = true;
             this.MaGV.VisibleIndex = 5;
-            this.MaGV.Width = 94;
+            this.MaGV.Width = 70;
             // 
             // lkMaGV
             // 
@@ -187,9 +185,14 @@
             this.lkMaGV.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.lkMaGV.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] {
-            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("MaGV", "MaGV"),
-            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("HoTenGV", "Họ tên")});
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("MaGV", "MaGV", 15, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default),
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("HoTenGV", "Họ tên", 15, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default)});
             this.lkMaGV.Name = "lkMaGV";
+            // 
+            // ckTrangThai
+            // 
+            this.ckTrangThai.AutoHeight = false;
+            this.ckTrangThai.Name = "ckTrangThai";
             // 
             // bar2
             // 
@@ -321,49 +324,53 @@
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barManager1;
-            this.barDockControlTop.Size = new System.Drawing.Size(829, 37);
+            this.barDockControlTop.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.barDockControlTop.Size = new System.Drawing.Size(622, 30);
             // 
             // barDockControlBottom
             // 
             this.barDockControlBottom.CausesValidation = false;
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.barDockControlBottom.Location = new System.Drawing.Point(0, 467);
+            this.barDockControlBottom.Location = new System.Drawing.Point(0, 379);
             this.barDockControlBottom.Manager = this.barManager1;
-            this.barDockControlBottom.Size = new System.Drawing.Size(829, 0);
+            this.barDockControlBottom.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.barDockControlBottom.Size = new System.Drawing.Size(622, 0);
             // 
             // barDockControlLeft
             // 
             this.barDockControlLeft.CausesValidation = false;
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
-            this.barDockControlLeft.Location = new System.Drawing.Point(0, 37);
+            this.barDockControlLeft.Location = new System.Drawing.Point(0, 30);
             this.barDockControlLeft.Manager = this.barManager1;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 430);
+            this.barDockControlLeft.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 349);
             // 
             // barDockControlRight
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(829, 37);
+            this.barDockControlRight.Location = new System.Drawing.Point(622, 30);
             this.barDockControlRight.Manager = this.barManager1;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 430);
+            this.barDockControlRight.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 349);
             // 
             // uc_TaiKhoan
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.gcDanhSach);
             this.Controls.Add(this.barDockControlLeft);
             this.Controls.Add(this.barDockControlRight);
             this.Controls.Add(this.barDockControlBottom);
             this.Controls.Add(this.barDockControlTop);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "uc_TaiKhoan";
-            this.Size = new System.Drawing.Size(829, 467);
-            this.Load += new System.EventHandler(this.uc_TaiKhoan_Load);
+            this.Size = new System.Drawing.Size(622, 379);
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSach)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSach)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ckTrangThai)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lkRoleid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lkMaGV)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ckTrangThai)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

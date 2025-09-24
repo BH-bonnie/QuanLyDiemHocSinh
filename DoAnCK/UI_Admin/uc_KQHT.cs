@@ -6,7 +6,7 @@ using DoAnCK.UI_GV;
 
 namespace DoAnCK.UI_Admin
 {
-    public partial class uc_KQHT : UserControl
+    public partial class uc_KQHT : UserControl, IRefreshable
     {
         private string connStr;
         private int maHocKyNamHoc;
@@ -20,9 +20,10 @@ namespace DoAnCK.UI_Admin
             InitializeComponent();
             connStr = frmAdmin.ConnString;
         }
-
-        private void uc_KQHT_Load(object sender, EventArgs e)
+        public void RefreshData()
         {
+
+
             btnLuu.Enabled = false;
             btnHuy.Enabled = false;
             btnSua.Enabled = true;
@@ -30,8 +31,15 @@ namespace DoAnCK.UI_Admin
            
 
             LoadMaHKNH(); 
-            LoadBangDiem(); 
+            LoadBangDiem();
+            gvDanhSachSV.RefreshData();
+
+
         }
+
+
+
+
 
         private void LoadMaHKNH()
         {
@@ -140,19 +148,21 @@ namespace DoAnCK.UI_Admin
 
         private void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+
             gvDanhSachSV.CloseEditor();
             gvDanhSachSV.UpdateCurrentRow();
 
-            DataTable dtChanges = ((DataTable)gcDanhSachSV.DataSource)?.GetChanges();
-            if (dtChanges == null || dtChanges.Rows.Count == 0)
+            var changes = dt.GetChanges();
+
+            if (changes == null)
             {
-                MessageBox.Show("Không có thay đổi nào để lưu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Không có thay đổi nào để lưu!");
                 return;
             }
 
             try
             {
-                foreach (DataRow row in dtChanges.Rows)
+                foreach (DataRow row in changes.Rows)
                 {
                     string maSV = row["MaSV"].ToString();
                     string maMH = row["MaMH"].ToString();
@@ -169,7 +179,7 @@ namespace DoAnCK.UI_Admin
                     }
 
 
-                     string diemGKValue = diemGK.HasValue ? diemGK.Value.ToString() : "NULL";
+                    string diemGKValue = diemGK.HasValue ? diemGK.Value.ToString() : "NULL";
                     string diemCKValue = diemCK.HasValue ? diemCK.Value.ToString() : "NULL";
 
                     string query = $@"EXEC sp_CapNhatDiemHocPhan 
@@ -180,22 +190,24 @@ namespace DoAnCK.UI_Admin
                                     @DiemCK = {diemCKValue}";
 
                     frmAdmin.executeQuery(query);
-                }
 
+                }
                 dt.AcceptChanges();
-                MessageBox.Show("Cập nhật điểm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadBangDiem();
+                MessageBox.Show("Cập nhật điểm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
+                btnLuu.Enabled = false;
+                btnSua.Enabled = true;
+                btnHuy.Enabled = false;
+                gvDanhSachSV.OptionsBehavior.Editable = false;
+                isAdding = false;
+                editingRowHandle = -1;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi khi lưu điểm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            btnLuu.Enabled = false;
-            btnSua.Enabled = true;
-            btnHuy.Enabled = false;
-            gvDanhSachSV.OptionsBehavior.Editable = false;
-            isAdding = false;
-            editingRowHandle = -1;
         }
 
         private void btnThongKe_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)

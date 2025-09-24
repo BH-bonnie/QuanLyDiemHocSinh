@@ -289,7 +289,6 @@
             this.Controls.Add(this.barDockControlTop);
             this.Name = "uc_ThongTinGV";
             this.Size = new System.Drawing.Size(856, 516);
-            this.Load += new System.EventHandler(this.uc_ThongTinGV_Load);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();

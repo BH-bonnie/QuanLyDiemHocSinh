@@ -13,7 +13,7 @@ using DevExpress.XtraCharts;
 
 namespace DoAnCK.UI_GV
 {
-    public partial class uc_QLDiem : UserControl
+    public partial class uc_QLDiem : UserControl, IRefreshable
     {
         private string MaGV;
         private string connStr;
@@ -43,7 +43,7 @@ namespace DoAnCK.UI_GV
             LoadBangDiemTheoLop();
         }
 
-        private void uc_QLDiem_Load(object sender, EventArgs e)
+        public void RefreshData()
         {
             isLoading = true;
             btnLuu.Enabled = false;
@@ -63,6 +63,9 @@ namespace DoAnCK.UI_GV
             isLoading = false;
 
             LoadBangDiemTheoLop();
+            gvDanhSach.RefreshData();
+
+
         }
 
         private void LoadMaLop()

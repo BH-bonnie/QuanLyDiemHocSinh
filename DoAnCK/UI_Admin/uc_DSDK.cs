@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 
 namespace DoAnCK.UI_Admin
 {
-    public partial class uc_DSDK: UserControl
+    public partial class uc_DSDK: UserControl, IRefreshable
     {
        
         private DataTable dt;
@@ -22,9 +22,10 @@ namespace DoAnCK.UI_Admin
 
         }
 
-        private void uc_DSDK_Load(object sender, EventArgs e)
+        public void RefreshData()
         {
-           
+
+
 
             string queryNamHoc = "SELECT MaHocKyNamHoc, HocKy, NamHoc FROM HocKyNamHoc ORDER BY MaHocKyNamHoc DESC";
             DataTable dtNamHoc = frmAdmin.getData(queryNamHoc);
@@ -52,6 +53,8 @@ namespace DoAnCK.UI_Admin
                 gcDanhSachSV.DataSource = dt;
             }
             gvDanhSachSV.OptionsBehavior.Editable = false;
+            gvDanhSachSV.RefreshData();
+
 
 
         }

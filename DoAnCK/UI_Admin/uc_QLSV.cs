@@ -15,7 +15,7 @@ using DevExpress.XtraGrid.Views.Grid;
 
 namespace DoAnCK.UI_Admin
 {
-    public partial class uc_QLSV : UserControl
+    public partial class uc_QLSV : UserControl, IRefreshable
     {
         string connStr = frmAdmin.ConnString;
         private DataTable dtSinhVien;
@@ -26,9 +26,9 @@ namespace DoAnCK.UI_Admin
             InitializeComponent();
 
         }
-  
 
-        private void uc_QLSV_Load(object sender, EventArgs e)
+
+        public void RefreshData()
         {
             btnLuu.Enabled = false;
             btnHuy.Enabled = false;
@@ -46,9 +46,11 @@ namespace DoAnCK.UI_Admin
                 loadGioiTinh();
                 LoadLop();
             }
+            gvDanhSachSV.RefreshData();   
+
 
         }
-        
+
         private void loadGioiTinh()
 
         {
@@ -106,6 +108,7 @@ namespace DoAnCK.UI_Admin
                         string gioiTinh = row["GioiTinh"]?.ToString() ?? "";
                         string cmnd = row["CMND_CCCD"]?.ToString() ?? "";
 
+
                         if (string.IsNullOrWhiteSpace(maSV) || string.IsNullOrWhiteSpace(hoTen) || string.IsNullOrWhiteSpace(lopSV))
                         {
                             MessageBox.Show("Mã sinh viên, Họ tên, Lớp SV không được để trống!");
@@ -134,6 +137,7 @@ namespace DoAnCK.UI_Admin
                         string noiSinh = row["NoiSinh"]?.ToString() ?? "";
                         string gioiTinh = row["GioiTinh"]?.ToString() ?? "";
                         string cmnd = row["CMND_CCCD"]?.ToString() ?? "";
+                        int trangThai = row["TrangThai"] != DBNull.Value ? Convert.ToInt32(row["TrangThai"]) : 0;
 
                         if (string.IsNullOrWhiteSpace(maSV) || string.IsNullOrWhiteSpace(hoTen) || string.IsNullOrWhiteSpace(lopSV))
                         {
@@ -148,10 +152,12 @@ namespace DoAnCK.UI_Admin
                                             @NgaySinh = {ngaySinh}, 
                                             @NoiSinh = {(string.IsNullOrWhiteSpace(noiSinh) ? "NULL" : $"N'{noiSinh}'")}, 
                                             @GioiTinh = {(string.IsNullOrWhiteSpace(gioiTinh) ? "NULL" : $"N'{gioiTinh}'")}, 
-                                            @CMND_CCCD = {(string.IsNullOrWhiteSpace(cmnd) ? "NULL" : $"'{cmnd}'")}";
+                                            @CMND_CCCD = {(string.IsNullOrWhiteSpace(cmnd) ? "NULL" : $"'{cmnd}'")},
+                                            @TrangThai = {trangThai} ";
 
 
-                      
+
+
                             frmAdmin.executeQuery(query);
                         
                     }
@@ -199,13 +205,11 @@ namespace DoAnCK.UI_Admin
                             }
                             else
                             {
-                                // Lấy MaSV từ hàng cũ
                                 string maSV = gvDanhSachSV.GetRowCellValue(selectedRows[i], "MaSV").ToString();
 
                                 string query = $"EXEC sp_XoaSinhVien @MaSV = '{maSV}'";
                                 frmAdmin.executeQuery(query);
 
-                                // Xóa trên GridView
                                 gvDanhSachSV.DeleteRow(selectedRows[i]);
                             }
                         }
@@ -291,7 +295,6 @@ namespace DoAnCK.UI_Admin
                 }
                 else
                 {
-                    // Tìm và xóa dòng có RowState = Added
                     for (int i = gvDanhSachSV.RowCount - 1; i >= 0; i--)
                     {
                         DataRow row = gvDanhSachSV.GetDataRow(i);
@@ -303,7 +306,6 @@ namespace DoAnCK.UI_Admin
                     }
                 }
 
-                // Hủy các thay đổi trong DataTable
                 dtSinhVien.RejectChanges();
             }
             else

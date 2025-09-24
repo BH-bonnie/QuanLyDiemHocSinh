@@ -14,7 +14,7 @@ using DevExpress.XtraEditors.TextEditController.Utils;
 
 namespace DoAnCK.UI_GV
 {
-    public partial class uc_DSSV : UserControl
+    public partial class uc_DSSV : UserControl, IRefreshable
     {
         private string MaGV;
         private string connStr;
@@ -33,7 +33,7 @@ namespace DoAnCK.UI_GV
         }
         private int maHocKyNamHoc;
         private bool isLoading = false;
-        private void uc_DSSV_Load(object sender, EventArgs e)
+        public void RefreshData()
         {
             isLoading = true;
 
@@ -50,7 +50,10 @@ namespace DoAnCK.UI_GV
 
             LoadSinhVien();
             gvDanhSach.OptionsBehavior.Editable = false;
+            gvDanhSach.RefreshData();
 
+
+       
         }
         private void LoadMaLop()
         {

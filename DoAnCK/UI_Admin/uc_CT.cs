@@ -13,7 +13,7 @@ using DevExpress.XtraEditors.TextEditController.Utils;
 
 namespace DoAnCK.UI_Admin
 {
-    public partial class uc_CT: UserControl
+    public partial class uc_CT: UserControl, IRefreshable
     {
         string connStr = frmAdmin.ConnString;
         private DataTable dt;
@@ -22,8 +22,9 @@ namespace DoAnCK.UI_Admin
             InitializeComponent();
         }
 
-        private void uc_CT_Load(object sender, EventArgs e)
+        public void RefreshData()
         {
+
             try
             {
                 string sql = "SELECT TOP 1 Ma, TiLeGK, TiLeCK FROM CongThucTinhDiem ORDER BY Ma DESC";
@@ -47,6 +48,7 @@ namespace DoAnCK.UI_Admin
                 txtTiLeGK.Text = "";
                 txtTiLeCK.Text = "";
             }
+
         }
         
     
@@ -103,7 +105,7 @@ namespace DoAnCK.UI_Admin
 
         private void btnHuy_Click(object sender, EventArgs e)
         {
-            uc_CT_Load(this, EventArgs.Empty);
+            RefreshData();
 
         }
     }

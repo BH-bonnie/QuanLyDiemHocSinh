@@ -319,7 +319,6 @@
             this.Controls.Add(this.barDockControlTop);
             this.Name = "uc_DSSV";
             this.Size = new System.Drawing.Size(856, 516);
-            this.Load += new System.EventHandler(this.uc_DSSV_Load);
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSach)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSach)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn)).EndInit();

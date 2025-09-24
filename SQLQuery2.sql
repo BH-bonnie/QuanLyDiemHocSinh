@@ -101,7 +101,7 @@ SELECT
     tk.MatKhau,
     tk.TrangThai,
     tk.ThoiGian,
-    r.Roleid,         -- thêm Roleid
+    r.Roleid,         
     tk.MaGV
 FROM TaiKhoan tk
 LEFT JOIN Roles r ON tk.Roleid = r.Roleid
@@ -131,6 +131,11 @@ BEGIN
         IF EXISTS (SELECT 1 FROM TaiKhoan WHERE TenDangNhap = @TenDangNhap)
         BEGIN
             RAISERROR('Tên đăng nhập ''%s'' đã tồn tại!', 16, 1, @TenDangNhap);
+            RETURN;
+        END
+		IF EXISTS (SELECT 1 FROM TaiKhoan WHERE MaGV = @MaGV)
+        BEGIN
+            RAISERROR('Mã giảng viên ''%s'' đã có tài khoản!', 16, 1, @MaGV);
             RETURN;
         END
 
@@ -261,7 +266,6 @@ BEGIN
             EXEC(@sql);
         END
 
-        -- Xóa record trong bảng TaiKhoan
         DELETE FROM TaiKhoan WHERE MaTK = @MaTK;
 
         COMMIT TRANSACTION;
