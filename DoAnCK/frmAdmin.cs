@@ -2,6 +2,7 @@
 using DevExpress.XtraBars.Navigation;
 using DevExpress.XtraEditors;
 using DoAnCK.UI_Admin;
+using DoAnCK.UI_Dangnhap;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -38,6 +39,8 @@ namespace DoAnCK
         uc_CT ucCT;
         uc_Chitiet ucChitiet;
         uc_TaiKhoan ucTK;
+        uc_Lichsu ucLichsu;
+
         private void frmAdmin_Load(object sender, EventArgs e)
         {
 
@@ -185,7 +188,11 @@ namespace DoAnCK
         }
         private void btnLichsu_Click(object sender, EventArgs e)
         {
-
+            if(ucLichsu == null)
+            {
+                ucLichsu = new uc_Lichsu();
+            }
+            ShowControl(ucLichsu, btnLichsu);
         }
         private void btnDangXuat_Click(object sender, EventArgs e)
         {

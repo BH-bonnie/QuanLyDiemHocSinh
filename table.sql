@@ -112,7 +112,7 @@ CREATE TABLE ChiTietHocPhan (
     MaHocKyNamHoc INT NOT NULL REFERENCES HocKyNamHoc(MaHocKyNamHoc),
     DiemGK    DECIMAL(4,2) CHECK (DiemGK BETWEEN 0 AND 10),
     DiemCK    DECIMAL(4,2) CHECK (DiemCK BETWEEN 0 AND 10),
-	DiemTB    DECIMAL(4,2)
+	DiemTB    DECIMAL(4,2),
     PRIMARY KEY (MaSV, MaMH, MaHocKyNamHoc)
 );
 

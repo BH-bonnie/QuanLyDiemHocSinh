@@ -24,7 +24,7 @@ RETURN
     INNER JOIN MonHoc MH ON LHP.MaMH = MH.MaMH
     INNER JOIN GiangVien GV ON LHP.MaGV = GV.MaGV
     INNER JOIN HocKyNamHoc HKNH ON LHP.MaHocKyNamHoc = HKNH.MaHocKyNamHoc
-    WHERE LHP.MaHocKyNamHoc = @MaHocKyNamHoc AND GV.TrangThai = 0                
+    WHERE LHP.MaHocKyNamHoc = @MaHocKyNamHoc AND GV.TrangThai =0              
               
 
 );
@@ -146,7 +146,7 @@ RETURN
     INNER JOIN MonHoc MH ON LHP.MaMH = MH.MaMH
     INNER JOIN GiangVien GV ON LHP.MaGV = GV.MaGV
     WHERE GV.MaGV = @MaGV
-      AND LHP.MaHocKyNamHoc = @MaHocKyNamHoc  AND GV.TrangThai = 1  
+      AND LHP.MaHocKyNamHoc = @MaHocKyNamHoc  
 );
 GO
 
@@ -188,10 +188,11 @@ RETURN
         dbo.fn_FormattedDate(SV.NgaySinh) AS NgaySinh,
         SV.GioiTinh
     FROM DangKyMonHoc DKMH
+
     INNER JOIN SinhVien SV ON DKMH.MaSV = SV.MaSV
     INNER JOIN LopHocPhan LHP ON DKMH.MaLHP = LHP.MaLHP
     WHERE LHP.MaLHP = @MaLHP
-      AND LHP.MaHocKyNamHoc = @MaHocKyNamHoc
+      AND LHP.MaHocKyNamHoc = @MaHocKyNamHoc AND SV.TrangThai = 0
 );
 GO
 
@@ -337,7 +338,7 @@ RETURN
        AND CTHP.MaMH = LHP.MaMH
        AND CTHP.MaHocKyNamHoc = LHP.MaHocKyNamHoc
     WHERE LHP.MaLHP = @MaLHP
-      AND LHP.MaHocKyNamHoc = @MaHocKyNamHoc
+      AND LHP.MaHocKyNamHoc = @MaHocKyNamHoc AND SV.TrangThai =0
 );
 GO
 
@@ -817,9 +818,17 @@ BEGIN
     FROM ChiTietHocPhan CTHP
     INNER JOIN MonHoc MH ON CTHP.MaMH = MH.MaMH
     WHERE CTHP.MaSV = @MaSV
-      AND dbo.fn_TrangThaiDiemTB(DiemTB)  ='Đạt';
+      AND dbo.fn_TrangThaiDiemTB(CTHP.DiemTB) = N'Đạt'
+
 END
 GO
+SELECT CTHP.DiemTB, dbo.fn_TrangThaiDiemTB(CTHP.DiemTB)
+FROM ChiTietHocPhan CTHP
+WHERE MaSV = 23110186
+EXEC dbo.sp_TinhTBVaTinChiDat @MaSV = '23110186'
+
+
+
 IF OBJECT_ID('dbo.sp_ThemCongThucTinhDiem', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_ThemCongThucTinhDiem;
 GO
@@ -1087,10 +1096,10 @@ BEGIN
         MH.TenMH,
 		COUNT(*) AS SoSV_Tong,
         ROUND(AVG(CTHP.DiemTB), 2) AS DiemTB,
-		SUM(CASE WHEN dbo.fn_TrangThaiDiemTB(CTHP.DiemTB) = 'Đạt' THEN 1 ELSE 0 END) AS SoSV_Dat,
+		SUM(CASE WHEN dbo.fn_TrangThaiDiemTB(CTHP.DiemTB) = N'Đạt' THEN 1 ELSE 0 END) AS SoSV_Dat,
 
 
-       SUM(CASE WHEN dbo.fn_TrangThaiDiemTB(CTHP.DiemTB) = 'Không đạt' THEN 1 ELSE 0 END)  AS SoSV_Rot,
+       SUM(CASE WHEN dbo.fn_TrangThaiDiemTB(CTHP.DiemTB) = N'Không đạt' THEN 1 ELSE 0 END)  AS SoSV_Rot,
         SUM(CASE  WHEN CTHP.DiemTB Is NULL THEN 1 ELSE 0 END) AS SoSV_Chuacham
 
        
@@ -1101,4 +1110,21 @@ BEGIN
     ORDER BY DiemTB DESC;
 END
 GO
+IF OBJECT_ID('dbo.trg_KhoaTaiKhoan_KhiGVBNgungHoatDong', 'TR') IS NOT NULL
+    DROP TRIGGER dbo.trg_KhoaTaiKhoan_KhiGVBNgungHoatDong;
+GO
+CREATE TRIGGER trg_KhoaTaiKhoan_KhiGVBNgungHoatDong
+ON GiangVien
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
 
+    -- Cập nhật TrangThai của TaiKhoan khi GiangVien.TrangThai = 1
+    UPDATE tk
+    SET tk.TrangThai = 0   -- khóa tài khoản
+    FROM TaiKhoan tk
+    INNER JOIN inserted i ON tk.MaGV = i.MaGV
+    WHERE i.TrangThai = 1;
+END;
+GO
