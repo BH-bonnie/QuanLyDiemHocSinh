@@ -37,7 +37,6 @@ CREATE TABLE SinhVien (
 	NgaySinh   DATE,
 	NoiSinh    NVARCHAR(100),
 	GioiTinh   NVARCHAR(10) CHECK (GioiTinh IN (N'Nam', N'Nữ')),
-	CMND_CCCD  VARCHAR(20),
 	LopSV      VARCHAR(20) REFERENCES Lop(LopSV),
     TrangThai BIT DEFAULT 0
 );

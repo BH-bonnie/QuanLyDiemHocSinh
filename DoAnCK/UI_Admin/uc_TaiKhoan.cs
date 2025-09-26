@@ -197,7 +197,7 @@ namespace DoAnCK.UI_Admin
                             return;
                         }
                         
-                        if (int.Parse(roleId) == 2 && string.IsNullOrWhiteSpace(maGV))
+                        if (string.IsNullOrWhiteSpace(maGV))
                         {
                             MessageBox.Show("Phải có mã giảng viên");
                             return;

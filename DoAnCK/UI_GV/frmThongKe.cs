@@ -93,7 +93,7 @@ namespace DoAnCK.UI_GV
             if (dtPhoDiem != null && dtPhoDiem.Rows.Count > 0)
             {
                 DataRow row = dtPhoDiem.Rows[0];
-
+                    
                 // Xóa dữ liệu cũ
                 chartThongKe.Series.Clear();
 

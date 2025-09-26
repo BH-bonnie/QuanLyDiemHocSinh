@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             this.mainContainer = new DevExpress.XtraBars.FluentDesignSystem.FluentDesignFormContainer();
             this.accordionControl1 = new DevExpress.XtraBars.Navigation.AccordionControl();
+            this.accordionControlElement2 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
+            this.accordionControlElement3 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.accordionControlElement1 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.btnQLSV = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.btnQLGV = new DevExpress.XtraBars.Navigation.AccordionControlElement();
@@ -64,6 +66,7 @@
             // 
             this.accordionControl1.Dock = System.Windows.Forms.DockStyle.Left;
             this.accordionControl1.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] {
+            this.accordionControlElement2,
             this.accordionControlElement1,
             this.accordionControlElement7});
             this.accordionControl1.Location = new System.Drawing.Point(0, 53);
@@ -72,6 +75,24 @@
             this.accordionControl1.Size = new System.Drawing.Size(294, 502);
             this.accordionControl1.TabIndex = 1;
             this.accordionControl1.ViewType = DevExpress.XtraBars.Navigation.AccordionControlViewType.HamburgerMenu;
+            // 
+            // accordionControlElement2
+            // 
+            this.accordionControlElement2.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
+            this.accordionControlElement2.Appearance.Default.Options.UseFont = true;
+            this.accordionControlElement2.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] {
+            this.accordionControlElement3});
+            this.accordionControlElement2.Expanded = true;
+            this.accordionControlElement2.Name = "accordionControlElement2";
+            this.accordionControlElement2.Text = "TRANG CÁ NHÂN";
+            // 
+            // accordionControlElement3
+            // 
+            this.accordionControlElement3.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.accordionControlElement3.Appearance.Default.Options.UseFont = true;
+            this.accordionControlElement3.Name = "accordionControlElement3";
+            this.accordionControlElement3.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
+            this.accordionControlElement3.Text = "Thông tin cá nhân";
             // 
             // accordionControlElement1
             // 
@@ -237,7 +258,7 @@
             this.fluentFormDefaultManager1.Form = this;
             this.fluentFormDefaultManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
             this.lblTieude});
-            this.fluentFormDefaultManager1.MaxItemId = 1;
+            this.fluentFormDefaultManager1.MaxItemId = 3;
             // 
             // frmAdmin
             // 
@@ -251,7 +272,7 @@
             this.FluentDesignFormControl = this.fluentDesignFormControl1;
             this.Name = "frmAdmin";
             this.NavigationControl = this.accordionControl1;
-            this.Text = "frmAdmin";
+            this.Text = "Phần mềm quản lý điểm";
             this.Load += new System.EventHandler(this.frmAdmin_Load);
             ((System.ComponentModel.ISupportInitialize)(this.accordionControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fluentDesignFormControl1)).EndInit();
@@ -279,5 +300,7 @@
         private DevExpress.XtraBars.Navigation.AccordionControlElement btnDangXuat;
         private DevExpress.XtraBars.Navigation.AccordionControlElement btnLichsu;
         private DevExpress.XtraBars.BarHeaderItem lblTieude;
+        private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement2;
+        private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement3;
     }
 }

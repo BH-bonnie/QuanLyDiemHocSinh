@@ -78,7 +78,7 @@
             this.MaMH.FieldName = "MaMH";
             this.MaMH.MinWidth = 25;
             this.MaMH.Name = "MaMH";
-            this.MaMH.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.True;
+            this.MaMH.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
             this.MaMH.Visible = true;
             this.MaMH.VisibleIndex = 0;
             this.MaMH.Width = 94;
@@ -89,7 +89,7 @@
             this.TenMH.FieldName = "TenMH";
             this.TenMH.MinWidth = 25;
             this.TenMH.Name = "TenMH";
-            this.TenMH.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.True;
+            this.TenMH.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
             this.TenMH.Visible = true;
             this.TenMH.VisibleIndex = 1;
             this.TenMH.Width = 94;

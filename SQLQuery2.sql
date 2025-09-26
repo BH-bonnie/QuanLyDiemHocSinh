@@ -1,28 +1,8 @@
 ﻿-- Bước 1: chọn database
 USE QL_SinhVien;
 GO
-IF OBJECT_ID('dbo.TaiKhoan', 'U') IS NOT NULL DROP TABLE dbo.TaiKhoan;
-IF OBJECT_ID('dbo.Roles', 'U') IS NOT NULL DROP TABLE dbo.Roles;
 
-CREATE TABLE Roles (
-	    Roleid int PRIMARY KEY,
-		Rolename NVARCHAR(100),
-		MoTa NVARCHAR(1000));
-INSERT INTO Roles (Roleid, Rolename, MoTa) VALUES
-(1, N'Admin', N'Quản trị toàn hệ thống, toàn quyền'),
-(2, N'GiangVien', N'Giảng viên quản lý lớp và điểm');
 
-CREATE TABLE TaiKhoan (
-    MaTK INT IDENTITY(1,1) PRIMARY KEY,
-    TenDangNhap NVARCHAR(50) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL UNIQUE,
-    MatKhau NVARCHAR(255) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
-    Roleid int ,
-    MaGV VARCHAR(10),
-    TrangThai BIT DEFAULT 1,
-    ThoiGian DATETIME DEFAULT GETDATE(),
-	FOREIGN KEY (Roleid) REFERENCES Roles(Roleid),
-    FOREIGN KEY (MaGV) REFERENCES GiangVien(MaGV)
-);
 -- Admin
 
 
@@ -38,37 +18,37 @@ GO
 GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE ON DATABASE::QL_SinhVien TO [AdminRole];
 GRANT CONTROL ON SCHEMA::dbo TO [AdminRole];  -- Quyền cao hơn nếu cần
 -- Quyền SELECT trên các bảng cần thiết
-GRANT SELECT ON dbo.SinhVien TO GiangVienRole;
-GRANT SELECT ON dbo.GiangVien TO GiangVienRole;
-GRANT SELECT ON dbo.MonHoc TO GiangVienRole;
-GRANT SELECT ON dbo.LopHocPhan TO GiangVienRole;
-GRANT SELECT ON dbo.HocKyNamHoc TO GiangVienRole;
+	GRANT SELECT ON dbo.SinhVien TO GiangVienRole;
+	GRANT SELECT ON dbo.GiangVien TO GiangVienRole;
+	GRANT SELECT ON dbo.MonHoc TO GiangVienRole;
+	GRANT SELECT ON dbo.LopHocPhan TO GiangVienRole;
+	GRANT SELECT ON dbo.HocKyNamHoc TO GiangVienRole;
 
--- Quyền SELECT, UPDATE trên ChiTietHocPhan
-GRANT SELECT, UPDATE ON dbo.ChiTietHocPhan TO GiangVienRole;
+	-- Quyền SELECT, UPDATE trên ChiTietHocPhan
+	GRANT SELECT, UPDATE ON dbo.ChiTietHocPhan TO GiangVienRole;
 
--- Quyền EXECUTE trên các stored procedure cần thiết
-GRANT EXECUTE ON dbo.sp_CapNhatDiemHocPhan TO GiangVienRole;
-GRANT EXECUTE ON dbo.sp_ThongKeDiemLopHocPhan TO GiangVienRole;
-GRANT EXECUTE ON dbo.sp_ThongKeDiemTheoKhoangNho TO GiangVienRole;
-GRANT EXECUTE ON dbo.sp_GetLopHocPhanByGV TO GiangVienRole;
-GRANT EXECUTE ON dbo.sp_LayLopHocPhanKhac TO GiangVienRole;
-GRANT EXECUTE ON dbo.sp_ChuyenLopHocPhan TO GiangVienRole;
-GRANT EXECUTE ON dbo.sp_CapNhatGiangVien TO GiangVienRole;
-
-
-
--- Quyền SELECT trên view
-GRANT SELECT ON dbo.vw_ThongTinChiTietSV TO GiangVienRole;
+	-- Quyền EXECUTE trên các stored procedure cần thiết
+	GRANT EXECUTE ON dbo.sp_CapNhatDiemHocPhan TO GiangVienRole;
+	GRANT EXECUTE ON dbo.sp_ThongKeDiemLopHocPhan TO GiangVienRole;
+	GRANT EXECUTE ON dbo.sp_ThongKeDiemTheoKhoangNho TO GiangVienRole;
+	GRANT EXECUTE ON dbo.sp_GetLopHocPhanByGV TO GiangVienRole;
+	GRANT EXECUTE ON dbo.sp_LayLopHocPhanKhac TO GiangVienRole;
+	GRANT EXECUTE ON dbo.sp_ChuyenLopHocPhan TO GiangVienRole;
+	GRANT EXECUTE ON dbo.sp_CapNhatGiangVien TO GiangVienRole;
 
 
--- Quyền SELECT trên Table-Valued Function
-GRANT SELECT ON dbo.fn_SinhVienVaDiemTheoLopHocPhan TO GiangVienRole;
-GRANT SELECT ON dbo.fn_GetThongTinGV TO GiangVienRole;
-GRANT SELECT ON dbo.fn_SinhVienTheoLopHocPhan TO GiangVienRole;
 
-GRANT SELECT ON dbo.fn_ChiTietDiemSV TO GiangVienRole;
-GRANT SELECT ON dbo.fn_DanhSachMonHoc_GiangVien TO GiangVienRole;
+	-- Quyền SELECT trên view
+	GRANT SELECT ON dbo.vw_ThongTinChiTietSV TO GiangVienRole;
+
+
+	-- Quyền SELECT trên Table-Valued Function
+	GRANT SELECT ON dbo.fn_SinhVienVaDiemTheoLopHocPhan TO GiangVienRole;
+	GRANT SELECT ON dbo.fn_GetThongTinGV TO GiangVienRole;
+	GRANT SELECT ON dbo.fn_SinhVienTheoLopHocPhan TO GiangVienRole;
+
+	GRANT SELECT ON dbo.fn_ChiTietDiemSV TO GiangVienRole;
+	GRANT SELECT ON dbo.fn_DanhSachMonHoc_GiangVien TO GiangVienRole;
 
 
 -- Không GRANT SELECT cho các scalar function
@@ -133,11 +113,13 @@ BEGIN
             RAISERROR('Tên đăng nhập ''%s'' đã tồn tại!', 16, 1, @TenDangNhap);
             RETURN;
         END
-		IF EXISTS (SELECT 1 FROM TaiKhoan WHERE MaGV = @MaGV)
-        BEGIN
-            RAISERROR('Mã giảng viên ''%s'' đã có tài khoản!', 16, 1, @MaGV);
-            RETURN;
-        END
+		-- Kiểm tra giảng viên đã có tài khoản với vai trò này chưa
+		IF EXISTS (SELECT 1 FROM TaiKhoan WHERE MaGV = @MaGV AND Roleid = @Roleid)
+		BEGIN
+			RAISERROR('Mã giảng viên ''%s'' đã có tài khoản với vai trò này!', 16, 1, @MaGV);
+			RETURN;
+		END
+
 
         -- Thêm bản ghi vào bảng TaiKhoan
         INSERT INTO TaiKhoan (TenDangNhap, MatKhau, Roleid, MaGV, TrangThai)

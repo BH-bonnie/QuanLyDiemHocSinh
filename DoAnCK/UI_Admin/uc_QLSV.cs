@@ -106,7 +106,6 @@ namespace DoAnCK.UI_Admin
                             $"'{Convert.ToDateTime(row["NgaySinh"]).ToString("yyyy-MM-dd")}'";
                         string noiSinh = row["NoiSinh"]?.ToString() ?? "";
                         string gioiTinh = row["GioiTinh"]?.ToString() ?? "";
-                        string cmnd = row["CMND_CCCD"]?.ToString() ?? "";
 
 
                         if (string.IsNullOrWhiteSpace(maSV) || string.IsNullOrWhiteSpace(hoTen) || string.IsNullOrWhiteSpace(lopSV))
@@ -122,8 +121,7 @@ namespace DoAnCK.UI_Admin
                                             @LopSV = '{lopSV}', 
                                             @NgaySinh = {ngaySinh}, 
                                             @NoiSinh = {(string.IsNullOrWhiteSpace(noiSinh) ? "NULL" : $"N'{noiSinh}'")}, 
-                                            @GioiTinh = {(string.IsNullOrWhiteSpace(gioiTinh) ? "NULL" : $"N'{gioiTinh}'")}, 
-                                            @CMND_CCCD = {(string.IsNullOrWhiteSpace(cmnd) ? "NULL" : $"'{cmnd}'")}";
+                                            @GioiTinh = {(string.IsNullOrWhiteSpace(gioiTinh) ? "NULL" : $"N'{gioiTinh}'")}";
 
                         frmAdmin.executeQuery(query);
                     }
@@ -136,7 +134,6 @@ namespace DoAnCK.UI_Admin
                             $"'{Convert.ToDateTime(row["NgaySinh"]).ToString("yyyy-MM-dd")}'";
                         string noiSinh = row["NoiSinh"]?.ToString() ?? "";
                         string gioiTinh = row["GioiTinh"]?.ToString() ?? "";
-                        string cmnd = row["CMND_CCCD"]?.ToString() ?? "";
                         int trangThai = row["TrangThai"] != DBNull.Value ? Convert.ToInt32(row["TrangThai"]) : 0;
 
                         if (string.IsNullOrWhiteSpace(maSV) || string.IsNullOrWhiteSpace(hoTen) || string.IsNullOrWhiteSpace(lopSV))
@@ -152,7 +149,6 @@ namespace DoAnCK.UI_Admin
                                             @NgaySinh = {ngaySinh}, 
                                             @NoiSinh = {(string.IsNullOrWhiteSpace(noiSinh) ? "NULL" : $"N'{noiSinh}'")}, 
                                             @GioiTinh = {(string.IsNullOrWhiteSpace(gioiTinh) ? "NULL" : $"N'{gioiTinh}'")}, 
-                                            @CMND_CCCD = {(string.IsNullOrWhiteSpace(cmnd) ? "NULL" : $"'{cmnd}'")},
                                             @TrangThai = {trangThai} ";
 
 

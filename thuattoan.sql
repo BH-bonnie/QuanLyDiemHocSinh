@@ -41,7 +41,6 @@ SELECT
     SV.NgaySinh, 
     SV.NoiSinh, 
     SV.GioiTinh,
-    SV.CMND_CCCD, 
     SV.LopSV,
     SV.TrangThai	
 FROM SinhVien SV;
@@ -385,7 +384,7 @@ IF OBJECT_ID('dbo.sp_ThongKeDiemLopHocPhan', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_ThongKeDiemLopHocPhan;
 GO
 
-CREATE PROCEDURE dbo.sp_ThongKeDiemLopHocPhan
+/*CREATE PROCEDURE dbo.sp_ThongKeDiemLopHocPhan
     @MaLHP VARCHAR(20),
     @MaHocKyNamHoc INT
 AS
@@ -399,12 +398,27 @@ BEGIN
         SUM(CASE WHEN TrangThai IS NULL THEN 1 ELSE 0 END) AS SoSinhVienChuaCham
     FROM fn_SinhVienVaDiemTheoLopHocPhan(@MaLHP, @MaHocKyNamHoc);
 END
+GO*/
+CREATE PROCEDURE dbo.sp_ThongKeDiemLopHocPhan
+    @MaLHP VARCHAR(20),
+    @MaHocKyNamHoc INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+   SELECT
+    COUNT(*) AS TongSoSinhVien,
+    ISNULL(SUM(CASE WHEN TrangThai = N'Đạt' THEN 1 ELSE 0 END), 0) AS SoSinhVienDat,
+    ISNULL(SUM(CASE WHEN TrangThai = N'Không đạt' THEN 1 ELSE 0 END), 0) AS SoSinhVienRớt,
+    ISNULL(SUM(CASE WHEN TrangThai IS NULL THEN 1 ELSE 0 END), 0) AS SoSinhVienChuaCham
+FROM fn_SinhVienVaDiemTheoLopHocPhan(@MaLHP, @MaHocKyNamHoc);
+END
 GO
 IF OBJECT_ID('dbo.sp_ThongKeDiemTheoKhoangNho', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_ThongKeDiemTheoKhoangNho;
 GO
 
-CREATE PROCEDURE dbo.sp_ThongKeDiemTheoKhoangNho
+/*CREATE PROCEDURE dbo.sp_ThongKeDiemTheoKhoangNho
     @MaLHP VARCHAR(20),
     @MaHocKyNamHoc INT
 AS
@@ -424,6 +438,30 @@ BEGIN
         SUM(CASE WHEN DiemTB >= 8 AND DiemTB < 9 THEN 1 ELSE 0 END) AS Khoang8_9,
         SUM(CASE WHEN DiemTB >= 9 AND DiemTB <= 10 THEN 1 ELSE 0 END) AS Khoang9_10
     FROM fn_SinhVienVaDiemTheoLopHocPhan(@MaLHP, @MaHocKyNamHoc)
+    WHERE DiemTB IS NOT NULL;
+END
+GO*/
+CREATE PROCEDURE dbo.sp_ThongKeDiemTheoKhoangNho
+    @MaLHP VARCHAR(20),
+    @MaHocKyNamHoc INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+   SELECT
+    COUNT(*) AS TongSoSinhVien,
+    ISNULL(SUM(CASE WHEN DiemTB >= 0 AND DiemTB < 1 THEN 1 ELSE 0 END), 0) AS Khoang0_1,
+    ISNULL(SUM(CASE WHEN DiemTB >= 1 AND DiemTB < 2 THEN 1 ELSE 0 END), 0) AS Khoang1_2,
+    ISNULL(SUM(CASE WHEN DiemTB >= 2 AND DiemTB < 3 THEN 1 ELSE 0 END), 0) AS Khoang2_3,
+    ISNULL(SUM(CASE WHEN DiemTB >= 3 AND DiemTB < 4 THEN 1 ELSE 0 END), 0) AS Khoang3_4,
+    ISNULL(SUM(CASE WHEN DiemTB >= 4 AND DiemTB < 5 THEN 1 ELSE 0 END), 0) AS Khoang4_5,
+    ISNULL(SUM(CASE WHEN DiemTB >= 5 AND DiemTB < 6 THEN 1 ELSE 0 END), 0) AS Khoang5_6,
+    ISNULL(SUM(CASE WHEN DiemTB >= 6 AND DiemTB < 7 THEN 1 ELSE 0 END), 0) AS Khoang6_7,
+    ISNULL(SUM(CASE WHEN DiemTB >= 7 AND DiemTB < 8 THEN 1 ELSE 0 END), 0) AS Khoang7_8,
+    ISNULL(SUM(CASE WHEN DiemTB >= 8 AND DiemTB < 9 THEN 1 ELSE 0 END), 0) AS Khoang8_9,
+    ISNULL(SUM(CASE WHEN DiemTB >= 9 AND DiemTB <= 10 THEN 1 ELSE 0 END), 0) AS Khoang9_10
+FROM fn_SinhVienVaDiemTheoLopHocPhan(@MaLHP, @MaHocKyNamHoc)
+
     WHERE DiemTB IS NOT NULL;
 END
 GO
@@ -1002,8 +1040,7 @@ CREATE PROCEDURE dbo.sp_ThemSinhVien
     @LopSV VARCHAR(20),
     @NgaySinh DATE = NULL,
     @NoiSinh NVARCHAR(100) = NULL,
-    @GioiTinh NVARCHAR(10) = NULL,
-    @CMND_CCCD VARCHAR(20) = NULL
+    @GioiTinh NVARCHAR(10) = NULL
 
 AS
 BEGIN
@@ -1018,8 +1055,8 @@ BEGIN
             RETURN
         END
 
-        INSERT INTO SinhVien (MaSV, HoTen, LopSV, NgaySinh, NoiSinh, GioiTinh, CMND_CCCD)
-        VALUES (@MaSV, @HoTen, @LopSV, @NgaySinh, @NoiSinh, @GioiTinh, @CMND_CCCD)
+        INSERT INTO SinhVien (MaSV, HoTen, LopSV, NgaySinh, NoiSinh, GioiTinh)
+        VALUES (@MaSV, @HoTen, @LopSV, @NgaySinh, @NoiSinh, @GioiTinh)
 
         COMMIT TRANSACTION
     END TRY
@@ -1044,7 +1081,6 @@ CREATE PROCEDURE dbo.sp_CapNhatSinhVien
     @NgaySinh DATE = NULL,
     @NoiSinh NVARCHAR(100) = NULL,
     @GioiTinh NVARCHAR(10) = NULL,
-    @CMND_CCCD VARCHAR(20) = NULL,
 	@TrangThai BIT 
 
 
@@ -1061,7 +1097,6 @@ BEGIN
             NgaySinh = @NgaySinh,
             NoiSinh = @NoiSinh,
             GioiTinh = @GioiTinh,
-            CMND_CCCD = @CMND_CCCD,
 			TrangThai = @TrangThai
         WHERE MaSV = @MaSV;
 
