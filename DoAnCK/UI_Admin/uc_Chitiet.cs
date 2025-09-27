@@ -125,9 +125,7 @@ namespace DoAnCK.UI_Admin
                 DataRow row = dtInfo.Rows[0];
                 lblMa.Text = row["MaSV"].ToString();
                 lblTen.Text = row["HoTen"].ToString();
-                lblNS.Text = row["NgaySinh"] == DBNull.Value ? "" :
-                    Convert.ToDateTime(row["NgaySinh"]).ToString("dd/MM/yyyy");
-
+                lblNS.Text = row["NgaySinh"].ToString();
                 lblDRL.Text = row["DiemRenLuyen"] == DBNull.Value ? "0" :
                     row["DiemRenLuyen"].ToString();
                 lblNoiSinh.Text = row["NoiSinh"].ToString();

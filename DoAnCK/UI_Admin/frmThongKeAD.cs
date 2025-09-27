@@ -33,7 +33,7 @@ namespace DoAnCK.UI_Admin
         public frmThongKeAD(int maHocKyNamHoc)
         {
             InitializeComponent();
-            currentMaHocKyNamHoc = maHocKyNamHoc; // Thêm dòng này
+            currentMaHocKyNamHoc = maHocKyNamHoc;
         }
 
         private void frmThongKeAD_Load(object sender, EventArgs e)

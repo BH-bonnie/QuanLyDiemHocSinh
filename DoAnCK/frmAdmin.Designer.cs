@@ -32,7 +32,7 @@
             this.mainContainer = new DevExpress.XtraBars.FluentDesignSystem.FluentDesignFormContainer();
             this.accordionControl1 = new DevExpress.XtraBars.Navigation.AccordionControl();
             this.accordionControlElement2 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
-            this.accordionControlElement3 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
+            this.btnThongTin = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.accordionControlElement1 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.btnQLSV = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             this.btnQLGV = new DevExpress.XtraBars.Navigation.AccordionControlElement();
@@ -57,9 +57,10 @@
             // mainContainer
             // 
             this.mainContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainContainer.Location = new System.Drawing.Point(294, 53);
+            this.mainContainer.Location = new System.Drawing.Point(368, 53);
+            this.mainContainer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.mainContainer.Name = "mainContainer";
-            this.mainContainer.Size = new System.Drawing.Size(781, 502);
+            this.mainContainer.Size = new System.Drawing.Size(707, 502);
             this.mainContainer.TabIndex = 0;
             // 
             // accordionControl1
@@ -70,9 +71,10 @@
             this.accordionControlElement1,
             this.accordionControlElement7});
             this.accordionControl1.Location = new System.Drawing.Point(0, 53);
+            this.accordionControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.accordionControl1.Name = "accordionControl1";
             this.accordionControl1.ScrollBarMode = DevExpress.XtraBars.Navigation.ScrollBarMode.Touch;
-            this.accordionControl1.Size = new System.Drawing.Size(294, 502);
+            this.accordionControl1.Size = new System.Drawing.Size(368, 502);
             this.accordionControl1.TabIndex = 1;
             this.accordionControl1.ViewType = DevExpress.XtraBars.Navigation.AccordionControlViewType.HamburgerMenu;
             // 
@@ -81,18 +83,19 @@
             this.accordionControlElement2.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
             this.accordionControlElement2.Appearance.Default.Options.UseFont = true;
             this.accordionControlElement2.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] {
-            this.accordionControlElement3});
+            this.btnThongTin});
             this.accordionControlElement2.Expanded = true;
             this.accordionControlElement2.Name = "accordionControlElement2";
             this.accordionControlElement2.Text = "TRANG CÁ NHÂN";
             // 
-            // accordionControlElement3
+            // btnThongTin
             // 
-            this.accordionControlElement3.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 9.5F);
-            this.accordionControlElement3.Appearance.Default.Options.UseFont = true;
-            this.accordionControlElement3.Name = "accordionControlElement3";
-            this.accordionControlElement3.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
-            this.accordionControlElement3.Text = "Thông tin cá nhân";
+            this.btnThongTin.Appearance.Default.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.btnThongTin.Appearance.Default.Options.UseFont = true;
+            this.btnThongTin.Name = "btnThongTin";
+            this.btnThongTin.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
+            this.btnThongTin.Text = "Thông tin cá nhân";
+            this.btnThongTin.Click += new System.EventHandler(this.btnThongTin_Click);
             // 
             // accordionControlElement1
             // 
@@ -301,6 +304,6 @@
         private DevExpress.XtraBars.Navigation.AccordionControlElement btnLichsu;
         private DevExpress.XtraBars.BarHeaderItem lblTieude;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement2;
-        private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement3;
+        private DevExpress.XtraBars.Navigation.AccordionControlElement btnThongTin;
     }
 }

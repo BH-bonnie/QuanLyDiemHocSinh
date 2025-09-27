@@ -9,13 +9,18 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraGrid.Views.Grid;
 using System.Data.SqlClient;
+using DevExpress.XtraLayout.Utils;
 
 namespace DoAnCK.UI_Admin
 {
     public partial class uc_DSGD: UserControl, IRefreshable
     {
-        string connStr;
+        private string connStr;
+        private int maHocKyNamHoc;
+        private bool isAdding = false;
+        private int editingRowHandle = -1;
         private DataTable dt;
+        private bool isLoading = false;
         public uc_DSGD()
         {
             InitializeComponent();
@@ -26,8 +31,12 @@ namespace DoAnCK.UI_Admin
         public void RefreshData()
         {
 
+            btnLuu.Enabled = false;
+            btnHuy.Enabled = false;
+            btnSua.Enabled = true;
+            gvDanhSachSV.OptionsBehavior.Editable = false;
 
-            string queryNamHoc = "SELECT MaHocKyNamHoc, HocKy, NamHoc FROM HocKyNamHoc ORDER BY MaHocKyNamHoc DESC";
+            string queryNamHoc = "EXEC sp_DanhSachHocKyNamHoc;";
             DataTable dtNamHoc = frmAdmin.getData(queryNamHoc);
 
             if (dtNamHoc != null && dtNamHoc.Rows.Count > 0)
@@ -74,6 +83,58 @@ namespace DoAnCK.UI_Admin
             DataTable dt = frmAdmin.getData(query);
 
             gcDanhSachSV.DataSource = dt;
+
+        }
+
+        private void btnSua_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            btnLuu.Enabled = true;
+            btnHuy.Enabled = true;
+            btnSua.Enabled = false;
+            gvDanhSachSV.OptionsBehavior.Editable = true;
+            editingRowHandle = gvDanhSachSV.FocusedRowHandle;
+        }
+
+        private void btnHuy_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            int rowHandle = gvDanhSachSV.FocusedRowHandle;
+
+            if (isAdding)
+            {
+                if (gvDanhSachSV.IsNewItemRow(rowHandle) || rowHandle == DevExpress.XtraGrid.GridControl.NewItemRowHandle)
+                {
+                    gvDanhSachSV.DeleteRow(rowHandle);
+                }
+                else
+                {
+                    for (int i = gvDanhSachSV.RowCount - 1; i >= 0; i--)
+                    {
+                        DataRow row = gvDanhSachSV.GetDataRow(i);
+                        if (row != null && row.RowState == DataRowState.Added)
+                        {
+                            gvDanhSachSV.DeleteRow(i);
+                            break;
+                        }
+                    }
+                }
+                dt.RejectChanges();
+            }
+            else
+            {
+                gvDanhSachSV.CancelUpdateCurrentRow();
+                dt.RejectChanges();
+            }
+
+            btnLuu.Enabled = false;
+            btnSua.Enabled = true;
+            btnHuy.Enabled = false;
+            gvDanhSachSV.OptionsBehavior.Editable = false;
+            isAdding = false;
+            editingRowHandle = -1;
+        }
+
+        private void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
 
         }
     }

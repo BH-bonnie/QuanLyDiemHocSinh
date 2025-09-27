@@ -25,14 +25,18 @@ namespace DoAnCK {
             this.mainContainer.AutoScroll = true;
         }
 
-        uc_DSGD ucDSGD;
+        uc_DSGDGV ucDSGD;
         uc_DSSV ucDSSV;
         uc_QLDiem ucQLD;
         uc_ThongTinGV ucTTGV;
 
         private void frmGiangVien_Load(object sender, EventArgs e)
         {
-           
+            if (ucTTGV == null)
+            {
+                ucTTGV = new uc_ThongTinGV(FormMain.ConnString, MaGV);
+            }
+            ShowControl(ucTTGV, btnThongTin);
         }
 
         public static DataTable getData(string query)
@@ -82,7 +86,7 @@ namespace DoAnCK {
         {
            if(ucDSGD == null)
             {
-                ucDSGD = new uc_DSGD(FormMain.ConnString, MaGV);
+                ucDSGD = new uc_DSGDGV(FormMain.ConnString, MaGV);
               
             }
             ShowControl(ucDSGD, btnDSGD);

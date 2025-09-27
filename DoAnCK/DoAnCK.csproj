@@ -91,6 +91,12 @@
     <Compile Include="UI_Admin\frmThongKeAD.Designer.cs">
       <DependentUpon>frmThongKeAD.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI_Admin\uc_thongtin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI_Admin\uc_thongtin.Designer.cs">
+      <DependentUpon>uc_thongtin.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI_Admin\uc_Chitiet.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -169,11 +175,11 @@
     <Compile Include="UI_GV\frmThongKe.Designer.cs">
       <DependentUpon>frmThongKe.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI_GV\uc_DSGD.cs">
+    <Compile Include="UI_GV\uc_DSGDGV.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI_GV\uc_DSGD.Designer.cs">
-      <DependentUpon>uc_DSGD.cs</DependentUpon>
+    <Compile Include="UI_GV\uc_DSGDGV.Designer.cs">
+      <DependentUpon>uc_DSGDGV.cs</DependentUpon>
     </Compile>
     <Compile Include="UI_GV\uc_DSSV.cs">
       <SubType>UserControl</SubType>
@@ -245,6 +251,9 @@
     <EmbeddedResource Include="UI_Admin\uc_TaiKhoan.resx">
       <DependentUpon>uc_TaiKhoan.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI_Admin\uc_thongtin.resx">
+      <DependentUpon>uc_thongtin.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI_Dangnhap\uc_Chonquyen.resx">
       <DependentUpon>uc_Chonquyen.cs</DependentUpon>
     </EmbeddedResource>
@@ -254,8 +263,8 @@
     <EmbeddedResource Include="UI_GV\frmThongKe.resx">
       <DependentUpon>frmThongKe.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI_GV\uc_DSGD.resx">
-      <DependentUpon>uc_DSGD.cs</DependentUpon>
+    <EmbeddedResource Include="UI_GV\uc_DSGDGV.resx">
+      <DependentUpon>uc_DSGDGV.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI_GV\uc_DSSV.resx">
       <DependentUpon>uc_DSSV.cs</DependentUpon>

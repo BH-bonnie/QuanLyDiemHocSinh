@@ -27,7 +27,7 @@ namespace DoAnCK.UI_Admin
 
             try
             {
-                string sql = "SELECT TOP 1 Ma, TiLeGK, TiLeCK FROM CongThucTinhDiem ORDER BY Ma DESC";
+                string sql = "EXEC dbo.sp_LayCongThucTinhDiemMoiNhat";
                 DataTable dt = frmAdmin.getData(sql);
 
                 if (dt != null && dt.Rows.Count > 0)

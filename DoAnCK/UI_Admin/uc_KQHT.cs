@@ -44,7 +44,7 @@ namespace DoAnCK.UI_Admin
         private void LoadMaHKNH()
         {
             isLoading = true; 
-            string queryNamHoc = @"SELECT MaHocKyNamHoc, HocKy, NamHoc FROM HocKyNamHoc ORDER BY MaHocKyNamHoc DESC";
+            string queryNamHoc = @"EXEC sp_DanhSachHocKyNamHoc";
             DataTable dtNamHoc = frmAdmin.getData(queryNamHoc);
 
             if (dtNamHoc != null && dtNamHoc.Rows.Count > 0)

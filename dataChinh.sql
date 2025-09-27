@@ -203,7 +203,6 @@ INSERT INTO LopHocPhan (MaLHP, MaMH, MaGV, MaHocKyNamHoc) VALUES
  
  -- ==============================
 -- Đăng ký 76 SV cho MATH132401_01, _02, _03
-truncate table DangKyMonHoc;
 -- ==============================
 INSERT INTO DangKyMonHoc (MaSV, MaLHP, MaHocKyNamHoc) VALUES
 ('23131177', 'MATH132401_01', 4),

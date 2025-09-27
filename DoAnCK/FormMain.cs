@@ -68,7 +68,6 @@ namespace DoAnCK
 
         private void UcChonquyen_OnChonQuyen(object sender, int role)
         {
-            // Lưu quyền được chọn vào ConnString context
             SetCurrentRole(role);
 
             if (ucDangnhap != null)
@@ -77,7 +76,6 @@ namespace DoAnCK
                 ucDangnhap.Dispose();
             }
 
-            // Tạo màn hình đăng nhập với quyền đã chọn
             ucDangnhap = new uc_Dangnhap(role);
             ucDangnhap.Dock = DockStyle.Fill;
             ucDangnhap.AutoSize = true;

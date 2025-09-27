@@ -27,7 +27,7 @@ namespace DoAnCK.UI_Admin
 
 
 
-            string queryNamHoc = "SELECT MaHocKyNamHoc, HocKy, NamHoc FROM HocKyNamHoc ORDER BY MaHocKyNamHoc DESC";
+            string queryNamHoc = "EXEC sp_DanhSachHocKyNamHoc";
             DataTable dtNamHoc = frmAdmin.getData(queryNamHoc);
 
             if (dtNamHoc != null && dtNamHoc.Rows.Count > 0)
@@ -45,11 +45,9 @@ namespace DoAnCK.UI_Admin
 
                 int maHocKyNamHoc = Convert.ToInt32(cbbNamHoc.SelectedValue);
 
-                // 3. Câu SQL lấy lớp học phần cho năm học hiện tại
                 string queryLopHocPhan = $"SELECT * FROM dbo.fn_DangKyMonHocTheoNamHoc({maHocKyNamHoc})";
                 DataTable dt = frmAdmin.getData(queryLopHocPhan);
 
-                // 4. Gán vào GridControl
                 gcDanhSachSV.DataSource = dt;
             }
             gvDanhSachSV.OptionsBehavior.Editable = false;
@@ -73,7 +71,6 @@ namespace DoAnCK.UI_Admin
             string query = $"SELECT * FROM dbo.fn_DangKyMonHocTheoNamHoc({maHocKyNamHoc})";
             DataTable dt = frmAdmin.getData(query);
 
-            // Bind vào GridControl
             gcDanhSachSV.DataSource = dt;
         }
     }

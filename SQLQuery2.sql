@@ -28,6 +28,9 @@ GRANT CONTROL ON SCHEMA::dbo TO [AdminRole];  -- Quyền cao hơn nếu cần
 	GRANT SELECT, UPDATE ON dbo.ChiTietHocPhan TO GiangVienRole;
 
 	-- Quyền EXECUTE trên các stored procedure cần thiết
+	GRANT EXECUTE ON dbo.sp_GetMaHocKyMoiNhat TO GiangVienRole;
+	GRANT EXECUTE ON dbo.sp_DanhSachHocKyNamHoc TO GiangVienRole;
+
 	GRANT EXECUTE ON dbo.sp_CapNhatDiemHocPhan TO GiangVienRole;
 	GRANT EXECUTE ON dbo.sp_ThongKeDiemLopHocPhan TO GiangVienRole;
 	GRANT EXECUTE ON dbo.sp_ThongKeDiemTheoKhoangNho TO GiangVienRole;
@@ -35,6 +38,7 @@ GRANT CONTROL ON SCHEMA::dbo TO [AdminRole];  -- Quyền cao hơn nếu cần
 	GRANT EXECUTE ON dbo.sp_LayLopHocPhanKhac TO GiangVienRole;
 	GRANT EXECUTE ON dbo.sp_ChuyenLopHocPhan TO GiangVienRole;
 	GRANT EXECUTE ON dbo.sp_CapNhatGiangVien TO GiangVienRole;
+	GRANT EXECUTE ON dbo.sp_XoaDangKyMonHoc TO GiangVienRole;
 
 
 
@@ -51,13 +55,10 @@ GRANT CONTROL ON SCHEMA::dbo TO [AdminRole];  -- Quyền cao hơn nếu cần
 	GRANT SELECT ON dbo.fn_DanhSachMonHoc_GiangVien TO GiangVienRole;
 
 
--- Không GRANT SELECT cho các scalar function
--- fn_TinhDiemTrungBinh, fn_QuyDoiDiemHe4, fn_QuyDoiDiemChu
--- Scalar function chỉ được sử dụng bên trong proc/view mà user có quyền EXEC/SELECT
 
 GO
 
-SELECT 
+/*SELECT 
     p.class_desc,
     p.permission_name,
     p.state_desc AS permission_state,
@@ -68,6 +69,18 @@ FROM sys.database_permissions p
     LEFT JOIN sys.database_principals pr ON p.grantee_principal_id = pr.principal_id
 WHERE pr.name = 'GiangVienRole'
 ORDER BY p.class_desc, o.name;
+SELECT 
+    sp.name AS LoginName,
+    rp.name AS ServerRole
+FROM sys.server_role_members rm
+JOIN sys.server_principals rp ON rm.role_principal_id = rp.principal_id
+JOIN sys.server_principals sp ON rm.member_principal_id = sp.principal_id
+WHERE sp.name = 'gv2';
+EXEC sp_helpuser;  -- Xem toàn bộ user và role
+*/
+
+
+
 
 IF OBJECT_ID('vw_ThongTinTaiKhoan', 'V') IS NOT NULL
     DROP VIEW vw_ThongTinTaiKhoan;
@@ -133,7 +146,8 @@ BEGIN
             CREATE LOGIN [' + @TenDangNhap + '] WITH PASSWORD = ''' + REPLACE(@MatKhau,'''','''''') + ''';
         ';
         EXEC(@sql);
-
+		SET @sql = 'ALTER LOGIN [' + @TenDangNhap + '] WITH DEFAULT_DATABASE = [QL_SinhVien];';
+        EXEC(@sql);
         -- Tạo USER cho cả Admin và GiangVien
         SET @sql = '
             IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = ''' + @TenDangNhap + ''')
@@ -410,3 +424,17 @@ BEGIN
 END
 GO
 
+-- Xem log SQL Server
+SELECT 
+    TE.name AS EventName,
+    T.DatabaseName,
+    T.ObjectName,
+    T.TextData,
+    T.LoginName,
+    T.StartTime
+FROM sys.fn_trace_gettable(CONVERT(VARCHAR(150),
+    (SELECT TOP 1 f.[value] 
+     FROM sys.fn_trace_getinfo(NULL) f 
+     WHERE f.property = 2)), DEFAULT) T
+JOIN sys.trace_events TE ON T.EventClass = TE.trace_event_id
+ORDER BY T.StartTime DESC;

@@ -37,7 +37,7 @@ namespace DoAnCK.UI_GV
         {
             isLoading = true;
 
-            string queryMaHK = "SELECT TOP 1 MaHocKyNamHoc FROM HocKyNamHoc ORDER BY MaHocKyNamHoc DESC";
+            string queryMaHK = "EXEC sp_GetMaHocKyMoiNhat";
             DataTable dtHK = frmGiangVien.getData(queryMaHK);
             if (dtHK != null && dtHK.Rows.Count > 0)
                 maHocKyNamHoc = Convert.ToInt32(dtHK.Rows[0]["MaHocKyNamHoc"]);

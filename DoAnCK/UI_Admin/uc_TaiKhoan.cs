@@ -149,7 +149,7 @@ namespace DoAnCK.UI_Admin
                         }
 
                         int maTK = Convert.ToInt32(maTKValue);
-                        MessageBox.Show($"MaTK = {maTK}");
+                   
 
                         frmAdmin.executeQuery($"EXEC sp_XoaTaiKhoanForce  @MaTK = {maTK}");
                         gvDanhSach.DeleteRow(selectedRows[i]);

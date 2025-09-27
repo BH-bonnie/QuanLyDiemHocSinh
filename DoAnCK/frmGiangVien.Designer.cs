@@ -50,10 +50,10 @@
             // mainContainer
             // 
             this.mainContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainContainer.Location = new System.Drawing.Point(294, 53);
-            this.mainContainer.Margin = new System.Windows.Forms.Padding(6);
+            this.mainContainer.Location = new System.Drawing.Point(368, 53);
+            this.mainContainer.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.mainContainer.Name = "mainContainer";
-            this.mainContainer.Size = new System.Drawing.Size(781, 502);
+            this.mainContainer.Size = new System.Drawing.Size(707, 502);
             this.mainContainer.TabIndex = 0;
             // 
             // accordionControl1
@@ -64,10 +64,10 @@
             this.accordionControlElement1,
             this.accordionControlElement4});
             this.accordionControl1.Location = new System.Drawing.Point(0, 53);
-            this.accordionControl1.Margin = new System.Windows.Forms.Padding(6);
+            this.accordionControl1.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.accordionControl1.Name = "accordionControl1";
             this.accordionControl1.ScrollBarMode = DevExpress.XtraBars.Navigation.ScrollBarMode.Touch;
-            this.accordionControl1.Size = new System.Drawing.Size(294, 502);
+            this.accordionControl1.Size = new System.Drawing.Size(368, 502);
             this.accordionControl1.TabIndex = 1;
             this.accordionControl1.ViewType = DevExpress.XtraBars.Navigation.AccordionControlViewType.HamburgerMenu;
             // 

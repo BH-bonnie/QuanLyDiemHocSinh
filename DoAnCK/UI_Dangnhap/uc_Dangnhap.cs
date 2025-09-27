@@ -79,7 +79,7 @@ namespace DoAnCK.UI_Dangnhap
                     {
                         MessageBox.Show($"{ketQua}",
                             "Đăng nhập thất bại", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
+                            return;
                     }
 
                     if (trangThai == false)
@@ -90,6 +90,19 @@ namespace DoAnCK.UI_Dangnhap
                     }
 
                     FormMain.UpdateConnString(tenDangNhap, matKhau);
+                    try
+                    {
+                        using (SqlConnection c = new SqlConnection(FormMain.ConnString))
+                        {
+                            c.Open();
+                            MessageBox.Show("Kết nối thành công với: " + c.Database);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi kết nối: " + ex.Message);
+                    }
+
                     TenDangNhap = tenDangNhap;
                     MatKhau = matKhau;
 
@@ -99,7 +112,7 @@ namespace DoAnCK.UI_Dangnhap
                             "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         // Đảm bảo frmAdmin sử dụng connection string mới
-                        frmAdmin frm = new frmAdmin();
+                        frmAdmin frm = new frmAdmin(maGV);
                         Form parent = this.FindForm();
                         parent.Hide();
                         frm.ShowDialog();
@@ -125,16 +138,11 @@ namespace DoAnCK.UI_Dangnhap
             }
             catch (SqlException ex)
             {
-                // Log chi tiết lỗi để debug
-                System.Diagnostics.Debug.WriteLine($"SqlException: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"Connection String: {FormMain.ConnString}");
-
                 MessageBox.Show($"Lỗi SQL với quyền {GetRoleName(roleID)}: {ex.Message}",
                     "Lỗi đăng nhập", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Exception: {ex.Message}");
                 MessageBox.Show($"Lỗi kết nối: {ex.Message}", "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

@@ -51,7 +51,7 @@ namespace DoAnCK.UI_GV
             btnSua.Enabled = true;
             gvDanhSach.OptionsBehavior.Editable = false;
 
-            string queryMaHK = "SELECT TOP 1 MaHocKyNamHoc FROM HocKyNamHoc ORDER BY MaHocKyNamHoc DESC";
+            string queryMaHK = "EXEC sp_DanhSachHocKyNamHoc";
             DataTable dtHK = frmGiangVien.getData(queryMaHK);
             if (dtHK != null && dtHK.Rows.Count > 0)
                 maHocKyNamHoc = Convert.ToInt32(dtHK.Rows[0]["MaHocKyNamHoc"]);

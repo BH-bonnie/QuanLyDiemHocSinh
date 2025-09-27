@@ -3,6 +3,7 @@ using DevExpress.XtraBars.Navigation;
 using DevExpress.XtraEditors;
 using DoAnCK.UI_Admin;
 using DoAnCK.UI_Dangnhap;
+using DoAnCK.UI_GV;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,7 +20,14 @@ namespace DoAnCK
     public partial class frmAdmin : DevExpress.XtraBars.FluentDesignSystem.FluentDesignForm
     {
         public static string ConnString { get; private set; }
-
+        public static string MaGV { get; private set; }
+        public frmAdmin(string maGV)
+        {
+            InitializeComponent();
+            ConnString = FormMain.ConnString;
+            MaGV = maGV;
+            this.mainContainer.AutoScroll = true;
+        }
         public frmAdmin()
         {
 
@@ -29,6 +37,8 @@ namespace DoAnCK
 
 
         }
+
+
 
         uc_QLSV ucQLSV;
         uc_QLGV ucQLGV;
@@ -40,9 +50,15 @@ namespace DoAnCK
         uc_Chitiet ucChitiet;
         uc_TaiKhoan ucTK;
         uc_Lichsu ucLichsu;
+        uc_thongtin ucThongTin;
 
         private void frmAdmin_Load(object sender, EventArgs e)
         {
+            if (ucThongTin == null)
+            {
+                ucThongTin = new uc_thongtin(FormMain.ConnString, MaGV);
+            }
+            ShowControl(ucThongTin, btnThongTin);
 
         }
        
@@ -212,7 +228,14 @@ namespace DoAnCK
             }
         }
 
-       
+        private void btnThongTin_Click(object sender, EventArgs e)
+        {
+            if(ucThongTin == null)
+            {
+                ucThongTin = new uc_thongtin(FormMain.ConnString, MaGV);
+            }
+            ShowControl(ucThongTin, btnThongTin);
+        }
     }
 }
 

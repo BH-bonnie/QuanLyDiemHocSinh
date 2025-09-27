@@ -1,0 +1,129 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace DoAnCK.UI_Admin
+{
+    public partial class uc_thongtin : UserControl, IRefreshable
+    {
+        private string MaGV;
+        private string connStr;
+        private DataTable dt;
+
+        public uc_thongtin()
+        {
+            InitializeComponent();
+            connStr = frmAdmin.ConnString;
+            MaGV = frmAdmin.MaGV;
+        }
+        public uc_thongtin(string connectionString, string maGV)
+        {
+            InitializeComponent();
+            connStr = connectionString;
+            MaGV = maGV;
+        }
+        public void RefreshData()
+        {
+            LoadThongTinGiangVien();
+            btnLuu.Enabled = false;
+            btnSua.Enabled = true;
+            btnHuy.Enabled = false;
+
+
+        }
+
+        private void LoadThongTinGiangVien()
+        {
+            try
+            {
+                string queryGV = $"SELECT * FROM dbo.fn_GetThongTinGV('{MaGV}')";
+                DataTable dtGV = frmAdmin.getData(queryGV);
+
+                if (dtGV != null && dtGV.Rows.Count > 0)
+                {
+                    DataRow row = dtGV.Rows[0];
+
+                    txtMa.Text = row["MaGV"].ToString();
+                    txtHoten.Text = row["HoTenGV"].ToString();
+                    txtHocvi.Text = row["HocVi"]?.ToString() ?? "";
+                    txtKhoa.Text = row["Khoa"]?.ToString() ?? "";
+                    txtEmail.Text = row["Email"]?.ToString() ?? "";
+                    txtSDT.Text = row["DienThoai"]?.ToString() ?? "";
+                }
+                else
+                {
+                    MessageBox.Show("Không tìm thấy thông tin giảng viên.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải thông tin: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+
+
+        }
+
+
+
+
+
+        private void btnSua_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            btnLuu.Enabled = true;
+            btnSua.Enabled = false;
+            btnHuy.Enabled = true;
+
+            txtEmail.ReadOnly = false;
+            txtSDT.ReadOnly = false;
+
+        }
+
+        private void btnLuu_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            try
+            {
+                string query = $@"EXEC sp_CapNhatGiangVien 
+                                    @MaGV = '{MaGV}',
+                                    @HoTenGV ='{txtHoten.Text}',
+                                    @HocVi = '{txtHocvi.Text}', 
+                                    @Khoa = '{txtKhoa.Text}', 
+                                    @Email = '{txtEmail.Text}',     
+                                    @DienThoai = '{txtSDT.Text}',
+                                    @TrangThai = 1";
+
+                frmAdmin.executeQuery(query);
+
+                MessageBox.Show("Cập nhật thông tin thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                txtEmail.ReadOnly = true;
+                txtSDT.ReadOnly = true;
+                btnLuu.Enabled = false;
+                btnHuy.Enabled = false;
+
+                btnSua.Enabled = true;
+                LoadThongTinGiangVien();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi lưu thông tin: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void btnHuy_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            LoadThongTinGiangVien();
+
+            txtEmail.ReadOnly = true;
+            txtSDT.ReadOnly = true;
+            btnLuu.Enabled = false;
+            btnHuy.Enabled = false;
+            btnSua.Enabled = true;
+
+        }
+    }}
