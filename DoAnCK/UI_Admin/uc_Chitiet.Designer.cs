@@ -99,7 +99,7 @@
             // 
             this.splitContainerControl1.Panel2.Controls.Add(this.splitContainerControl2);
             this.splitContainerControl1.Panel2.Text = "Panel2";
-            this.splitContainerControl1.Size = new System.Drawing.Size(856, 516);
+            this.splitContainerControl1.Size = new System.Drawing.Size(943, 516);
             this.splitContainerControl1.SplitterPosition = 222;
             this.splitContainerControl1.TabIndex = 0;
             // 
@@ -186,7 +186,7 @@
             // 
             this.splitContainerControl2.Panel2.Controls.Add(this.gcDanhSach);
             this.splitContainerControl2.Panel2.Text = "Panel2";
-            this.splitContainerControl2.Size = new System.Drawing.Size(622, 516);
+            this.splitContainerControl2.Size = new System.Drawing.Size(709, 516);
             this.splitContainerControl2.SplitterPosition = 155;
             this.splitContainerControl2.TabIndex = 0;
             // 
@@ -386,7 +386,7 @@
             this.gcDanhSach.Location = new System.Drawing.Point(0, 0);
             this.gcDanhSach.MainView = this.gvDanhSach;
             this.gcDanhSach.Name = "gcDanhSach";
-            this.gcDanhSach.Size = new System.Drawing.Size(622, 349);
+            this.gcDanhSach.Size = new System.Drawing.Size(709, 349);
             this.gcDanhSach.TabIndex = 0;
             this.gcDanhSach.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gvDanhSach});
@@ -480,7 +480,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainerControl1);
             this.Name = "uc_Chitiet";
-            this.Size = new System.Drawing.Size(856, 516);
+            this.Size = new System.Drawing.Size(943, 516);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1.Panel1)).EndInit();
             this.splitContainerControl1.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1.Panel2)).EndInit();

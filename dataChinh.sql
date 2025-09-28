@@ -1,4 +1,6 @@
-﻿INSERT INTO KHOA(MaKhoa, TenKhoa) VALUES
+﻿	USE QL_SinhVien;
+	GO
+INSERT INTO KHOA(MaKhoa, TenKhoa) VALUES
 ('01', N'Khoa Chính trị Luật'),
 ('02', N'Khoa Cơ khí Chế tạo máy'),
 ('03', N'Khoa Cơ khí Động lực'),
@@ -210,9 +212,6 @@ INSERT INTO LopHocPhan (MaLHP, MaMH, MaGV, MaHocKyNamHoc) VALUES
 ('LLCT120205_01', 'LLCT120205', '1993', 4),
 ('LLCT120314_01', 'LLCT120314', '1990', 4);
 
--- ==============================
--- Đăng ký 76 SV cho 3 lớp MATH132401
--- ==============================
 
  
  -- ==============================

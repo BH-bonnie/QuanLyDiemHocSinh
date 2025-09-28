@@ -45,11 +45,11 @@
             this.bar2 = new DevExpress.XtraBars.Bar();
             this.barEditGiangVien = new DevExpress.XtraBars.BarEditItem();
             this.repoLookUpGiangVien = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
+            this.btnHuy = new DevExpress.XtraBars.BarButtonItem();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
-            this.btnHuy = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSachSV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSachSV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
@@ -70,7 +70,7 @@
             this.gcDanhSachSV.MainView = this.gvDanhSachSV;
             this.gcDanhSachSV.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gcDanhSachSV.Name = "gcDanhSachSV";
-            this.gcDanhSachSV.Size = new System.Drawing.Size(856, 399);
+            this.gcDanhSachSV.Size = new System.Drawing.Size(886, 392);
             this.gcDanhSachSV.TabIndex = 10;
             this.gcDanhSachSV.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gvDanhSachSV});
@@ -87,7 +87,6 @@
             this.MaKhoa});
             this.gvDanhSachSV.GridControl = this.gcDanhSachSV;
             this.gvDanhSachSV.Name = "gvDanhSachSV";
-            this.gvDanhSachSV.OptionsView.ShowGroupPanel = false;
             this.gvDanhSachSV.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.gvDanhSachSV_FocusedRowChanged);
             // 
             // MaMH
@@ -182,8 +181,8 @@
             // 
             this.splitContainerControl1.Panel2.Controls.Add(this.gcDanhSachSV);
             this.splitContainerControl1.Panel2.Text = "Panel2";
-            this.splitContainerControl1.Size = new System.Drawing.Size(856, 479);
-            this.splitContainerControl1.SplitterPosition = 68;
+            this.splitContainerControl1.Size = new System.Drawing.Size(886, 479);
+            this.splitContainerControl1.SplitterPosition = 75;
             this.splitContainerControl1.TabIndex = 11;
             // 
             // cbbNamHoc
@@ -255,13 +254,20 @@
             this.repoLookUpGiangVien.Name = "repoLookUpGiangVien";
             this.repoLookUpGiangVien.Popup += new System.EventHandler(this.repoLookUpGiangVien_Popup);
             // 
+            // btnHuy
+            // 
+            this.btnHuy.Caption = "Huỷ lớp ";
+            this.btnHuy.Id = 17;
+            this.btnHuy.Name = "btnHuy";
+            this.btnHuy.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnHuy_ItemClick);
+            // 
             // barDockControlTop
             // 
             this.barDockControlTop.CausesValidation = false;
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barManager1;
-            this.barDockControlTop.Size = new System.Drawing.Size(856, 37);
+            this.barDockControlTop.Size = new System.Drawing.Size(886, 37);
             // 
             // barDockControlBottom
             // 
@@ -269,7 +275,7 @@
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.barDockControlBottom.Location = new System.Drawing.Point(0, 516);
             this.barDockControlBottom.Manager = this.barManager1;
-            this.barDockControlBottom.Size = new System.Drawing.Size(856, 0);
+            this.barDockControlBottom.Size = new System.Drawing.Size(886, 0);
             // 
             // barDockControlLeft
             // 
@@ -283,16 +289,9 @@
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(856, 37);
+            this.barDockControlRight.Location = new System.Drawing.Point(886, 37);
             this.barDockControlRight.Manager = this.barManager1;
             this.barDockControlRight.Size = new System.Drawing.Size(0, 479);
-            // 
-            // btnHuy
-            // 
-            this.btnHuy.Caption = "Huỷ lớp ";
-            this.btnHuy.Id = 17;
-            this.btnHuy.Name = "btnHuy";
-            this.btnHuy.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnHuy_ItemClick);
             // 
             // uc_DSGD
             // 
@@ -305,7 +304,7 @@
             this.Controls.Add(this.barDockControlTop);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "uc_DSGD";
-            this.Size = new System.Drawing.Size(856, 516);
+            this.Size = new System.Drawing.Size(886, 516);
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSachSV)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSachSV)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1.Panel1)).EndInit();

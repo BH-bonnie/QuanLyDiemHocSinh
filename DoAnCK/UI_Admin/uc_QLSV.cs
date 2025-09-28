@@ -27,7 +27,6 @@ namespace DoAnCK.UI_Admin
 
         }
 
-
         public void RefreshData()
         {
             btnLuu.Enabled = false;

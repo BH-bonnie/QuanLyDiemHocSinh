@@ -89,7 +89,6 @@ CREATE TABLE DangKyMonHoc (
     FOREIGN KEY (MaLHP,MaHocKyNamHoc) REFERENCES LopHocPhan(MaLHP,MaHocKyNamHoc)
 );
 
-
 CREATE TABLE ChiTietHocPhan ( 
     MaSV VARCHAR(10) NOT NULL,
     MaLHP VARCHAR(20) NOT NULL,
@@ -102,10 +101,6 @@ CREATE TABLE ChiTietHocPhan (
         REFERENCES DangKyMonHoc(MaSV, MaLHP, MaHocKyNamHoc)
 		ON UPDATE CASCADE
 );
-
-
-
-
 
 CREATE TABLE CongThucTinhDiem
 (
