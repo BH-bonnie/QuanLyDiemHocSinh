@@ -4,7 +4,6 @@
 IF OBJECT_ID('dbo.fn_LopHocPhanTheoNamHoc', 'IF') IS NOT NULL
     DROP FUNCTION dbo.fn_LopHocPhanTheoNamHoc;
 GO
-
 CREATE FUNCTION dbo.fn_LopHocPhanTheoNamHoc
 (
     @MaHocKyNamHoc INT
@@ -19,12 +18,13 @@ RETURN
         LHP.MaLHP,
         GV.MaGV,
         GV.HoTenGV,
+		MH.MaKhoa,
 		GV.Email
     FROM LopHocPhan LHP
     INNER JOIN MonHoc MH ON LHP.MaMH = MH.MaMH
-    INNER JOIN GiangVien GV ON LHP.MaGV = GV.MaGV
-    INNER JOIN HocKyNamHoc HKNH ON LHP.MaHocKyNamHoc = HKNH.MaHocKyNamHoc
-    WHERE LHP.MaHocKyNamHoc = @MaHocKyNamHoc AND GV.TrangThai =0              
+	LEFT JOIN GiangVien GV ON LHP.MaGV = GV.MaGV
+	INNER JOIN HocKyNamHoc HKNH ON LHP.MaHocKyNamHoc = HKNH.MaHocKyNamHoc
+    WHERE LHP.MaHocKyNamHoc = @MaHocKyNamHoc           
               
 
 );
@@ -32,7 +32,6 @@ GO
 IF OBJECT_ID('dbo.v_SinhVien_Detail', 'V') IS NOT NULL
     DROP VIEW dbo.v_SinhVien_Detail;
 GO
-
 CREATE VIEW dbo.v_SinhVien_Detail
 AS
 SELECT 
@@ -45,6 +44,7 @@ SELECT
     SV.TrangThai	
 FROM SinhVien SV;
 GO
+
 IF OBJECT_ID('dbo.trg_UpdateDiem_KhiSVNgungHoatDong', 'TR') IS NOT NULL
     DROP TRIGGER dbo.trg_UpdateDiem_KhiSVNgungHoatDong;
 GO
@@ -77,7 +77,7 @@ SELECT
     GV.MaGV,
     GV.HoTenGV,
     GV.HocVi,
-    GV.Khoa,
+    GV.MaKhoa,
     GV.Email,
     GV.DienThoai,
 	GV.TrangThai	
@@ -91,10 +91,11 @@ GO
 
 CREATE VIEW dbo.v_MonHoc
 AS
-SELECT 
-    MaMH,       
-    TenMH,      
-    SoTinChi    
+SELECT
+    MaMH,
+    TenMH,
+    SoTinChi,
+    MaKhoa
 FROM MonHoc;
 GO
 IF OBJECT_ID('dbo.fn_DangKyMonHocTheoNamHoc', 'IF') IS NOT NULL
@@ -119,9 +120,9 @@ RETURN
         SV.HoTen
     FROM DangKyMonHoc DKMH
     INNER JOIN SinhVien SV ON DKMH.MaSV = SV.MaSV
-    INNER JOIN LopHocPhan LHP ON DKMH.MaLHP = LHP.MaLHP
+    INNER JOIN LopHocPhan LHP ON DKMH.MaLHP = LHP.MaLHP  AND LHP.MaHocKyNamHoc = DKMH.MaHocKyNamHoc
     INNER JOIN MonHoc MH ON LHP.MaMH = MH.MaMH
-    WHERE DKMH.MaHocKyNamHoc = @MaHocKyNamHoc AND SV.TrangThai = 0          
+    WHERE DKMH.MaHocKyNamHoc = @MaHocKyNamHoc        
 );
 GO
 
@@ -129,7 +130,6 @@ GO
 IF OBJECT_ID('dbo.fn_DanhSachMonHoc_GiangVien', 'IF') IS NOT NULL
     DROP FUNCTION dbo.fn_DanhSachMonHoc_GiangVien;
 GO
-
 CREATE FUNCTION fn_DanhSachMonHoc_GiangVien (
     @MaGV VARCHAR(10),
     @MaHocKyNamHoc INT
@@ -737,10 +737,14 @@ AS
 BEGIN
     SET NOCOUNT ON;
 	DELETE FROM ChiTietHocPhan
-    DELETE FROM DangKyMonHoc
-    WHERE MaSV = @MaSV 
-      AND MaLHP = @MaLHP 
-      AND MaHocKyNamHoc = @MaHocKyNamHoc;
+	WHERE MaSV = @MaSV 
+	AND MaLHP = @MaLHP 
+	AND MaHocKyNamHoc = @MaHocKyNamHoc;
+	DELETE FROM DangKyMonHoc
+	WHERE MaSV = @MaSV 
+	AND MaLHP = @MaLHP 
+	AND MaHocKyNamHoc = @MaHocKyNamHoc;
+
 END;
 GO
 
@@ -771,37 +775,57 @@ IF OBJECT_ID('sp_ChuyenLopHocPhan', 'P') IS NOT NULL
 GO
 
 CREATE PROCEDURE sp_ChuyenLopHocPhan
-
     @MaSV VARCHAR(10),
     @MaLHPNguon VARCHAR(20),
     @MaLHPDich VARCHAR(20),
-	@MaHocKyNamHoc INT
-
+    @MaHocKyNamHoc INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    UPDATE DangKyMonHoc
-    SET MaLHP = @MaLHPDich
-    WHERE MaSV = @MaSV
-      AND MaLHP = @MaLHPNguon
-	  AND MaHocKyNamHoc = @MaHocKyNamHoc;
+    BEGIN TRANSACTION; 
+
+    BEGIN TRY
+        UPDATE DangKyMonHoc
+        SET MaLHP = @MaLHPDich
+        WHERE MaSV = @MaSV
+          AND MaLHP = @MaLHPNguon
+          AND MaHocKyNamHoc = @MaHocKyNamHoc;
+
+        COMMIT TRANSACTION;  
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION; 
+        THROW;
+    END CATCH
 END;
-go
+GO
+
+
 IF OBJECT_ID('dbo.fn_GetThongTinGV', 'IF') IS NOT NULL
     DROP FUNCTION dbo.fn_GetThongTinGV;
 GO
+---------------------------
 
 CREATE FUNCTION dbo.fn_GetThongTinGV(@MaGV VARCHAR(10))
 RETURNS TABLE
 AS
 RETURN
 (
-    SELECT MaGV, HoTenGV, HocVi, Khoa, Email, DienThoai
-    FROM GiangVien
-    WHERE MaGV = @MaGV
+    SELECT 
+        gv.MaGV, 
+        gv.HoTenGV, 
+        gv.HocVi, 
+        k.TenKhoa,       
+        gv.Email, 
+        gv.DienThoai
+    FROM GiangVien gv
+    LEFT JOIN Khoa k
+        ON gv.MaKhoa = k.MaKhoa
+    WHERE gv.MaGV = @MaGV
 );
 GO
+
 
 
 IF OBJECT_ID('dbo.sp_TinhTBVaTinChiDat', 'P') IS NOT NULL
@@ -868,6 +892,66 @@ BEGIN
     VALUES(@TiLeGK, @TiLeCK);
 END;
 GO
+
+IF OBJECT_ID('dbo.sp_GetGVTheoKhoa', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_GetGVTheoKhoa;
+GO
+
+CREATE PROCEDURE sp_GetGVTheoKhoa
+    @MaKhoa VARCHAR(10),
+    @MaGVHienTai VARCHAR(10)  
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT gv.MaGV, gv.HoTenGV
+    FROM GiangVien gv
+    LEFT JOIN Khoa k
+        ON gv.MaKhoa = k.MaKhoa
+    WHERE gv.MaKhoa = @MaKhoa
+      AND gv.TrangThai = 0
+      AND gv.MaGV <> @MaGVHienTai;  
+END;
+GO
+
+
+
+IF OBJECT_ID('dbo.sp_ChuyenGiangVien', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.sp_ChuyenGiangVien;
+GO
+---------------------------
+
+CREATE PROCEDURE sp_ChuyenGiangVien
+    @MaLHP VARCHAR(20),
+    @MaHocKyNamHoc INT,
+    @MaGVNguon VARCHAR(10),
+    @MaGVDich VARCHAR(10)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+            UPDATE LopHocPhan
+            SET MaGV = @MaGVDich
+            WHERE MaLHP = @MaLHP
+              AND MaHocKyNamHoc = @MaHocKyNamHoc
+              AND (MaGV = @MaGVNguon OR (@MaGVNguon IS NULL AND MaGV IS NULL) OR MaGV IS NULL);
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        RAISERROR(@ErrorMessage, 16, 1);
+    END CATCH
+END;
+GO
+
+
 IF OBJECT_ID('dbo.sp_XoaGiangVien', 'P') IS NOT NULL
     DROP PROCEDURE dbo.sp_XoaGiangVien;
 GO
@@ -877,25 +961,26 @@ CREATE PROCEDURE dbo.sp_XoaGiangVien
 AS
 BEGIN
     SET NOCOUNT ON;
-
     BEGIN TRY
         BEGIN TRANSACTION;
-		  DELETE DKMH
-        FROM DangKyMonHoc DKMH
-        INNER JOIN LopHocPhan LHP ON DKMH.MaLHP = LHP.MaLHP
-        WHERE LHP.MaGV = @MaGV;
-		DELETE FROM LopHocPhan WHERE MaGV = @MaGV;
-
-
-        DELETE FROM TaiKhoan WHERE MaGV = @MaGV;
-        DELETE FROM GiangVien WHERE MaGV = @MaGV;
-
+        -- Đặt MaGV về NULL trong LopHocPhan thay vì xóa
+        UPDATE LopHocPhan
+        SET MaGV = NULL
+        WHERE MaGV = @MaGV;
+        
+        -- Xóa bản ghi trong TaiKhoan
+        DELETE FROM TaiKhoan
+        WHERE MaGV = @MaGV;
+        
+        -- Xóa bản ghi trong GiangVien
+        DELETE FROM GiangVien
+        WHERE MaGV = @MaGV;
+        
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION;
-
         THROW;
     END CATCH
 END
@@ -909,7 +994,7 @@ CREATE PROCEDURE dbo.sp_ThemGiangVien
     @MaGV VARCHAR(10),
     @HoTenGV NVARCHAR(100),
     @HocVi NVARCHAR(50) = NULL,
-    @Khoa NVARCHAR(50) = NULL,
+    @MaKhoa NVARCHAR(10) = NULL,
     @Email NVARCHAR(100) = NULL,
     @DienThoai NVARCHAR(15) = NULL
 AS
@@ -925,8 +1010,8 @@ BEGIN
             RETURN;
         END
 
-        INSERT INTO GiangVien (MaGV, HoTenGV, HocVi, Khoa, Email, DienThoai)
-        VALUES (@MaGV, @HoTenGV, @HocVi, @Khoa, @Email, @DienThoai);
+        INSERT INTO GiangVien (MaGV, HoTenGV, HocVi, MaKhoa, Email, DienThoai)
+        VALUES (@MaGV, @HoTenGV, @HocVi, @MaKhoa, @Email, @DienThoai);
 
         COMMIT TRANSACTION;
     END TRY
@@ -946,7 +1031,7 @@ CREATE PROCEDURE dbo.sp_CapNhatGiangVien
     @MaGV VARCHAR(10),
     @HoTenGV NVARCHAR(100),
     @HocVi NVARCHAR(50) = NULL,
-    @Khoa NVARCHAR(50) = NULL,
+    @MaKhoa NVARCHAR(10) = NULL,
     @Email NVARCHAR(100) = NULL,
     @DienThoai NVARCHAR(15) = NULL,
 	@TrangThai BIT 
@@ -961,7 +1046,7 @@ BEGIN
         UPDATE GiangVien 
         SET HoTenGV = @HoTenGV,
             HocVi = @HocVi,
-            Khoa = @Khoa,
+            MaKhoa = @MaKhoa,
             Email = @Email,
             DienThoai = @DienThoai,
 			TrangThai = @TrangThai
@@ -1132,21 +1217,73 @@ BEGIN
 
 END
 GO
-IF OBJECT_ID('dbo.trg_KhoaTaiKhoan_KhiGVBNgungHoatDong', 'TR') IS NOT NULL
-    DROP TRIGGER dbo.trg_KhoaTaiKhoan_KhiGVBNgungHoatDong;
+USE QL_SinhVien;
 GO
-CREATE TRIGGER trg_KhoaTaiKhoan_KhiGVBNgungHoatDong
+
+IF OBJECT_ID('trg_KhoaTaiKhoanVaCapNhatLopHocPhan', 'TR') IS NOT NULL
+    DROP TRIGGER trg_KhoaTaiKhoanVaCapNhatLopHocPhan;
+GO
+
+CREATE TRIGGER trg_KhoaTaiKhoanVaCapNhatLopHocPhan
 ON GiangVien
 AFTER UPDATE
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Cập nhật TrangThai của TaiKhoan khi GiangVien.TrangThai = 1
+    -- Chỉ những giảng viên vừa nghỉ (trạng thái từ 0 -> 1)
+    -- 1. Khóa tài khoản
     UPDATE tk
-    SET tk.TrangThai = 0   -- khóa tài khoản
+    SET tk.TrangThai = 0   
     FROM TaiKhoan tk
     INNER JOIN inserted i ON tk.MaGV = i.MaGV
-    WHERE i.TrangThai = 1;
+    INNER JOIN deleted d ON d.MaGV = i.MaGV
+    WHERE i.TrangThai = 1 AND d.TrangThai = 0;
+
+    -- 2. Cập nhật lớp học phần: MaGV = NULL
+    UPDATE lhp
+    SET lhp.MaGV = NULL
+    FROM LopHocPhan lhp
+    INNER JOIN inserted i ON lhp.MaGV = i.MaGV
+    INNER JOIN deleted d ON d.MaGV = i.MaGV
+    WHERE i.TrangThai = 1 AND d.TrangThai = 0;
+END
+GO
+IF OBJECT_ID('sp_HuyLopHocPhan', 'P') IS NOT NULL
+    DROP PROCEDURE sp_HuyLopHocPhan;
+GO
+
+CREATE PROCEDURE sp_HuyLopHocPhan
+    @MaLHP VARCHAR(20),
+    @MaHocKyNamHoc INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- 1. Xóa chi tiết học phần của sinh viên
+        DELETE FROM ChiTietHocPhan
+        WHERE MaLHP = @MaLHP AND MaHocKyNamHoc = @MaHocKyNamHoc;
+
+        -- 2. Xóa đăng ký môn học của sinh viên
+        DELETE FROM DangKyMonHoc
+        WHERE MaLHP = @MaLHP AND MaHocKyNamHoc = @MaHocKyNamHoc;
+
+        -- 3. Xóa lớp học phần
+        DELETE FROM LopHocPhan
+        WHERE MaLHP = @MaLHP AND MaHocKyNamHoc = @MaHocKyNamHoc;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        RAISERROR(@ErrorMessage, 16, 1);
+    END CATCH
 END;
 GO
+EXEC sp_HuyLopHocPhan @MaLHP = 'LLCT120205_01', @MaHocKyNamHoc = 4;

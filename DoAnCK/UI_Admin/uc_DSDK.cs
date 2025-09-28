@@ -13,8 +13,12 @@ namespace DoAnCK.UI_Admin
 {
     public partial class uc_DSDK: UserControl, IRefreshable
     {
-       
+
+
         private DataTable dt;
+        private int maHocKyNamHoc;
+        private bool isLoading = false;
+
         public uc_DSDK()
         {
             InitializeComponent();
@@ -25,6 +29,7 @@ namespace DoAnCK.UI_Admin
         public void RefreshData()
         {
 
+            isLoading = true;
 
 
             string queryNamHoc = "EXEC sp_DanhSachHocKyNamHoc";
@@ -32,7 +37,6 @@ namespace DoAnCK.UI_Admin
 
             if (dtNamHoc != null && dtNamHoc.Rows.Count > 0)
             {
-                // Thêm cột hiển thị
                 dtNamHoc.Columns.Add("HK_NamHoc", typeof(string));
                 foreach (DataRow row in dtNamHoc.Rows)
                 {
@@ -43,7 +47,7 @@ namespace DoAnCK.UI_Admin
                 cbbNamHoc.DisplayMember = "HK_NamHoc";
                 cbbNamHoc.ValueMember = "MaHocKyNamHoc";
 
-                int maHocKyNamHoc = Convert.ToInt32(cbbNamHoc.SelectedValue);
+                maHocKyNamHoc = Convert.ToInt32(cbbNamHoc.SelectedValue);
 
                 string queryLopHocPhan = $"SELECT * FROM dbo.fn_DangKyMonHocTheoNamHoc({maHocKyNamHoc})";
                 DataTable dt = frmAdmin.getData(queryLopHocPhan);

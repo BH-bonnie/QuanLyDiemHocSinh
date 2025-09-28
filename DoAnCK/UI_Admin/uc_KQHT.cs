@@ -77,7 +77,7 @@ namespace DoAnCK.UI_Admin
             if (drv == null)
                 return;
 
-            maHocKyNamHoc = Convert.ToInt32(drv["MaHocKyNamHoc"]);
+            int maHocKyNamHoc = Convert.ToInt32(drv["MaHocKyNamHoc"]);
             string query = $"SELECT * FROM fn_ChiTietHocPhan({maHocKyNamHoc})";
             dt = frmAdmin.getData(query);
 

@@ -52,7 +52,7 @@ namespace DoAnCK.UI_Admin
                     txtMa.Text = row["MaGV"].ToString();
                     txtHoten.Text = row["HoTenGV"].ToString();
                     txtHocvi.Text = row["HocVi"]?.ToString() ?? "";
-                    txtKhoa.Text = row["Khoa"]?.ToString() ?? "";
+                    txtKhoa.Text = row["TenKhoa"]?.ToString() ?? "";
                     txtEmail.Text = row["Email"]?.ToString() ?? "";
                     txtSDT.Text = row["DienThoai"]?.ToString() ?? "";
                 }

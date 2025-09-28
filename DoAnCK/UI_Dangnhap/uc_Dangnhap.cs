@@ -45,6 +45,11 @@ namespace DoAnCK.UI_Dangnhap
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if (string.IsNullOrEmpty(FormMain.ConnString))
+            {
+                MessageBox.Show("Chuỗi kết nối chưa được khởi tạo!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             try
             {

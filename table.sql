@@ -10,10 +10,12 @@ IF OBJECT_ID('dbo.LogDangNhap', 'U') IS NOT NULL DROP TABLE dbo.LogDangNhap;
 IF OBJECT_ID('dbo.TaiKhoan', 'U') IS NOT NULL DROP TABLE dbo.TaiKhoan;
 IF OBJECT_ID('dbo.Roles', 'U') IS NOT NULL DROP TABLE dbo.Roles;
 IF OBJECT_ID('dbo.SinhVien', 'U') IS NOT NULL DROP TABLE dbo.SinhVien;
-IF OBJECT_ID('dbo.Lop', 'U') IS NOT NULL DROP TABLE dbo.Lop;
-IF OBJECT_ID('dbo.Khoa', 'U') IS NOT NULL DROP TABLE dbo.Khoa;
-IF OBJECT_ID('dbo.MonHoc', 'U') IS NOT NULL DROP TABLE dbo.MonHoc;
 IF OBJECT_ID('dbo.GiangVien', 'U') IS NOT NULL DROP TABLE dbo.GiangVien;
+
+IF OBJECT_ID('dbo.Lop', 'U') IS NOT NULL DROP TABLE dbo.Lop;
+IF OBJECT_ID('dbo.MonHoc', 'U') IS NOT NULL DROP TABLE dbo.MonHoc;
+IF OBJECT_ID('dbo.Khoa', 'U') IS NOT NULL DROP TABLE dbo.Khoa;
+
 IF OBJECT_ID('dbo.HocKyNamHoc', 'U') IS NOT NULL DROP TABLE dbo.HocKyNamHoc;
 
 
@@ -35,8 +37,8 @@ CREATE TABLE SinhVien (
 	NgaySinh   DATE,
 	NoiSinh    NVARCHAR(100),
 	GioiTinh   NVARCHAR(10) CHECK (GioiTinh IN (N'Nam', N'Nữ')),
-	LopSV      VARCHAR(20) REFERENCES Lop(LopSV),
-    TrangThai BIT DEFAULT 0 -- 0 là còn hoạt động
+	LopSV      VARCHAR(20) NOT NULL REFERENCES Lop(LopSV),
+    TrangThai BIT DEFAULT 0 
 );
 
 CREATE TABLE DiemRenLuyen (
@@ -46,17 +48,17 @@ CREATE TABLE DiemRenLuyen (
 
 
 CREATE TABLE MonHoc (
-	MaMH      VARCHAR(20) PRIMARY KEY,
-	TenMH     NVARCHAR(100) NOT NULL,
-	SoTinChi  INT NOT NULL CHECK (SoTinChi > 0)
+    MaMH VARCHAR(20) PRIMARY KEY,
+    TenMH NVARCHAR(100) NOT NULL,
+    SoTinChi INT NOT NULL CHECK (SoTinChi > 0),
+    MaKhoa VARCHAR(10) NOT NULL REFERENCES Khoa(MaKhoa)
 );
-
 
 CREATE TABLE GiangVien (
 	MaGV      VARCHAR(10) PRIMARY KEY,
 	HoTenGV   NVARCHAR(100) NOT NULL,
 	HocVi     NVARCHAR(50),
-	Khoa      NVARCHAR(100),
+	MaKhoa    VARCHAR(10) NOT NULL REFERENCES Khoa(MaKhoa),
 	Email     VARCHAR(100),
 	DienThoai VARCHAR(15),
 	TrangThai BIT DEFAULT 0  -- 0 là còn hoạt động
@@ -73,7 +75,7 @@ CREATE TABLE HocKyNamHoc (
 CREATE TABLE LopHocPhan (
     MaLHP    VARCHAR(20) NOT NULL,
     MaMH     VARCHAR(20) NOT NULL  REFERENCES MonHoc(MaMH),
-    MaGV     VARCHAR(10) NOT NULL REFERENCES GiangVien(MaGV),
+    MaGV     VARCHAR(10) REFERENCES GiangVien(MaGV),
     MaHocKyNamHoc INT NOT NULL REFERENCES HocKyNamHoc(MaHocKyNamHoc),
     PRIMARY KEY (MaLHP,MaHocKyNamHoc)
 );
@@ -87,7 +89,6 @@ CREATE TABLE DangKyMonHoc (
     FOREIGN KEY (MaLHP,MaHocKyNamHoc) REFERENCES LopHocPhan(MaLHP,MaHocKyNamHoc)
 );
 
-IF OBJECT_ID('dbo.ChiTietHocPhan', 'U') IS NOT NULL DROP TABLE dbo.ChiTietHocPhan;
 
 CREATE TABLE ChiTietHocPhan ( 
     MaSV VARCHAR(10) NOT NULL,
@@ -99,6 +100,7 @@ CREATE TABLE ChiTietHocPhan (
     PRIMARY KEY (MaSV, MaLHP, MaHocKyNamHoc),
     FOREIGN KEY (MaSV, MaLHP, MaHocKyNamHoc)
         REFERENCES DangKyMonHoc(MaSV, MaLHP, MaHocKyNamHoc)
+		ON UPDATE CASCADE
 );
 
 

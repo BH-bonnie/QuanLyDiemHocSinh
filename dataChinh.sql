@@ -1,8 +1,21 @@
 ﻿INSERT INTO KHOA(MaKhoa, TenKhoa) VALUES
+('01', N'Khoa Chính trị Luật'),
+('02', N'Khoa Cơ khí Chế tạo máy'),
+('03', N'Khoa Cơ khí Động lực'),
+('04', N'Khoa Công nghệ Hóa học và Thực phẩm'),
 ('05', N'Khoa Công nghệ Thông tin'),
+('06', N'Khoa Điện – Điện tử'),
+('07', N'Khoa In và Truyền thông'),
+('08', N'Khoa Học Ứng dụng'),
 ('09', N'Khoa Kinh tế'),
-('12', N'Khoa Ngoại ngữ');
-
+('10', N'Khoa Ngoại ngữ'),
+('11', N'Khoa Thời trang và Du lịch'),
+('12', N'Khoa Ngoại ngữ'),
+('13', N'Khoa Xây dựng'),
+('14', N'Viện Sư phạm Kỹ thuật'),
+('15', N'Trung tâm GDQP và An ninh'),
+('16', N'Trung tâm Giáo dục thể chất');
+GO
 INSERT INTO Lop(LopSV,MaKhoa) VALUES
 ('231101A', '05'),
 ('231101B', '05'),
@@ -163,18 +176,19 @@ INSERT INTO DiemRenLuyen (MaSV, Diem) VALUES
 ('23110370', 88.5),
 ('23110371', 83.5),
 ('23131372', 69.5);
-INSERT INTO GIANGVIEN(MaGV, HoTenGV) VALUES
-('1990', N'Đỗ Thị Ngọc Lệ'),
-('2002', N'Lai Văn Phút'),
-('1993', N'Hồ Ngọc Khương');
-INSERT INTO MonHoc (MaMH, TenMH, SoTinChi)VALUES
-('LLCT120205', N'Kinh tế chính trị Mác - Lênin', 2),
-('LLCT120314', N'Tư tưởng Hồ Chí Minh', 2),
-('MATH132401', N'Toán 1', 3),
-('MATH132501', N'Toán 2', 3),
-('INPR140285', N'Nhập môn lập trình', 4),
-('PHYS130902', N'Vật lý 1', 3),
-('INIT130185', N'Nhập môn ngành CNTT', 3);
+INSERT INTO GIANGVIEN(MaGV, HoTenGV,MaKhoa) VALUES
+('1990', N'Đỗ Thị Ngọc Lệ','01'),
+('2001', N'Trần Minh Hiền', '08'),
+('2002', N'Lai Văn Phút', '08'),
+('1993', N'Hồ Ngọc Khương', '01');
+INSERT INTO MonHoc (MaMH, TenMH, SoTinChi,MaKhoa)VALUES
+('LLCT120205', N'Kinh tế chính trị Mác - Lênin', 2, '01'),
+('LLCT120314', N'Tư tưởng Hồ Chí Minh', 2,'01'),
+('MATH132401', N'Toán 1', 3,'08'),
+('MATH132501', N'Toán 2', 3 ,'08'),
+('INPR140285', N'Nhập môn lập trình', 4,'05'),
+('PHYS130902', N'Vật lý 1', 3,'08'),
+('INIT130185', N'Nhập môn ngành CNTT', 3,'05');
 
 INSERT INTO HocKyNamHoc (HocKy, NamHoc) VALUES
 (1, '2023-2024'),
@@ -432,7 +446,7 @@ INSERT INTO DangKyMonHoc (MaSV, MaLHP, MaHocKyNamHoc) VALUES
 ('23131205','LLCT120314_01',4),
 ('23131207','LLCT120314_01',4);
 
-
+/*
 
 INSERT INTO ChiTietHocPhan (MaSV, MaMH, MaHocKyNamHoc, DiemGK, DiemCK) VALUES
 ('23131177', 'INPR140285', 3, 2.1, 8.7),
@@ -577,8 +591,5 @@ INSERT INTO ChiTietHocPhan (MaSV, MaMH, MaHocKyNamHoc, DiemGK, DiemCK) VALUES
 ('23110371', 'INPR140285', 3, 5.9, 0.3),
 ('23131372', 'PHYS130902', 3, 8.3, 4.1),
 ('23131372', 'INPR140285', 3, 7.1, 1.2);
-
-
-
-
+*/
 

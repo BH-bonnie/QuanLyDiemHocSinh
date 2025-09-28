@@ -69,7 +69,6 @@
             this.HoTen});
             this.gvDanhSachSV.GridControl = this.gcDanhSachSV;
             this.gvDanhSachSV.Name = "gvDanhSachSV";
-            this.gvDanhSachSV.OptionsView.AllowCellMerge = true;
             this.gvDanhSachSV.OptionsView.ShowGroupPanel = false;
             // 
             // MaMH
@@ -100,6 +99,7 @@
             this.MaLHP.FieldName = "MaLHP";
             this.MaLHP.MinWidth = 25;
             this.MaLHP.Name = "MaLHP";
+            this.MaLHP.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
             this.MaLHP.Visible = true;
             this.MaLHP.VisibleIndex = 2;
             this.MaLHP.Width = 94;

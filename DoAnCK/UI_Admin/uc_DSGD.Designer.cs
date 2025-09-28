@@ -37,23 +37,19 @@
             this.MaGV = new DevExpress.XtraGrid.Columns.GridColumn();
             this.HoTenGV = new DevExpress.XtraGrid.Columns.GridColumn();
             this.Email = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.MaKhoa = new DevExpress.XtraGrid.Columns.GridColumn();
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
             this.cbbNamHoc = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.hScrollBar1 = new DevExpress.XtraEditors.HScrollBar();
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar2 = new DevExpress.XtraBars.Bar();
-            this.btnSua = new DevExpress.XtraBars.BarButtonItem();
-            this.btnLuu = new DevExpress.XtraBars.BarButtonItem();
-            this.btnHuy = new DevExpress.XtraBars.BarButtonItem();
-            this.btnThongKe = new DevExpress.XtraBars.BarButtonItem();
+            this.barEditGiangVien = new DevExpress.XtraBars.BarEditItem();
+            this.repoLookUpGiangVien = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
-            this.btnThem = new DevExpress.XtraBars.BarButtonItem();
-            this.btnXoa = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
+            this.btnHuy = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.gcDanhSachSV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDanhSachSV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
@@ -63,6 +59,7 @@
             this.splitContainerControl1.Panel2.SuspendLayout();
             this.splitContainerControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repoLookUpGiangVien)).BeginInit();
             this.SuspendLayout();
             // 
             // gcDanhSachSV
@@ -86,11 +83,12 @@
             this.MaLHP,
             this.MaGV,
             this.HoTenGV,
-            this.Email});
+            this.Email,
+            this.MaKhoa});
             this.gvDanhSachSV.GridControl = this.gcDanhSachSV;
             this.gvDanhSachSV.Name = "gvDanhSachSV";
-            this.gvDanhSachSV.OptionsView.AllowCellMerge = true;
             this.gvDanhSachSV.OptionsView.ShowGroupPanel = false;
+            this.gvDanhSachSV.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.gvDanhSachSV_FocusedRowChanged);
             // 
             // MaMH
             // 
@@ -98,7 +96,7 @@
             this.MaMH.FieldName = "MaMH";
             this.MaMH.MinWidth = 25;
             this.MaMH.Name = "MaMH";
-            this.MaMH.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.True;
+            this.MaMH.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
             this.MaMH.Visible = true;
             this.MaMH.VisibleIndex = 0;
             this.MaMH.Width = 93;
@@ -109,7 +107,7 @@
             this.TenMH.FieldName = "TenMH";
             this.TenMH.MinWidth = 25;
             this.TenMH.Name = "TenMH";
-            this.TenMH.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.True;
+            this.TenMH.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
             this.TenMH.Visible = true;
             this.TenMH.VisibleIndex = 1;
             this.TenMH.Width = 93;
@@ -158,6 +156,14 @@
             this.Email.VisibleIndex = 5;
             this.Email.Width = 93;
             // 
+            // MaKhoa
+            // 
+            this.MaKhoa.Caption = "Mã khoa";
+            this.MaKhoa.FieldName = "MaKhoa";
+            this.MaKhoa.MinWidth = 25;
+            this.MaKhoa.Name = "MaKhoa";
+            this.MaKhoa.Width = 94;
+            // 
             // splitContainerControl1
             // 
             this.splitContainerControl1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -174,7 +180,6 @@
             // 
             // splitContainerControl1.Panel2
             // 
-            this.splitContainerControl1.Panel2.Controls.Add(this.hScrollBar1);
             this.splitContainerControl1.Panel2.Controls.Add(this.gcDanhSachSV);
             this.splitContainerControl1.Panel2.Text = "Panel2";
             this.splitContainerControl1.Size = new System.Drawing.Size(856, 479);
@@ -202,13 +207,6 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Năm học:";
             // 
-            // hScrollBar1
-            // 
-            this.hScrollBar1.Location = new System.Drawing.Point(355, 224);
-            this.hScrollBar1.Name = "hScrollBar1";
-            this.hScrollBar1.Size = new System.Drawing.Size(80, 21);
-            this.hScrollBar1.TabIndex = 11;
-            // 
             // barManager1
             // 
             this.barManager1.Bars.AddRange(new DevExpress.XtraBars.Bar[] {
@@ -219,15 +217,12 @@
             this.barManager1.DockControls.Add(this.barDockControlRight);
             this.barManager1.Form = this;
             this.barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
-            this.btnThem,
-            this.btnXoa,
-            this.btnHuy,
-            this.btnLuu,
-            this.barButtonItem1,
-            this.btnSua,
-            this.btnThongKe});
+            this.barEditGiangVien,
+            this.btnHuy});
             this.barManager1.MainMenu = this.bar2;
-            this.barManager1.MaxItemId = 10;
+            this.barManager1.MaxItemId = 18;
+            this.barManager1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
+            this.repoLookUpGiangVien});
             // 
             // bar2
             // 
@@ -236,43 +231,29 @@
             this.bar2.DockRow = 0;
             this.bar2.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
             this.bar2.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
-            new DevExpress.XtraBars.LinkPersistInfo(this.btnSua, true),
-            new DevExpress.XtraBars.LinkPersistInfo(this.btnLuu),
-            new DevExpress.XtraBars.LinkPersistInfo(this.btnHuy, true),
-            new DevExpress.XtraBars.LinkPersistInfo(this.btnThongKe)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.barEditGiangVien),
+            new DevExpress.XtraBars.LinkPersistInfo(this.btnHuy)});
             this.bar2.OptionsBar.MultiLine = true;
             this.bar2.OptionsBar.UseWholeRow = true;
             this.bar2.Text = "Main menu";
             // 
-            // btnSua
+            // barEditGiangVien
             // 
-            this.btnSua.Caption = "Sửa";
-            this.btnSua.Id = 8;
-            this.btnSua.Name = "btnSua";
-            this.btnSua.Size = new System.Drawing.Size(50, 30);
-            this.btnSua.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnSua_ItemClick);
+            this.barEditGiangVien.Caption = "btnChuyen";
+            this.barEditGiangVien.Edit = this.repoLookUpGiangVien;
+            this.barEditGiangVien.Id = 16;
+            this.barEditGiangVien.Name = "barEditGiangVien";
+            this.barEditGiangVien.Size = new System.Drawing.Size(200, 30);
+            this.barEditGiangVien.EditValueChanged += new System.EventHandler(this.barEditGiangVien_EditValueChanged);
+            this.barEditGiangVien.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barEditGiangVien_ItemClick);
             // 
-            // btnLuu
+            // repoLookUpGiangVien
             // 
-            this.btnLuu.Caption = "Lưu";
-            this.btnLuu.Id = 4;
-            this.btnLuu.Name = "btnLuu";
-            this.btnLuu.Size = new System.Drawing.Size(50, 30);
-            this.btnLuu.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnLuu_ItemClick);
-            // 
-            // btnHuy
-            // 
-            this.btnHuy.Caption = "Huỷ";
-            this.btnHuy.Id = 3;
-            this.btnHuy.Name = "btnHuy";
-            this.btnHuy.Size = new System.Drawing.Size(50, 30);
-            this.btnHuy.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnHuy_ItemClick);
-            // 
-            // btnThongKe
-            // 
-            this.btnThongKe.Caption = "Thống kê";
-            this.btnThongKe.Id = 9;
-            this.btnThongKe.Name = "btnThongKe";
+            this.repoLookUpGiangVien.AutoHeight = false;
+            this.repoLookUpGiangVien.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.repoLookUpGiangVien.Name = "repoLookUpGiangVien";
+            this.repoLookUpGiangVien.Popup += new System.EventHandler(this.repoLookUpGiangVien_Popup);
             // 
             // barDockControlTop
             // 
@@ -306,22 +287,12 @@
             this.barDockControlRight.Manager = this.barManager1;
             this.barDockControlRight.Size = new System.Drawing.Size(0, 479);
             // 
-            // btnThem
+            // btnHuy
             // 
-            this.btnThem.Id = 5;
-            this.btnThem.Name = "btnThem";
-            // 
-            // btnXoa
-            // 
-            this.btnXoa.Id = 6;
-            this.btnXoa.Name = "btnXoa";
-            // 
-            // barButtonItem1
-            // 
-            this.barButtonItem1.Caption = "Xuất";
-            this.barButtonItem1.Id = 7;
-            this.barButtonItem1.Name = "barButtonItem1";
-            this.barButtonItem1.Size = new System.Drawing.Size(50, 30);
+            this.btnHuy.Caption = "Huỷ lớp ";
+            this.btnHuy.Id = 17;
+            this.btnHuy.Name = "btnHuy";
+            this.btnHuy.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnHuy_ItemClick);
             // 
             // uc_DSGD
             // 
@@ -345,6 +316,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).EndInit();
             this.splitContainerControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repoLookUpGiangVien)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -363,19 +335,15 @@
         private DevExpress.XtraGrid.Columns.GridColumn MaGV;
         private DevExpress.XtraGrid.Columns.GridColumn HoTenGV;
         private DevExpress.XtraGrid.Columns.GridColumn Email;
-        private DevExpress.XtraEditors.HScrollBar hScrollBar1;
         private DevExpress.XtraBars.BarManager barManager1;
         private DevExpress.XtraBars.Bar bar2;
-        private DevExpress.XtraBars.BarButtonItem btnSua;
-        private DevExpress.XtraBars.BarButtonItem btnLuu;
-        private DevExpress.XtraBars.BarButtonItem btnHuy;
-        private DevExpress.XtraBars.BarButtonItem btnThongKe;
         private DevExpress.XtraBars.BarDockControl barDockControlTop;
         private DevExpress.XtraBars.BarDockControl barDockControlBottom;
         private DevExpress.XtraBars.BarDockControl barDockControlLeft;
         private DevExpress.XtraBars.BarDockControl barDockControlRight;
-        private DevExpress.XtraBars.BarButtonItem btnThem;
-        private DevExpress.XtraBars.BarButtonItem btnXoa;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem1;
+        private DevExpress.XtraGrid.Columns.GridColumn MaKhoa;
+        private DevExpress.XtraBars.BarEditItem barEditGiangVien;
+        private DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit repoLookUpGiangVien;
+        private DevExpress.XtraBars.BarButtonItem btnHuy;
     }
 }

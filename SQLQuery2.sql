@@ -152,7 +152,11 @@ BEGIN
         SET @sql = '
             IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = ''' + @TenDangNhap + ''')
             CREATE USER [' + @TenDangNhap + '] FOR LOGIN [' + @TenDangNhap + '];
+			ALTER LOGIN [' + @TenDangNhap + '] ENABLE;
         ';
+		
+        EXEC(@sql);
+		SET @sql = 'USE QL_SinhVien; GRANT CONNECT TO [' + @TenDangNhap + '];';
         EXEC(@sql);
 
         IF @Roleid = 1  -- Admin
@@ -424,17 +428,5 @@ BEGIN
 END
 GO
 
--- Xem log SQL Server
-SELECT 
-    TE.name AS EventName,
-    T.DatabaseName,
-    T.ObjectName,
-    T.TextData,
-    T.LoginName,
-    T.StartTime
-FROM sys.fn_trace_gettable(CONVERT(VARCHAR(150),
-    (SELECT TOP 1 f.[value] 
-     FROM sys.fn_trace_getinfo(NULL) f 
-     WHERE f.property = 2)), DEFAULT) T
-JOIN sys.trace_events TE ON T.EventClass = TE.trace_event_id
-ORDER BY T.StartTime DESC;
+USE QL_SinhVien;
+SELECT name FROM sys.database_principals WHERE name = 'gv1';

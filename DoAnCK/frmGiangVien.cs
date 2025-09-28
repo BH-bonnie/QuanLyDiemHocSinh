@@ -23,7 +23,9 @@ namespace DoAnCK {
             ConnString = FormMain.ConnString; 
             MaGV = maGV;
             this.mainContainer.AutoScroll = true;
+           
         }
+        
 
         uc_DSGDGV ucDSGD;
         uc_DSSV ucDSSV;

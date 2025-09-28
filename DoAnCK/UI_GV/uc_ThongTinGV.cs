@@ -44,7 +44,7 @@ namespace DoAnCK.UI_GV
             try
             {
                 string queryGV = $"SELECT * FROM dbo.fn_GetThongTinGV('{MaGV}')";
-                DataTable dtGV = frmGiangVien.getData(queryGV);
+                DataTable dtGV = frmAdmin.getData(queryGV);
 
                 if (dtGV != null && dtGV.Rows.Count > 0)
                 {
@@ -53,7 +53,7 @@ namespace DoAnCK.UI_GV
                     txtMa.Text = row["MaGV"].ToString();
                     txtHoten.Text = row["HoTenGV"].ToString();
                     txtHocvi.Text = row["HocVi"]?.ToString() ?? "";
-                    txtKhoa.Text = row["Khoa"]?.ToString() ?? "";
+                    txtKhoa.Text = row["TenKhoa"]?.ToString() ?? "";
                     txtEmail.Text = row["Email"]?.ToString() ?? "";
                     txtSDT.Text = row["DienThoai"]?.ToString() ?? "";
                 }
@@ -67,9 +67,13 @@ namespace DoAnCK.UI_GV
                 MessageBox.Show("Lỗi khi tải thông tin: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            
+
 
         }
+
+            
+
+     
 
 
 

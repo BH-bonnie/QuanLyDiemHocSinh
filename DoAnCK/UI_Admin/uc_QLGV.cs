@@ -144,13 +144,13 @@ namespace DoAnCK.UI_Admin
                         string maGV = row["MaGV"].ToString().Trim();
                         string hoTenGV = row["HoTenGV"].ToString().Trim();
                         string hocVi = row["HocVi"]?.ToString() ?? "";
-                        string khoa = row["Khoa"]?.ToString() ?? "";
+                        string makhoa = row["MaKhoa"]?.ToString() ?? "";
                         string email = row["Email"]?.ToString() ?? "";
                         string dienThoai = row["DienThoai"]?.ToString() ?? "";
 
-                        if (string.IsNullOrWhiteSpace(maGV) || string.IsNullOrWhiteSpace(hoTenGV))
+                        if (string.IsNullOrWhiteSpace(maGV) || string.IsNullOrWhiteSpace(hoTenGV) || string.IsNullOrWhiteSpace(makhoa))
                         {
-                            MessageBox.Show("Mã giảng viên và Họ tên giảng viên không được để trống!");
+                            MessageBox.Show("Mã giảng viên, Họ tên giảng viên và khoa không được để trống!");
                             return;
                         }
 
@@ -159,7 +159,7 @@ namespace DoAnCK.UI_Admin
                                             @MaGV = '{maGV}', 
                                             @HoTenGV = N'{hoTenGV}', 
                                             @HocVi = {(string.IsNullOrWhiteSpace(hocVi) ? "NULL" : $"N'{hocVi}'")}, 
-                                            @Khoa = {(string.IsNullOrWhiteSpace(khoa) ? "NULL" : $"N'{khoa}'")}, 
+                                            @MaKhoa = {(string.IsNullOrWhiteSpace(makhoa) ? "NULL" : $"N'{makhoa}'")}, 
                                             @Email = {(string.IsNullOrWhiteSpace(email) ? "NULL" : $"N'{email}'")}, 
                                             @DienThoai = {(string.IsNullOrWhiteSpace(dienThoai) ? "NULL" : $"N'{dienThoai}'")}";
 
@@ -170,7 +170,7 @@ namespace DoAnCK.UI_Admin
                         string maGV = row["MaGV"].ToString().Trim();
                         string hoTenGV = row["HoTenGV"].ToString().Trim();
                         string hocVi = row["HocVi"]?.ToString() ?? "";
-                        string khoa = row["Khoa"]?.ToString() ?? "";
+                        string makhoa = row["MaKhoa"]?.ToString() ?? "";
                         string email = row["Email"]?.ToString() ?? "";
                         string dienThoai = row["DienThoai"]?.ToString() ?? "";
                         int trangThai = row["TrangThai"] != DBNull.Value ? Convert.ToInt32(row["TrangThai"]) : 0;
@@ -187,7 +187,7 @@ namespace DoAnCK.UI_Admin
                         @MaGV = '{maGV}', 
                         @HoTenGV = N'{hoTenGV}', 
                         @HocVi = {(string.IsNullOrWhiteSpace(hocVi) ? "NULL" : $"N'{hocVi}'")}, 
-                        @Khoa = {(string.IsNullOrWhiteSpace(khoa) ? "NULL" : $"N'{khoa}'")}, 
+                        @MaKhoa = {(string.IsNullOrWhiteSpace(makhoa) ? "NULL" : $"N'{makhoa}'")}, 
                         @Email = {(string.IsNullOrWhiteSpace(email) ? "NULL" : $"N'{email}'")}, 
                         @DienThoai = {(string.IsNullOrWhiteSpace(dienThoai) ? "NULL" : $"N'{dienThoai}'")},
                         @TrangThai = { trangThai} ";

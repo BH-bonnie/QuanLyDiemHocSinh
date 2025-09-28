@@ -36,6 +36,7 @@ namespace DoAnCK
         {
             ConnString = $@"Server=.;Database=QL_SinhVien;User ID={username};Password={password};Encrypt=false;TrustServerCertificate=true;Connection Timeout=30;";
         }
+        
 
         public static void SetCurrentRole(int roleID)
         {
@@ -50,6 +51,7 @@ namespace DoAnCK
 
         private void FormMain_Load(object sender, EventArgs e)
         {
+          
             if (ucChonquyen == null)
             {
                 ucChonquyen = new uc_Chonquyen();
